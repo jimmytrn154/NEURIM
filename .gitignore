@@ -1,0 +1,28 @@
+# Data (gitignored per Agent Instructions)
+data/raw/
+data/calibration/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Env / secrets
+.env
+
+# Model checkpoints
+*.ckpt
+*.safetensors
+*.pt
+*.pth
+models/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db

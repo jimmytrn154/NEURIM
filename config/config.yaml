@@ -1,0 +1,49 @@
+# NEURIM configuration
+# Placeholders — tune during calibration (Phase 2) before connecting real hardware.
+
+emotiv:
+  # EMOTIV_CLIENT_ID / EMOTIV_CLIENT_SECRET are read from environment (.env), not here.
+  device: "EPOC_X"
+  # 14-channel EPOC X montage (10-20 system, international naming)
+  channels:
+    - AF3
+    - F7
+    - F3
+    - FC5
+    - T7
+    - P7
+    - O1
+    - O2
+    - P8
+    - T8
+    - FC6
+    - F4
+    - F8
+    - AF4
+  sample_rate_hz: 128
+
+flicker:
+  # One entry per candidate slot shown in the frontend; frequencies chosen to avoid
+  # harmonics/sub-harmonics overlap for reliable CCA-based SSVEP separation.
+  candidate_slots: 4
+  frequencies_hz:
+    - 7.5
+    - 8.57
+    - 10.0
+    - 12.0
+  duty_cycle: 0.5
+
+loop:
+  target_latency_ms: 250   # perceive -> acquire -> decode -> generate, end to end
+  decode_window_ms: 1000   # sliding window used for SSVEP/P300 decoding
+  generate_steps: 4        # diffusion steps per candidate refresh (fast/low-step regime)
+
+calibration:
+  ssvep_trials_per_frequency: 10
+  ssvep_trial_duration_s: 5
+  p300_trials_per_target: 20
+  p300_isi_ms: 300          # inter-stimulus interval for oddball paradigm
+
+preference_vector:
+  ssvep_weight: 0.6
+  p300_weight: 0.4
