@@ -41,10 +41,11 @@ async def run_local(config: Config, eeg_source) -> None:
           f"steps={orchestrator.optimizer.state_machine.step_index}")
 
 
-async def run_served(config: Config) -> None:
+async def run_served(config: Config, host: str, port: int) -> None:
     generator = GeneratorService(config)
-    hub = WebSocketOrchestrator(config, generator)
-    print(f"[demo] serving on ws://{hub.host}:{hub.port} "
+    hub = WebSocketOrchestrator(config, generator, host=host, port=port)
+    browser_host = "localhost" if host in {"0.0.0.0", "::"} else host
+    print(f"[demo] serving on ws://{browser_host}:{hub.port} "
           "(Signal service connects with {\"role\": \"signal\"}, frontend with {\"role\": \"display\"})")
     await hub.serve_forever()
 
@@ -54,6 +55,8 @@ def main() -> None:
     parser.add_argument("--mock", action="store_true", help="use synthetic EEG instead of real hardware")
     parser.add_argument("--backend", choices=["procedural", "diffusion"], default=None)
     parser.add_argument("--serve", action="store_true", help="run the websocket hub instead of local mode")
+    parser.add_argument("--host", default="0.0.0.0", help="websocket host when using --serve")
+    parser.add_argument("--port", type=int, default=8765, help="websocket port when using --serve")
     args = parser.parse_args()
 
     config = Config.load()
@@ -61,7 +64,10 @@ def main() -> None:
         config.generator.backend = args.backend
 
     if args.serve:
-        asyncio.run(run_served(config))
+        try:
+            asyncio.run(run_served(config, args.host, args.port))
+        except KeyboardInterrupt:
+            print("\n[demo] stopped")
         return
 
     if args.mock:

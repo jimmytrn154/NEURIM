@@ -27,6 +27,15 @@ def _encode_png(image: Image.Image) -> str:
     return base64.b64encode(buf.getvalue()).decode("ascii")
 
 
+def _encode_jpeg(image: Image.Image, quality: int = 85) -> str:
+    """JPEG is 5-10x smaller than PNG and decodes faster in the browser.
+    Forces RGB conversion to handle any RGBA input (e.g. pyramid mode).
+    """
+    buf = io.BytesIO()
+    image.convert("RGB").save(buf, format="JPEG", quality=quality, optimize=True)
+    return base64.b64encode(buf.getvalue()).decode("ascii")
+
+
 class Interpolator:
     """Linear interpolation between the last two accepted latents, sampled
     continuously so the morph renders at target_fps between optimizer steps
@@ -72,8 +81,22 @@ class GeneratorService:
             return self._diffusion.render(embedding)
         return self._procedural.render(z, size=self.config.generator.frame_size)
 
-    def render(self, z: np.ndarray, step_index: int, as_pyramid: bool = False) -> FrameMessage:
+    def render(
+        self,
+        z: np.ndarray,
+        step_index: int,
+        as_pyramid: bool = False,
+        state: str = "explore",
+        reward_estimate: float = 0.0,
+    ) -> FrameMessage:
         image = self.render_image(z)
         if as_pyramid:
             image = mirrored_quadrants(image, self.config.generator.frame_size)
-        return FrameMessage(frame_b64=_encode_png(image), z=list(map(float, z)), step_index=step_index)
+        return FrameMessage(
+            frame_b64=_encode_jpeg(image),
+            z=list(map(float, z)),
+            step_index=step_index,
+            format="jpeg",
+            state=state,
+            reward_estimate=reward_estimate,
+        )

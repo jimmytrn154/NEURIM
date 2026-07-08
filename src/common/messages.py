@@ -52,13 +52,20 @@ class LatentMessage:
 
 @dataclass
 class FrameMessage:
-    """Generator service -> Orchestrator. One rendered frame, ready to display."""
+    """Generator service -> Orchestrator. One rendered frame, ready to display.
+
+    Extra fields (state, reward_estimate) are forwarded from the optimizer so
+    display clients can update their UI from a single message without a
+    separate status channel.
+    """
 
     frame_b64: str
     z: list[float]
     step_index: int
     t: float = field(default_factory=time.time)
-    format: str = "png"
+    format: str = "jpeg"
+    state: str = "explore"
+    reward_estimate: float = 0.0
 
     def to_json(self) -> str:
         return json.dumps(asdict(self))
