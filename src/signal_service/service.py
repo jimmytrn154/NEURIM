@@ -8,13 +8,15 @@ from __future__ import annotations
 
 import asyncio
 import time
-from typing import AsyncIterator, Callable
+from typing import TYPE_CHECKING, AsyncIterator, Callable
 
 from src.common.config import Config
 from src.common.messages import RewardMessage
 from src.signal_service.eeg_sources import EEGSource
 from src.signal_service.fake_reward import RewardSource
-from src.signal_service.faa import FAARewardComputer
+
+if TYPE_CHECKING:
+    from src.signal_service.faa import FAARewardComputer
 
 
 class FAARewardSource(RewardSource):
@@ -79,6 +81,10 @@ class SignalService:
 
 
 def build_faa_service(config: Config, eeg_source: EEGSource) -> SignalService:
+    # Lazy import: scipy (pulled in by faa.py) is expensive and broken on
+    # Python 3.14 pre-release. Only load it when EEG is actually in use.
+    from src.signal_service.faa import FAARewardComputer  # noqa: PLC0415
+
     computer = FAARewardComputer(
         fs=config.eeg.sample_rate_hz,
         channel_left=config.faa.channel_left,

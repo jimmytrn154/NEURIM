@@ -1,25 +1,11 @@
-<title>NEURIM — "draw a dog"</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>
-  :root {
-    --bg: #eef1ee;
-    --panel: #ffffff;
-    --panel-2: #f4f6f3;
-    --border: #d7ddd6;
-    --text: #16262a;
-    --text-muted: #5c6b67;
-    --accent: #c97f1e;
-    --accent-ink: #ffffff;
-    --state-explore: #4472b8;
-    --state-refine: #b06f1e;
-    --state-settle: #2f8c4a;
-    --state-recover: #b8483d;
-    --shadow: 0 1px 2px rgba(20, 30, 28, 0.06), 0 8px 24px rgba(20, 30, 28, 0.06);
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
-    --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px; --sp-7: 48px;
-  }
-  @media (prefers-color-scheme: dark) {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEURIM — Live Morph Display</title>
+  <meta name="description" content="Real-time display of NEURIM reward-steered latent morphing frames, streamed over WebSocket from the hub server." />
+  <style>
     :root {
       --bg: #0d1416;
       --panel: #141f22;
@@ -33,234 +19,308 @@
       --state-refine: #cf8a3d;
       --state-settle: #4c9a5b;
       --state-recover: #d1554a;
-      --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px rgba(0, 0, 0, 0.35);
+      --state-calibrate: #8ba39e;
+      --shadow: 0 1px 2px rgba(0,0,0,.35), 0 8px 28px rgba(0,0,0,.4);
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+      --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px; --sp-5: 24px; --sp-6: 32px;
+      --radius: 14px;
     }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0d1416; --panel: #141f22; --panel-2: #1b2a2e; --border: #263a3e;
-    --text: #e9f1ee; --text-muted: #8ba39e; --accent: #f2a340; --accent-ink: #2b1a06;
-    --state-explore: #5b8bd6; --state-refine: #cf8a3d; --state-settle: #4c9a5b; --state-recover: #d1554a;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 28px rgba(0, 0, 0, 0.35);
-  }
-  :root[data-theme="light"] {
-    --bg: #eef1ee; --panel: #ffffff; --panel-2: #f4f6f3; --border: #d7ddd6;
-    --text: #16262a; --text-muted: #5c6b67; --accent: #c97f1e; --accent-ink: #ffffff;
-    --state-explore: #4472b8; --state-refine: #b06f1e; --state-settle: #2f8c4a; --state-recover: #b8483d;
-    --shadow: 0 1px 2px rgba(20, 30, 28, 0.06), 0 8px 24px rgba(20, 30, 28, 0.06);
-  }
 
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0; background: var(--bg); color: var(--text);
-    font-family: var(--font-sans);
-  }
-  body { padding: var(--sp-6) var(--sp-5) var(--sp-7); }
-  .wrap { max-width: 980px; margin: 0 auto; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  header { margin-bottom: var(--sp-6); }
-  .eyebrow {
-    font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--text-muted); margin: 0 0 var(--sp-2);
-  }
-  h1 { font-size: 1.65rem; line-height: 1.2; margin: 0 0 var(--sp-2); text-wrap: balance; font-weight: 700; }
-  .subtitle { font-size: 0.95rem; color: var(--text-muted); max-width: 60ch; line-height: 1.5; margin: 0; }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+    }
 
-  .grid { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: var(--sp-5); align-items: start; }
-  @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } }
+    body { padding: var(--sp-6) var(--sp-5) var(--sp-6); }
+    .wrap { max-width: 1020px; margin: 0 auto; }
 
-  .panel {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 14px;
-    box-shadow: var(--shadow); padding: var(--sp-4);
-  }
-  .panel + .panel { margin-top: var(--sp-4); }
-  .panel-title {
-    font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--text-muted); margin: 0 0 var(--sp-3); display: flex; align-items: center; justify-content: space-between;
-  }
+    /* ── Header ─────────────────────────────── */
+    header { margin-bottom: var(--sp-6); }
+    .eyebrow {
+      font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--text-muted); margin-bottom: var(--sp-2);
+    }
+    h1 { font-size: 1.55rem; line-height: 1.2; font-weight: 700; margin-bottom: var(--sp-2); }
+    .subtitle { font-size: 0.9rem; color: var(--text-muted); max-width: 58ch; line-height: 1.55; }
 
-  /* Monitor / canvas bezel */
-  .monitor {
-    background: var(--panel-2); border: 1px solid var(--border); border-radius: 10px;
-    padding: var(--sp-2); position: relative;
-  }
-  .monitor canvas {
-    display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: 6px;
-    background: var(--panel);
-  }
-  .monitor .step-badge {
-    position: absolute; top: var(--sp-3); right: var(--sp-3);
-    font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted);
-    background: color-mix(in srgb, var(--panel) 80%, transparent);
-    padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border);
-    font-variant-numeric: tabular-nums;
-  }
+    /* ── Layout ─────────────────────────────── */
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: var(--sp-5);
+      align-items: start;
+    }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
 
-  /* Prompt card */
-  .prompt-line { font-family: var(--font-mono); font-size: 1.05rem; margin: 0; }
-  .prompt-line span { color: var(--text-muted); }
-  .reveal-btn {
-    margin-top: var(--sp-3); font: inherit; font-size: 0.82rem; color: var(--accent);
-    background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-  .reveal-btn:focus-visible, button:focus-visible, .seg button:focus-visible {
-    outline: 2px solid var(--accent); outline-offset: 2px;
-  }
-  .secret {
-    margin-top: var(--sp-3); padding: var(--sp-3); border-radius: 8px;
-    background: var(--panel-2); border: 1px dashed var(--border);
-    font-size: 0.88rem; line-height: 1.5; display: none;
-  }
-  .secret.shown { display: block; }
-  .secret b { color: var(--text); }
+    /* ── Panel ──────────────────────────────── */
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: var(--sp-4);
+    }
+    .panel + .panel { margin-top: var(--sp-4); }
+    .panel-title {
+      font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--text-muted);
+      margin-bottom: var(--sp-3);
+      display: flex; align-items: center; justify-content: space-between;
+    }
 
-  /* State + step readout */
-  .state-row { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-3); }
-  .chip {
-    display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: 0.88rem;
-    padding: 5px 12px; border-radius: 999px; border: 1px solid var(--border); white-space: nowrap;
-  }
-  .chip .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-  .chip.explore { color: var(--state-explore); }
-  .chip.refine { color: var(--state-refine); }
-  .chip.settle { color: var(--state-settle); }
-  .chip.recover { color: var(--state-recover); }
-  .chip.calibrate { color: var(--text-muted); }
-  .step-count { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+    /* ── Stage / canvas ─────────────────────── */
+    .stage-wrap {
+      position: relative;
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: var(--sp-2);
+      overflow: hidden;
+    }
+    #stage {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1 / 1;
+      border-radius: 6px;
+      background: #0a0f10;
+      image-rendering: auto;
+    }
 
-  /* Sparkline */
-  .spark-wrap { position: relative; }
-  canvas#spark { width: 100%; height: 92px; display: block; }
-  .spark-readout {
-    position: absolute; top: 0; right: 0; font-family: var(--font-mono); font-size: 1.05rem;
-    font-weight: 600; font-variant-numeric: tabular-nums;
-  }
+    /* Idle / connecting overlay */
+    .stage-overlay {
+      position: absolute;
+      inset: var(--sp-2);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-3);
+      background: rgba(10, 15, 16, 0.85);
+      backdrop-filter: blur(4px);
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .stage-overlay.hidden { opacity: 0; }
+    .overlay-icon { font-size: 2.2rem; line-height: 1; }
+    .overlay-text { font-size: 0.88rem; color: var(--text-muted); text-align: center; max-width: 22ch; }
 
-  /* z-vector meters */
-  .meters { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-2); }
-  .meter-row { display: grid; grid-template-columns: 56px 1fr; align-items: center; gap: var(--sp-3); }
-  .meter-label { font-size: 0.76rem; color: var(--text-muted); }
-  .meter-track {
-    position: relative; height: 6px; border-radius: 999px; background: var(--panel-2);
-    border: 1px solid var(--border); overflow: hidden;
-  }
-  .meter-track::after {
-    content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--border);
-  }
-  .meter-fill { position: absolute; top: 0; bottom: 0; border-radius: 999px; }
+    /* Step badge */
+    .step-badge {
+      position: absolute;
+      top: calc(var(--sp-2) + var(--sp-2));
+      right: calc(var(--sp-2) + var(--sp-2));
+      font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted);
+      background: color-mix(in srgb, var(--panel) 80%, transparent);
+      padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border);
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+    }
 
-  /* Controls */
-  .seg { display: inline-flex; border: 1px solid var(--border); border-radius: 10px; padding: 3px; background: var(--panel-2); gap: 2px; }
-  .seg button {
-    font: inherit; font-size: 0.82rem; font-weight: 600; border: none; background: none; color: var(--text-muted);
-    padding: 6px 12px; border-radius: 8px; cursor: pointer;
-  }
-  .seg button.active { background: var(--panel); color: var(--text); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
+    /* FPS badge */
+    .fps-badge {
+      position: absolute;
+      bottom: calc(var(--sp-2) + var(--sp-2));
+      right: calc(var(--sp-2) + var(--sp-2));
+      font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted);
+      background: color-mix(in srgb, var(--panel) 80%, transparent);
+      padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border);
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+    }
 
-  .btn-row { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-top: var(--sp-4); }
-  button.btn {
-    font: inherit; font-size: 0.88rem; font-weight: 600; padding: 9px 16px; border-radius: 9px;
-    border: 1px solid var(--border); background: var(--panel-2); color: var(--text); cursor: pointer;
-  }
-  button.btn:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--border)); }
-  button.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
-  button.btn:disabled { opacity: 0.45; cursor: not-allowed; }
-  .hint { font-size: 0.78rem; color: var(--text-muted); margin-top: var(--sp-2); }
-  kbd {
-    font-family: var(--font-mono); font-size: 0.78em; background: var(--panel-2); border: 1px solid var(--border);
-    border-bottom-width: 2px; border-radius: 5px; padding: 1px 5px;
-  }
+    /* ── State chip ─────────────────────────── */
+    .state-row { display: flex; align-items: center; gap: var(--sp-3); margin-bottom: var(--sp-4); }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px; font-weight: 600;
+      font-size: 0.85rem; padding: 5px 12px; border-radius: 999px;
+      border: 1px solid var(--border); white-space: nowrap;
+    }
+    .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .chip.explore  { color: var(--state-explore); }
+    .chip.refine   { color: var(--state-refine); }
+    .chip.settle   { color: var(--state-settle); }
+    .chip.recover  { color: var(--state-recover); }
+    .chip.calibrate { color: var(--state-calibrate); }
+    .step-count { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 
-  footer.note {
-    margin-top: var(--sp-6); font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; max-width: 68ch;
-  }
+    /* ── Sparkline ──────────────────────────── */
+    .spark-wrap { position: relative; }
+    canvas#spark { width: 100%; height: 88px; display: block; }
+    .spark-readout {
+      position: absolute; top: 0; right: 0;
+      font-family: var(--font-mono); font-size: 1rem; font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
 
-  @media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; animation: none !important; }
-  }
-</style>
+    /* ── z-vector meters ────────────────────── */
+    .meters { display: flex; flex-direction: column; gap: var(--sp-2); margin-top: var(--sp-2); }
+    .meter-row { display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: var(--sp-3); }
+    .meter-label { font-size: 0.74rem; color: var(--text-muted); font-family: var(--font-mono); }
+    .meter-track {
+      position: relative; height: 5px; border-radius: 999px;
+      background: var(--panel-2); border: 1px solid var(--border); overflow: hidden;
+    }
+    .meter-track::after {
+      content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px;
+      width: 1px; background: var(--border);
+    }
+    .meter-fill { position: absolute; top: 0; bottom: 0; border-radius: 999px; transition: left 0.1s, width 0.1s; }
 
+    /* ── Connect panel ──────────────────────── */
+    .connect-form { display: flex; gap: var(--sp-2); flex-wrap: wrap; margin-bottom: var(--sp-3); }
+    .url-input {
+      flex: 1; min-width: 160px;
+      font: inherit; font-size: 0.85rem; font-family: var(--font-mono);
+      padding: 8px 12px; border-radius: 9px;
+      border: 1px solid var(--border); background: var(--panel-2); color: var(--text);
+      outline: none;
+    }
+    .url-input:focus { border-color: var(--accent); }
+    .url-input:disabled { opacity: 0.5; }
+
+    button.btn {
+      font: inherit; font-size: 0.85rem; font-weight: 600;
+      padding: 8px 16px; border-radius: 9px;
+      border: 1px solid var(--border); background: var(--panel-2); color: var(--text);
+      cursor: pointer; white-space: nowrap;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    button.btn:hover:not(:disabled) { border-color: color-mix(in srgb, var(--accent) 60%, var(--border)); }
+    button.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+    button.btn.primary:hover:not(:disabled) { filter: brightness(1.08); }
+    button.btn.danger { background: var(--state-recover); color: #fff; border-color: transparent; }
+    button.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .status-line {
+      font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono);
+      min-height: 1.4em;
+    }
+    .status-line.ok   { color: var(--state-settle); }
+    .status-line.err  { color: var(--state-recover); }
+    .status-line.warn { color: var(--accent); }
+
+    /* ── Queue indicator ────────────────────── */
+    .queue-row {
+      display: flex; align-items: center; gap: var(--sp-2);
+      margin-top: var(--sp-3); font-size: 0.74rem; color: var(--text-muted);
+    }
+    .queue-pips { display: flex; gap: 3px; }
+    .pip {
+      width: 8px; height: 8px; border-radius: 2px;
+      background: var(--panel-2); border: 1px solid var(--border);
+      transition: background 0.1s;
+    }
+    .pip.filled { background: var(--accent); border-color: var(--accent); }
+
+    footer.note {
+      margin-top: var(--sp-6); font-size: 0.78rem; color: var(--text-muted);
+      line-height: 1.6; max-width: 66ch;
+    }
+    code { font-family: var(--font-mono); }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
 <div class="wrap">
   <header>
     <p class="eyebrow">NEURIM — reward-steered latent search</p>
-    <h1>The prompt says "draw a dog." Your reward signal says otherwise.</h1>
+    <h1>Live morphing display</h1>
     <p class="subtitle">
-      The model only ever sees the word "dog." Every step below, it shows you a candidate and
-      reads one number back — did you lean toward it, or away? That's the entire interface.
-      Watch a generic dog drift into something much more specific, using nothing but that scalar.
+      Frames are streamed from the hub server in real time. The optimizer
+      navigates the latent space using a scalar reward signal; each frame is
+      a JPEG snapshot of the current candidate, interpolated smoothly between
+      optimizer steps.
     </p>
   </header>
 
   <div class="grid">
+    <!-- Left: frame viewer -->
     <div>
       <div class="panel">
-        <p class="panel-title">Generator output</p>
-        <div class="monitor">
-          <canvas id="stage" width="640" height="480" aria-label="Generated candidate image, morphing as the search converges"></canvas>
-          <div class="step-badge" id="stepBadge">step 0 / 60</div>
-        </div>
-      </div>
+        <p class="panel-title">
+          Generator output
+          <span id="fmtBadge" style="font-variant-numeric:tabular-nums;">—</span>
+        </p>
+        <div class="stage-wrap">
+          <canvas id="stage" width="512" height="512"
+            aria-label="Real-time morphing frame from the NEURIM generator"></canvas>
 
-      <div class="panel">
-        <p class="prompt-line"><span>prompt →</span> "draw a dog"</p>
-        <button class="reveal-btn" id="revealBtn" aria-expanded="false">What did you actually picture?</button>
-        <div class="secret" id="secretBox">
-          <b>🐩 A white poodle, standing on green grass.</b><br />
-          That target never gets sent anywhere as text — it only ever exists as the thing your
-          reward signal is quietly steering toward.
+          <div class="stage-overlay" id="overlay">
+            <div class="overlay-icon">⬡</div>
+            <p class="overlay-text">Connect to the hub to start streaming frames</p>
+          </div>
+
+          <div class="step-badge" id="stepBadge">step —</div>
+          <div class="fps-badge" id="fpsBadge">— fps</div>
         </div>
       </div>
     </div>
 
+    <!-- Right: status + connect -->
     <div>
+      <!-- State -->
       <div class="panel">
-        <p class="panel-title">State</p>
+        <p class="panel-title">Optimizer state</p>
         <div class="state-row">
-          <span class="chip calibrate" id="stateChip"><span class="dot"></span><span id="stateLabel">Calibrating</span></span>
-          <span class="step-count" id="stepCount">step 0</span>
+          <span class="chip calibrate" id="stateChip">
+            <span class="dot"></span>
+            <span id="stateLabel">Waiting</span>
+          </span>
+          <span class="step-count" id="stepCount">step —</span>
         </div>
 
-        <p class="panel-title" style="margin-top: var(--sp-4);">Reward r(t)</p>
+        <p class="panel-title" style="margin-top:var(--sp-4)">Reward r(t)</p>
         <div class="spark-wrap">
-          <canvas id="spark" width="600" height="92"></canvas>
-          <span class="spark-readout" id="rewardReadout">0.00</span>
+          <canvas id="spark" width="500" height="88"></canvas>
+          <span class="spark-readout" id="rewardReadout">—</span>
         </div>
 
-        <p class="panel-title" style="margin-top: var(--sp-4);">Search vector z</p>
+        <p class="panel-title" style="margin-top:var(--sp-4)">Search vector z</p>
         <div class="meters" id="meters"></div>
       </div>
 
+      <!-- Connect -->
       <div class="panel">
-        <p class="panel-title">Reward source</p>
-        <div class="seg" role="group" aria-label="Reward source">
-          <button id="modeAuto" class="active">Simulated signal</button>
-          <button id="modeManual">You're the signal</button>
+        <p class="panel-title">WebSocket connection</p>
+        <div class="connect-form">
+          <input id="urlInput" class="url-input" type="text"
+            value="ws://localhost:8765"
+            placeholder="ws://host:port"
+            aria-label="WebSocket hub URL" />
+          <button class="btn primary" id="connectBtn">Connect</button>
+          <button class="btn danger" id="disconnectBtn" disabled>Disconnect</button>
         </div>
+        <p class="status-line" id="statusLine">Not connected</p>
 
-        <div class="btn-row" id="autoControls">
-          <button class="btn primary" id="startBtn">Start search</button>
-          <button class="btn" id="pauseBtn" disabled>Pause</button>
-          <button class="btn" id="resetBtn">Reset</button>
+        <div class="queue-row">
+          <span>Frame buffer</span>
+          <div class="queue-pips" id="queuePips">
+            <div class="pip" id="pip0"></div>
+            <div class="pip" id="pip1"></div>
+            <div class="pip" id="pip2"></div>
+          </div>
+          <span id="queueCount">0 / 3</span>
         </div>
-
-        <div class="btn-row" id="manualControls" style="display:none;">
-          <button class="btn" id="dislikeBtn">Not this ↓</button>
-          <button class="btn primary" id="likeBtn">I like this ↑</button>
-          <button class="btn" id="pauseBtn2" disabled>Pause</button>
-          <button class="btn" id="resetBtn2">Reset</button>
-        </div>
-        <p class="hint" id="modeHint">
-          A hidden target stands in for "what you wanted" — same reward, same optimizer, no brain required.
-        </p>
       </div>
     </div>
   </div>
 
   <footer class="note">
-    This is the fake-reward proof from the build order: before any EEG touches the loop, it has to
-    converge on a keyboard or a mouse. In the real system, <code style="font-family:var(--font-mono)">r(t)</code>
-    comes from frontal alpha asymmetry decoded every ~250ms over a 2-second window — the optimizer
-    and generator here are unchanged either way.
+    Start the hub with <code>.venv/bin/python scripts/run_demo.py --serve</code>, open this page at
+    <code>http://localhost:8080/dog_demo.html</code>, then connect above.
+    The display client receives a continuous stream of JPEG frames; each carries the current
+    latent vector <code>z</code>, optimizer state, and windowed reward estimate — no separate
+    status channel needed.
   </footer>
 </div>
 
@@ -268,422 +328,114 @@
 (() => {
   "use strict";
 
-  // ---------- utils ----------
-  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-  const lerp = (a, b, t) => a + (b - a) * t;
+  // ── Helpers ────────────────────────────────────────────────────────────────
+  const clamp  = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const lerp   = (a, b, t) => a + (b - a) * t;
   const norm01 = (v) => clamp((v + 1) / 2, 0, 1);
-  function hexToRgb(hex) {
-    const n = parseInt(hex.slice(1), 16);
-    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
-  }
-  function lerpColor(hexA, hexB, t) {
-    const a = hexToRgb(hexA), b = hexToRgb(hexB);
-    const r = Math.round(lerp(a[0], b[0], t));
-    const g = Math.round(lerp(a[1], b[1], t));
-    const bl = Math.round(lerp(a[2], b[2], t));
-    return `rgb(${r},${g},${bl})`;
-  }
-  function gaussian(std) {
-    let u = 0, v = 0;
-    while (u === 0) u = Math.random();
-    while (v === 0) v = Math.random();
-    return std * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-  }
+
   function cssVar(name) {
     return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
   }
-
-  // ---------- config (mirrors src/common/config.py defaults) ----------
-  const DIMS = 6;
-  const BOUNDS = 1.0;
-  const TICK_MS = 150;         // reward sampling cadence
-  const WINDOW_TICKS = 4;      // ticks averaged per optimizer decision (~600ms/step)
-  const STEP_MS = TICK_MS * WINDOW_TICKS;
-  const MAX_STEPS = 60;
-
-  const OPT = {
-    stepExplore: 0.5,
-    stepRefineMin: 0.05,
-    momentum: 0.6,
-    noiseThreshold: 0.05,
-  };
-  const SM = {
-    settleRewardThreshold: 0.55,
-    settleMotionThreshold: 0.1,
-    settlePatienceSteps: 3,
-    recoverNegativeStreak: 4,
-    recoverWidenFactor: 1.5,
-    refineEntryReward: 0.05,
-    refineExitMargin: 0.1,
-  };
-
-  const TARGET = [0.95, 0.9, 0.85, 0.8, 0.7, 0.6]; // white poodle, green grass, curly, poofy, round ears, poof tail
-
-  // ---------- momentum hill-climb (mirrors src/optimizer/hill_climb.py) ----------
-  class MomentumHillClimb {
-    constructor(dims) {
-      this.dims = dims;
-      this.stepSize = OPT.stepExplore;
-      this.z = new Array(dims).fill(0);
-      this.velocity = this.randomDirection(this.stepSize);
-      this.bestZ = this.z.slice();
-      this.bestReward = -Infinity;
-    }
-    randomDirection(scale) {
-      const d = Array.from({ length: this.dims }, () => Math.random() * 2 - 1);
-      const norm = Math.sqrt(d.reduce((s, x) => s + x * x, 0)) || 1;
-      return d.map((x) => (x / norm) * scale);
-    }
-    propose() {
-      return this.z.map((zi, i) => clamp(zi + this.velocity[i], -BOUNDS, BOUNDS));
-    }
-    update(candidate, rewardBefore, rewardAfter) {
-      if (rewardAfter > this.bestReward) {
-        this.bestReward = rewardAfter;
-        this.bestZ = candidate.slice();
-      }
-      const diff = rewardAfter - rewardBefore;
-      if (Math.abs(diff) < OPT.noiseThreshold) {
-        this.velocity = this.randomDirection(this.stepSize);
-        return false;
-      }
-      if (diff > 0) {
-        this.z = candidate;
-        const rand = this.randomDirection(this.stepSize);
-        const combined = this.velocity.map((v, i) => OPT.momentum * v + (1 - OPT.momentum) * rand[i]);
-        const norm = Math.sqrt(combined.reduce((s, x) => s + x * x, 0)) || 1;
-        this.velocity = combined.map((x) => (x / norm) * this.stepSize);
-        return true;
-      }
-      this.velocity = this.velocity.map((v) => -v);
-      return false;
-    }
-    setStepSize(s) {
-      this.stepSize = s;
-      const norm = Math.sqrt(this.velocity.reduce((sum, x) => sum + x * x, 0));
-      if (norm > 1e-9) this.velocity = this.velocity.map((x) => (x / norm) * s);
-    }
-    revertToBest() {
-      this.z = this.bestZ.slice();
-      this.velocity = this.randomDirection(this.stepSize);
-    }
+  function hexToRgb(hex) {
+    const n = parseInt(hex.replace("#",""), 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function colorWithAlpha(hex, alpha) {
+    const [r, g, b] = hexToRgb(hex);
+    return `rgba(${r},${g},${b},${alpha})`;
   }
 
-  // ---------- state machine (mirrors src/optimizer/state_machine.py) ----------
-  class StateMachine {
-    constructor() {
-      this.state = "calibrate";
-      this.stepIndex = 0;
-      this.rewardHistory = [];
-      this.negativeStreak = 0;
-      this.settleStreak = 0;
-    }
-    markCalibrated() { if (this.state === "calibrate") this.state = "explore"; }
-    recentAverage(n = 5) {
-      if (!this.rewardHistory.length) return 0;
-      const recent = this.rewardHistory.slice(-n);
-      return recent.reduce((a, b) => a + b, 0) / recent.length;
-    }
-    observe(reward, stepNorm) {
-      this.stepIndex++;
-      this.rewardHistory.push(reward);
-      if (this.rewardHistory.length > 20) this.rewardHistory.shift();
-      if (this.state === "calibrate") return this.state;
+  // ── DOM refs ───────────────────────────────────────────────────────────────
+  const stage         = document.getElementById("stage");
+  const ctx           = stage.getContext("2d");
+  const overlay       = document.getElementById("overlay");
+  const stepBadge     = document.getElementById("stepBadge");
+  const fpsBadge      = document.getElementById("fpsBadge");
+  const fmtBadge      = document.getElementById("fmtBadge");
+  const stateChip     = document.getElementById("stateChip");
+  const stateLabel    = document.getElementById("stateLabel");
+  const stepCount     = document.getElementById("stepCount");
+  const rewardReadout = document.getElementById("rewardReadout");
+  const statusLine    = document.getElementById("statusLine");
+  const urlInput      = document.getElementById("urlInput");
+  const connectBtn    = document.getElementById("connectBtn");
+  const disconnectBtn = document.getElementById("disconnectBtn");
+  const queueCount    = document.getElementById("queueCount");
+  const pips          = [0, 1, 2].map(i => document.getElementById(`pip${i}`));
 
-      this.negativeStreak = reward < 0 ? this.negativeStreak + 1 : 0;
-      if (this.negativeStreak >= SM.recoverNegativeStreak) { this.state = "recover"; return this.state; }
-      if (this.state === "recover") { this.negativeStreak = 0; this.state = "explore"; return this.state; }
-
-      if (reward >= SM.settleRewardThreshold && stepNorm < SM.settleMotionThreshold) this.settleStreak++;
-      else this.settleStreak = 0;
-      if (this.settleStreak >= SM.settlePatienceSteps) { this.state = "settle"; return this.state; }
-
-      const avg = this.recentAverage();
-      if (this.state === "explore" && avg >= SM.refineEntryReward) this.state = "refine";
-      else if (this.state === "refine" && avg < SM.refineEntryReward - SM.refineExitMargin) this.state = "explore";
-      return this.state;
-    }
-    stepSize() {
-      const { stepExplore, stepRefineMin } = OPT;
-      if (this.state === "calibrate" || this.state === "explore") return stepExplore;
-      if (this.state === "recover") return stepExplore * SM.recoverWidenFactor;
-      if (this.state === "settle") return stepRefineMin;
-      const progress = clamp(this.recentAverage() / Math.max(SM.settleRewardThreshold, 1e-6), 0, 1);
-      return stepExplore + progress * (stepRefineMin - stepExplore);
-    }
-    shouldStop() { return this.state === "settle" || this.stepIndex >= MAX_STEPS; }
-  }
-
-  // ---------- optimizer service (mirrors src/optimizer/service.py) ----------
-  class OptimizerService {
-    constructor() {
-      this.hc = new MomentumHillClimb(DIMS);
-      this.sm = new StateMachine();
-      this.rewardBuffer = [];
-      this.currentRewardEstimate = 0;
-      this.candidate = this.hc.propose();
-    }
-    currentZ() { return this.hc.z; }
-    pendingCandidate() { return this.candidate; }
-    notifyCalibrated() { this.sm.markCalibrated(); }
-    observeReward(r) {
-      this.rewardBuffer.push(r);
-      if (this.rewardBuffer.length < WINDOW_TICKS) return null;
-      const windowed = this.rewardBuffer.reduce((a, b) => a + b, 0) / this.rewardBuffer.length;
-      this.rewardBuffer = [];
-
-      const rewardBefore = this.currentRewardEstimate;
-      const candidate = this.candidate;
-      const accepted = this.hc.update(candidate, rewardBefore, windowed);
-      if (accepted) this.currentRewardEstimate = windowed;
-
-      const stepNorm = Math.sqrt(this.hc.velocity.reduce((s, x) => s + x * x, 0));
-      const state = this.sm.observe(windowed, stepNorm);
-
-      if (state === "recover") this.hc.revertToBest();
-      else this.hc.setStepSize(this.sm.stepSize());
-
-      this.candidate = this.hc.propose();
-      return { z: this.candidate.slice(), stepIndex: this.sm.stepIndex, state, reward: windowed };
-    }
-  }
-
-  // ---------- reward sources ----------
-  class ScriptedRewardSource {
-    constructor(target, getCurrentZ) { this.target = target; this.getCurrentZ = getCurrentZ; }
-    read() {
-      const z = this.getCurrentZ();
-      const dist = Math.sqrt(z.reduce((s, zi, i) => s + (zi - this.target[i]) ** 2, 0));
-      const raw = 1 - dist;
-      return clamp(raw + gaussian(0.05), -1, 1);
-    }
-  }
-  class ManualRewardSource {
-    constructor() { this.value = 0; }
-    press(delta) { this.value = clamp(this.value + delta, -1, 1); }
-    read() { const v = this.value; this.value *= 0.9; return v; }
-  }
-
-  // ---------- drawing: the "dog" ----------
-  const stage = document.getElementById("stage");
-  const sctx = stage.getContext("2d");
-
-  function drawDog(z) {
-    const w = stage.width, h = stage.height;
-    const furWhite = norm01(z[0]);
-    const grassAmt = norm01(z[1]);
-    const curl = norm01(z[2]);
-    const poof = norm01(z[3]);
-    const earRound = norm01(z[4]);
-    const tailCurl = norm01(z[5]);
-
-    const furColor = lerpColor("#b5824f", "#f8f5ee", furWhite);
-    const furShade = lerpColor("#96683c", "#ded6c4", furWhite);
-    const groundColor = lerpColor("#cfd0c7", "#5a9a55", grassAmt);
-    const skyColor = lerpColor("#e8e7e1", "#dff1e0", grassAmt * 0.6);
-
-    sctx.clearRect(0, 0, w, h);
-    sctx.fillStyle = skyColor;
-    sctx.fillRect(0, 0, w, h);
-
-    const groundY = h * 0.72;
-    sctx.fillStyle = groundColor;
-    sctx.fillRect(0, groundY, w, h - groundY);
-
-    if (grassAmt > 0.15) {
-      const tuftCount = Math.round(grassAmt * 40);
-      sctx.strokeStyle = lerpColor(groundColor, "#2f6b34", 0.5);
-      sctx.lineWidth = 2;
-      const rng = mulberry32(7);
-      for (let i = 0; i < tuftCount; i++) {
-        const x = rng() * w;
-        const y = groundY + rng() * (h - groundY) * 0.85 + 6;
-        const tuftH = 6 + rng() * 8;
-        sctx.beginPath();
-        sctx.moveTo(x, y);
-        sctx.quadraticCurveTo(x + 3, y - tuftH * 0.6, x + (rng() - 0.5) * 6, y - tuftH);
-        sctx.stroke();
-      }
-    }
-
-    const cx = w * 0.5, bodyY = groundY - h * 0.14;
-    const bodyRX = w * 0.2, bodyRY = h * 0.13;
-
-    // legs
-    sctx.fillStyle = furShade;
-    [-1, -0.4, 0.4, 1].forEach((off) => {
-      sctx.beginPath();
-      sctx.ellipse(cx + off * bodyRX * 0.85, groundY - 4, w * 0.028, h * 0.075, 0, 0, Math.PI * 2);
-      sctx.fill();
-    });
-
-    // tail
-    const tailBaseX = cx + bodyRX * 0.95, tailBaseY = bodyY;
-    sctx.strokeStyle = furColor;
-    sctx.lineWidth = w * 0.02;
-    sctx.lineCap = "round";
-    sctx.beginPath();
-    sctx.moveTo(tailBaseX, tailBaseY);
-    const tailEndX = lerp(tailBaseX + w * 0.09, tailBaseX + w * 0.03, tailCurl);
-    const tailEndY = lerp(tailBaseY - h * 0.04, tailBaseY - h * 0.13, tailCurl);
-    const tailCtrlX = tailBaseX + w * 0.08;
-    const tailCtrlY = tailBaseY - h * 0.02 - tailCurl * h * 0.05;
-    sctx.quadraticCurveTo(tailCtrlX, tailCtrlY, tailEndX, tailEndY);
-    sctx.stroke();
-    if (poof > 0.3) poofCluster(tailEndX, tailEndY, w * 0.045 * poof, furColor, furShade, 5, curl);
-
-    // body
-    sctx.fillStyle = furColor;
-    sctx.beginPath();
-    sctx.ellipse(cx, bodyY, bodyRX, bodyRY, 0, 0, Math.PI * 2);
-    sctx.fill();
-    if (poof > 0.2) poofCluster(cx, bodyY, bodyRX * 0.9, furColor, furShade, Math.round(6 + poof * 10), curl);
-
-    // head
-    const headX = cx - bodyRX * 0.95, headY = bodyY - bodyRY * 0.55;
-    const headR = h * 0.11;
-    sctx.fillStyle = furColor;
-    sctx.beginPath();
-    sctx.ellipse(headX, headY, headR, headR * 0.95, 0, 0, Math.PI * 2);
-    sctx.fill();
-    if (poof > 0.2) poofCluster(headX, headY, headR * 1.05, furColor, furShade, Math.round(4 + poof * 6), curl);
-
-    // ears: floppy (pointed teardrop) <-> round poodle poof
-    [-1, 1].forEach((side) => {
-      const earX = headX + side * headR * 0.7;
-      const earY = headY - headR * 0.3;
-      sctx.fillStyle = lerpColor(furShade, furColor, 0.3);
-      sctx.beginPath();
-      if (earRound < 0.5) {
-        sctx.ellipse(earX, earY + headR * 0.55, headR * 0.28, headR * (0.6 - earRound * 0.2), side * 0.3, 0, Math.PI * 2);
-      } else {
-        sctx.ellipse(earX, earY + headR * 0.3, headR * 0.32, headR * 0.32, 0, 0, Math.PI * 2);
-      }
-      sctx.fill();
-      if (earRound > 0.5) poofCluster(earX, earY + headR * 0.3, headR * 0.3, furColor, furShade, 4, curl);
-    });
-
-    // face
-    sctx.fillStyle = "#2b2320";
-    sctx.beginPath();
-    sctx.ellipse(headX - headR * 0.5, headY + headR * 0.05, headR * 0.11, headR * 0.11, 0, 0, Math.PI * 2);
-    sctx.fill();
-    sctx.beginPath();
-    sctx.ellipse(headX + headR * 0.15, headY - headR * 0.15, headR * 0.09, headR * 0.09, 0, 0, Math.PI * 2);
-    sctx.fill();
-  }
-
-  // curl controls puff irregularity: tight uniform dots at low curl (short
-  // smooth coat catching a little light), big lumpy overlapping puffs at
-  // high curl (groomed poodle texture) - distinct from `poof`, which only
-  // controls how much of the body the clustering covers at all.
-  function poofCluster(cx, cy, radius, colorLight, colorShade, count, curl) {
-    const rng = mulberry32(Math.round((cx + cy) * 97));
-    const sizeMin = lerp(0.14, 0.2, curl);
-    const sizeSpread = lerp(0.08, 0.32, curl);
-    for (let i = 0; i < count; i++) {
-      const angle = rng() * Math.PI * 2;
-      const dist = rng() * radius * 0.7;
-      const px = cx + Math.cos(angle) * dist;
-      const py = cy + Math.sin(angle) * dist * 0.7;
-      const r = radius * (sizeMin + rng() * sizeSpread);
-      sctx.fillStyle = rng() > 0.5 ? colorLight : colorShade;
-      sctx.beginPath();
-      sctx.ellipse(px, py, r, r * (0.85 - curl * 0.15), 0, 0, Math.PI * 2);
-      sctx.fill();
-    }
-  }
-  function mulberry32(seed) {
-    let a = seed;
-    return function () {
-      a |= 0; a = (a + 0x6d2b79f5) | 0;
-      let t = Math.imul(a ^ (a >>> 15), 1 | a);
-      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-  }
-
-  // ---------- sparkline ----------
-  const spark = document.getElementById("spark");
-  const pctx = spark.getContext("2d");
+  // ── Sparkline setup ────────────────────────────────────────────────────────
+  const spark   = document.getElementById("spark");
+  const pctx    = spark.getContext("2d");
   const rewardLog = [];
-  const MAX_LOG = 90;
+  const MAX_LOG = 80;
+  const SETTLE_THRESH = 0.55;
 
   function drawSpark() {
     const w = spark.width, h = spark.height;
     pctx.clearRect(0, 0, w, h);
-    const border = cssVar("--border"), muted = cssVar("--text-muted"), accent = cssVar("--accent");
+    const border = cssVar("--border");
+    const muted  = cssVar("--text-muted");
+    const accent = cssVar("--accent");
 
-    // gridlines at -1, 0, 1 and the settle threshold
-    pctx.strokeStyle = border;
-    pctx.lineWidth = 1;
-    [-1, 0, 1].forEach((v) => {
+    pctx.strokeStyle = border; pctx.lineWidth = 1;
+    [-1, 0, 1].forEach(v => {
       const y = h - ((v + 1) / 2) * h;
       pctx.beginPath(); pctx.moveTo(0, y); pctx.lineTo(w, y); pctx.stroke();
     });
-    const thY = h - ((SM.settleRewardThreshold + 1) / 2) * h;
-    pctx.setLineDash([4, 4]);
-    pctx.strokeStyle = muted;
+    const thY = h - ((SETTLE_THRESH + 1) / 2) * h;
+    pctx.setLineDash([4, 4]); pctx.strokeStyle = muted;
     pctx.beginPath(); pctx.moveTo(0, thY); pctx.lineTo(w, thY); pctx.stroke();
     pctx.setLineDash([]);
 
     if (rewardLog.length < 2) return;
     const n = rewardLog.length;
     const stepX = w / (MAX_LOG - 1);
-    const xAt = (i) => w - (n - 1 - i) * stepX;
-    const yAt = (v) => h - ((clamp(v, -1, 1) + 1) / 2) * h;
+    const xAt = i => w - (n - 1 - i) * stepX;
+    const yAt = v => h - ((clamp(v, -1, 1) + 1) / 2) * h;
 
-    // area fill
     const grad = pctx.createLinearGradient(0, 0, 0, h);
     grad.addColorStop(0, colorWithAlpha(accent, 0.35));
     grad.addColorStop(1, colorWithAlpha(accent, 0.02));
     pctx.fillStyle = grad;
-    pctx.beginPath();
-    pctx.moveTo(xAt(0), h);
+    pctx.beginPath(); pctx.moveTo(xAt(0), h);
     rewardLog.forEach((v, i) => pctx.lineTo(xAt(i), yAt(v)));
-    pctx.lineTo(xAt(n - 1), h);
-    pctx.closePath();
-    pctx.fill();
+    pctx.lineTo(xAt(n - 1), h); pctx.closePath(); pctx.fill();
 
-    // line
-    pctx.strokeStyle = accent;
-    pctx.lineWidth = 2;
+    pctx.strokeStyle = accent; pctx.lineWidth = 2;
     pctx.beginPath();
     rewardLog.forEach((v, i) => (i === 0 ? pctx.moveTo(xAt(i), yAt(v)) : pctx.lineTo(xAt(i), yAt(v))));
     pctx.stroke();
 
-    // emphasized endpoint
-    const lastV = rewardLog[n - 1];
-    pctx.fillStyle = accent;
-    pctx.shadowColor = accent;
-    pctx.shadowBlur = 8;
-    pctx.beginPath();
-    pctx.arc(xAt(n - 1), yAt(lastV), 3.5, 0, Math.PI * 2);
-    pctx.fill();
+    const lv = rewardLog[n - 1];
+    pctx.fillStyle = accent; pctx.shadowColor = accent; pctx.shadowBlur = 8;
+    pctx.beginPath(); pctx.arc(xAt(n - 1), yAt(lv), 3.5, 0, Math.PI * 2); pctx.fill();
     pctx.shadowBlur = 0;
   }
-  function colorWithAlpha(hexOrRgb, alpha) {
-    if (hexOrRgb.startsWith("#")) {
-      const [r, g, b] = hexToRgb(hexOrRgb);
-      return `rgba(${r},${g},${b},${alpha})`;
+
+  // ── z-vector meters ────────────────────────────────────────────────────────
+  const metersEl = document.getElementById("meters");
+  const Z_LABELS = ["z₀","z₁","z₂","z₃","z₄","z₅","z₆","z₇"];
+  let meterEls = [];
+
+  function ensureMeters(n) {
+    while (meterEls.length < n) {
+      const i = meterEls.length;
+      const row = document.createElement("div");
+      row.className = "meter-row";
+      row.innerHTML = `<span class="meter-label">${Z_LABELS[i] ?? `z${i}`}</span>`
+        + `<div class="meter-track"><div class="meter-fill" id="mf${i}"></div></div>`;
+      metersEl.appendChild(row);
+      meterEls.push(document.getElementById(`mf${i}`));
     }
-    return hexOrRgb.replace("rgb(", "rgba(").replace(")", `,${alpha})`);
   }
 
-  // ---------- z-vector meters ----------
-  const METER_LABELS = ["Fur", "Grass", "Curl", "Poof", "Ears", "Tail"];
-  const metersEl = document.getElementById("meters");
-  METER_LABELS.forEach((label, i) => {
-    const row = document.createElement("div");
-    row.className = "meter-row";
-    row.innerHTML = `<span class="meter-label">${label}</span><div class="meter-track"><div class="meter-fill" id="meter-${i}"></div></div>`;
-    metersEl.appendChild(row);
-  });
   function drawMeters(z) {
+    ensureMeters(z.length);
+    const accent  = cssVar("--accent");
+    const explore = cssVar("--state-explore");
     z.forEach((v, i) => {
-      const el = document.getElementById(`meter-${i}`);
       const t = clamp(v, -1, 1);
-      const explore = cssVar("--state-explore"), accent = cssVar("--accent");
+      const el = meterEls[i];
       if (t >= 0) {
         el.style.left = "50%"; el.style.width = `${t * 50}%`; el.style.background = accent;
       } else {
@@ -692,144 +444,162 @@
     });
   }
 
-  // ---------- orchestrator ----------
-  const optimizer = new OptimizerService();
-  let mode = "auto";
-  let tickHandle = null;
-  let scriptedSource = new ScriptedRewardSource(TARGET, () => optimizer.pendingCandidate());
-  let manualSource = new ManualRewardSource();
-
-  let displayZ = optimizer.currentZ().slice();
-  let interpFrom = displayZ.slice();
-  let interpTo = optimizer.pendingCandidate().slice();
-  let stepStartedAt = performance.now();
-
-  const stateChip = document.getElementById("stateChip");
-  const stateLabel = document.getElementById("stateLabel");
-  const stepCount = document.getElementById("stepCount");
-  const stepBadge = document.getElementById("stepBadge");
-  const rewardReadout = document.getElementById("rewardReadout");
-
+  // ── State display ──────────────────────────────────────────────────────────
   const STATE_COPY = {
     calibrate: "Calibrating",
-    explore: "Exploring",
-    refine: "Refining",
-    settle: "Locked in",
-    recover: "Recovering",
+    explore:   "Exploring",
+    refine:    "Refining",
+    settle:    "Locked in",
+    recover:   "Recovering",
   };
 
-  function setState(state) {
+  function applyState(state, stepIndex, reward) {
     stateChip.className = `chip ${state}`;
-    stateLabel.textContent = STATE_COPY[state] || state;
-  }
+    stateLabel.textContent = STATE_COPY[state] ?? state;
+    stepCount.textContent  = `step ${stepIndex}`;
+    stepBadge.textContent  = `step ${stepIndex}`;
 
-  function onDecision(result) {
-    interpFrom = displayZ.slice();
-    interpTo = result.z;
-    stepStartedAt = performance.now();
-    setState(result.state);
-    stepCount.textContent = `step ${result.stepIndex}`;
-    stepBadge.textContent = `step ${result.stepIndex} / ${MAX_STEPS}`;
-    rewardLog.push(result.reward);
+    const r = Number(reward);
+    rewardLog.push(r);
     if (rewardLog.length > MAX_LOG) rewardLog.shift();
-    rewardReadout.textContent = result.reward.toFixed(2);
-    rewardReadout.style.color = result.reward >= 0 ? cssVar("--state-settle") : cssVar("--state-recover");
-    if (optimizer.sm.shouldStop()) stopTicking();
+    rewardReadout.textContent = r.toFixed(3);
+    rewardReadout.style.color = r >= 0 ? cssVar("--state-settle") : cssVar("--state-recover");
   }
 
-  function tick() {
-    const r = mode === "auto" ? scriptedSource.read() : manualSource.read();
-    const result = optimizer.observeReward(r);
-    if (result) onDecision(result);
-  }
+  // ── Frame queue + render loop ──────────────────────────────────────────────
+  /**
+   * Each entry: { bitmap: ImageBitmap, meta: { z, step_index, state, reward_estimate } }
+   * Max depth: 3. Stale frames are dropped (prefer low latency over backpressure).
+   */
+  const QUEUE_MAX = 3;
+  const frameQueue = [];
 
-  function startTicking() {
-    if (tickHandle) return;
-    optimizer.notifyCalibrated();
-    setState(optimizer.sm.state);
-    tickHandle = setInterval(tick, TICK_MS);
-    document.getElementById("startBtn").disabled = true;
-    document.getElementById("pauseBtn").disabled = false;
-    document.getElementById("pauseBtn2").disabled = false;
-  }
-  function stopTicking() {
-    clearInterval(tickHandle);
-    tickHandle = null;
-    document.getElementById("startBtn").disabled = false;
-    document.getElementById("pauseBtn").disabled = true;
-    document.getElementById("pauseBtn2").disabled = true;
-  }
+  let frameCount = 0;
+  let fpsTimer   = performance.now();
+  let displayFps = 0;
 
-  function resetAll() {
-    stopTicking();
-    Object.assign(optimizer, new OptimizerService());
-    scriptedSource = new ScriptedRewardSource(TARGET, () => optimizer.pendingCandidate());
-    manualSource = new ManualRewardSource();
-    rewardLog.length = 0;
-    displayZ = optimizer.currentZ().slice();
-    interpFrom = displayZ.slice();
-    interpTo = optimizer.pendingCandidate().slice();
-    stepStartedAt = performance.now();
-    setState("calibrate");
-    stepCount.textContent = "step 0";
-    stepBadge.textContent = `step 0 / ${MAX_STEPS}`;
-    rewardReadout.textContent = "0.00";
-    rewardReadout.style.color = "";
+  function updateQueueUI() {
+    const n = frameQueue.length;
+    pips.forEach((p, i) => p.classList.toggle("filled", i < n));
+    queueCount.textContent = `${n} / ${QUEUE_MAX}`;
   }
 
   function renderLoop() {
-    const elapsed = performance.now() - stepStartedAt;
-    const alpha = clamp(elapsed / STEP_MS, 0, 1);
-    displayZ = interpFrom.map((v, i) => lerp(v, interpTo[i], alpha));
-    drawDog(displayZ);
-    drawMeters(displayZ);
-    drawSpark();
+    if (frameQueue.length > 0) {
+      const { bitmap, meta } = frameQueue.shift();
+      ctx.drawImage(bitmap, 0, 0, stage.width, stage.height);
+      bitmap.close();
+
+      applyState(meta.state, meta.step_index, meta.reward_estimate);
+      drawMeters(meta.z);
+      drawSpark();
+      fmtBadge.textContent = `${meta.format?.toUpperCase() ?? "JPEG"} · ${meta.z.length}D`;
+      updateQueueUI();
+
+      frameCount++;
+      const now = performance.now();
+      if (now - fpsTimer >= 1000) {
+        displayFps = Math.round(frameCount * 1000 / (now - fpsTimer));
+        fpsBadge.textContent = `${displayFps} fps`;
+        frameCount = 0;
+        fpsTimer = now;
+      }
+    }
     requestAnimationFrame(renderLoop);
   }
 
-  // ---------- wiring: controls ----------
-  document.getElementById("startBtn").addEventListener("click", startTicking);
-  document.getElementById("pauseBtn").addEventListener("click", stopTicking);
-  document.getElementById("pauseBtn2").addEventListener("click", stopTicking);
-  document.getElementById("resetBtn").addEventListener("click", resetAll);
-  document.getElementById("resetBtn2").addEventListener("click", resetAll);
-
-  document.getElementById("likeBtn").addEventListener("click", () => { manualSource.press(0.35); startTicking(); });
-  document.getElementById("dislikeBtn").addEventListener("click", () => { manualSource.press(-0.35); startTicking(); });
-  window.addEventListener("keydown", (e) => {
-    if (mode !== "manual") return;
-    if (e.key === "ArrowUp") { manualSource.press(0.35); startTicking(); }
-    if (e.key === "ArrowDown") { manualSource.press(-0.35); startTicking(); }
-  });
-
-  const modeAutoBtn = document.getElementById("modeAuto");
-  const modeManualBtn = document.getElementById("modeManual");
-  const autoControls = document.getElementById("autoControls");
-  const manualControls = document.getElementById("manualControls");
-  const modeHint = document.getElementById("modeHint");
-  modeAutoBtn.addEventListener("click", () => {
-    mode = "auto"; modeAutoBtn.classList.add("active"); modeManualBtn.classList.remove("active");
-    autoControls.style.display = ""; manualControls.style.display = "none";
-    modeHint.textContent = "A hidden target stands in for “what you wanted” — same reward, same optimizer, no brain required.";
-    resetAll();
-  });
-  modeManualBtn.addEventListener("click", () => {
-    mode = "manual"; modeManualBtn.classList.add("active"); modeAutoBtn.classList.remove("active");
-    autoControls.style.display = "none"; manualControls.style.display = "";
-    modeHint.textContent = "Click “I like this” when it drifts toward what you pictured, “Not this” when it drifts away. Or use ↑ / ↓.";
-    resetAll();
-  });
-
-  document.getElementById("revealBtn").addEventListener("click", (e) => {
-    const box = document.getElementById("secretBox");
-    const shown = box.classList.toggle("shown");
-    e.target.setAttribute("aria-expanded", String(shown));
-    e.target.textContent = shown ? "Hide what you actually pictured" : "What did you actually picture?";
-  });
-
-  drawDog(displayZ);
-  drawMeters(displayZ);
-  drawSpark();
   requestAnimationFrame(renderLoop);
+
+  // ── WebSocket client ───────────────────────────────────────────────────────
+  let ws = null;
+
+  async function onMessage(event) {
+    let msg;
+    try { msg = JSON.parse(event.data); } catch { return; }
+
+    const { frame_b64, format = "jpeg", z, step_index, state, reward_estimate } = msg;
+    if (!frame_b64 || !z) return; // not a FrameMessage
+
+    // Decode JPEG/PNG off-main-thread via createImageBitmap
+    const binary = atob(frame_b64);
+    const bytes  = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    const blob   = new Blob([bytes], { type: `image/${format}` });
+
+    let bitmap;
+    try { bitmap = await createImageBitmap(blob); } catch { return; }
+
+    // Drop oldest if queue is full (stay low-latency)
+    if (frameQueue.length >= QUEUE_MAX) {
+      const dropped = frameQueue.shift();
+      dropped.bitmap.close();
+    }
+
+    frameQueue.push({ bitmap, meta: { z, step_index, state, reward_estimate, format } });
+    updateQueueUI();
+  }
+
+  function setStatus(text, cls = "") {
+    statusLine.textContent = text;
+    statusLine.className = `status-line ${cls}`;
+  }
+
+  function connect() {
+    const url = urlInput.value.trim();
+    if (!url) { setStatus("Enter a WebSocket URL first.", "err"); return; }
+
+    setStatus("Connecting…", "warn");
+    connectBtn.disabled    = true;
+    disconnectBtn.disabled = false;
+    urlInput.disabled      = true;
+
+    ws = new WebSocket(url);
+
+    ws.addEventListener("open", () => {
+      // Send the display-client handshake
+      ws.send(JSON.stringify({ role: "display" }));
+      setStatus(`Connected to ${url}`, "ok");
+      overlay.classList.add("hidden");
+    });
+
+    ws.addEventListener("message", onMessage);
+
+    ws.addEventListener("close", (e) => {
+      setStatus(`Disconnected (code ${e.code})`, "");
+      resetConnection();
+    });
+
+    ws.addEventListener("error", () => {
+      setStatus("Connection error — check URL and hub status.", "err");
+      resetConnection();
+    });
+  }
+
+  function disconnect() {
+    if (ws) { ws.close(); ws = null; }
+    resetConnection();
+    setStatus("Disconnected.", "");
+  }
+
+  function resetConnection() {
+    ws = null;
+    connectBtn.disabled    = false;
+    disconnectBtn.disabled = true;
+    urlInput.disabled      = false;
+    overlay.classList.remove("hidden");
+    // Drain queue
+    while (frameQueue.length) frameQueue.shift().bitmap.close();
+    updateQueueUI();
+  }
+
+  connectBtn.addEventListener("click",    connect);
+  disconnectBtn.addEventListener("click", disconnect);
+  urlInput.addEventListener("keydown", e => { if (e.key === "Enter") connect(); });
+
+  // Initial draws
+  drawSpark();
+  updateQueueUI();
 })();
 </script>
+</body>
+</html>

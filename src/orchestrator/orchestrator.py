@@ -17,7 +17,7 @@ from __future__ import annotations
 import asyncio
 import json
 import time
-from typing import Callable
+from typing import TYPE_CHECKING, Callable
 
 import numpy as np
 
@@ -25,7 +25,10 @@ from src.common.config import Config
 from src.common.messages import FrameMessage, RewardMessage
 from src.generator.service import GeneratorService, Interpolator
 from src.optimizer.service import OptimizerService
-from src.signal_service.service import FAARewardSource, SignalService
+from src.signal_service.service import SignalService
+
+if TYPE_CHECKING:
+    from src.signal_service.service import FAARewardSource
 
 
 class LocalOrchestrator:
@@ -47,11 +50,15 @@ class LocalOrchestrator:
         self._stop_event: asyncio.Event | None = None
         self._step_started_at = time.monotonic()
         self._last_step_index = 0
+        self._last_state: str = "calibrate"
+        self._last_reward_estimate: float = 0.0
 
     async def calibrate(self) -> None:
         """Real FAA needs 30s of rest to fit the baseline; fake reward sources
         (keyboard/scripted) skip straight to EXPLORE.
         """
+        from src.signal_service.service import FAARewardSource  # noqa: PLC0415 (lazy: avoids scipy at startup)
+
         source = self.signal_service.reward_source
         if isinstance(source, FAARewardSource):
             from src.signal_service.baseline import calibrate_baseline
@@ -69,6 +76,8 @@ class LocalOrchestrator:
             if result is not None:
                 self.interpolator.set_target(np.array(result.z, dtype=float))
                 self._last_step_index = result.step_index
+                self._last_state = result.state
+                self._last_reward_estimate = result.reward_estimate
                 self._step_started_at = time.monotonic()
                 if self.optimizer.state_machine.should_stop():
                     assert self._stop_event is not None
@@ -83,7 +92,12 @@ class LocalOrchestrator:
             elapsed = time.monotonic() - self._step_started_at
             alpha = min(1.0, elapsed / step_interval) if step_interval > 0 else 1.0
             z = self.interpolator.sample(alpha)
-            frame = self.generator.render(z, self._last_step_index)
+            frame = self.generator.render(
+                z,
+                self._last_step_index,
+                state=self._last_state,
+                reward_estimate=self._last_reward_estimate,
+            )
             self.on_frame(frame)
             await asyncio.sleep(frame_interval)
 
@@ -120,6 +134,8 @@ class WebSocketOrchestrator:
         self._display_clients: set = set()
         self._step_started_at = time.monotonic()
         self._last_step_index = 0
+        self._last_state: str = "calibrate"
+        self._last_reward_estimate: float = 0.0
 
     async def _handle_signal_client(self, websocket) -> None:
         async for raw in websocket:
@@ -128,6 +144,8 @@ class WebSocketOrchestrator:
             if result is not None:
                 self.interpolator.set_target(np.array(result.z, dtype=float))
                 self._last_step_index = result.step_index
+                self._last_state = result.state
+                self._last_reward_estimate = result.reward_estimate
                 self._step_started_at = time.monotonic()
 
     async def _handle_display_client(self, websocket) -> None:
@@ -162,7 +180,12 @@ class WebSocketOrchestrator:
             elapsed = time.monotonic() - self._step_started_at
             alpha = min(1.0, elapsed / step_interval) if step_interval > 0 else 1.0
             z = self.interpolator.sample(alpha)
-            frame = self.generator.render(z, self._last_step_index)
+            frame = self.generator.render(
+                z,
+                self._last_step_index,
+                state=self._last_state,
+                reward_estimate=self._last_reward_estimate,
+            )
             await self._broadcast(frame.to_json())
             await asyncio.sleep(frame_interval)
 
