@@ -54,6 +54,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mock", action="store_true", help="use synthetic EEG instead of real hardware")
     parser.add_argument("--backend", choices=["procedural", "diffusion"], default=None)
+    parser.add_argument("--algorithm", choices=["hill_climb", "es_1p1", "gp_bo"], default=None)
     parser.add_argument("--serve", action="store_true", help="run the websocket hub instead of local mode")
     parser.add_argument("--host", default="0.0.0.0", help="websocket host when using --serve")
     parser.add_argument("--port", type=int, default=8765, help="websocket port when using --serve")
@@ -62,6 +63,8 @@ def main() -> None:
     config = Config.load()
     if args.backend:
         config.generator.backend = args.backend
+    if args.algorithm:
+        config.optimizer.algorithm = args.algorithm
 
     if args.serve:
         try:
