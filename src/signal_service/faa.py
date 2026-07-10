@@ -1,18 +1,18 @@
 """Frontal alpha asymmetry: the entire "reward" signal.
 
-FAA = ln(alpha_power(F4)) - ln(alpha_power(F3)), z-scored against a per-subject
-resting baseline and clipped to [-1, 1]. Higher = more left-frontal activation
-= approach motivation, per the standard EEG asymmetry literature. This module
+FAA = ln(alpha_power(right)) - ln(alpha_power(left)), combined across frontal
+mirror pairs with fixed pair weights, z-scored against a per-subject resting
+baseline and clipped to [-1, 1]. Higher = more left-frontal activation =
+approach motivation, per the standard EEG asymmetry literature. This module
 only knows about numbers in, numbers out - it never sees the image generator,
 the optimizer, or anything about images.
-
-F3 = Channel_3.csv and F4 = Channel_12.csv.
 """
 
 from __future__ import annotations
 
 from collections import deque
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 from scipy.signal import welch
@@ -35,6 +35,40 @@ EPOC_X_POSITIONS: dict[str, tuple[float, float, float]] = {
     "AF4": (0.42, 0.88, 0.22),
 }
 
+DEFAULT_FAA_PAIRS: tuple[tuple[str, str], ...] = (
+    ("F7", "F8"),
+    ("AF3", "AF4"),
+    ("F3", "F4"),
+    ("FC5", "FC6"),
+)
+
+DEFAULT_FAA_PAIR_WEIGHTS: dict[str, float] = {
+    "F3/F4": 1.0,
+    "F7/F8": 0.75,
+    "AF3/AF4": 0.5,
+    "FC5/FC6": 0.5,
+}
+
+
+@dataclass
+class PairFAAMetrics:
+    left: str
+    right: str
+    power_left: float
+    power_right: float
+    raw_faa: float
+    pair_weight: float
+
+    def as_dict(self) -> dict[str, float | str]:
+        return {
+            "left": self.left,
+            "right": self.right,
+            "power_left": self.power_left,
+            "power_right": self.power_right,
+            "raw_faa": self.raw_faa,
+            "pair_weight": self.pair_weight,
+        }
+
 
 def band_power(samples: np.ndarray, fs: float, band: tuple[float, float]) -> float:
     """Welch PSD power in `band` (Hz) for a single-channel 1D signal."""
@@ -51,18 +85,19 @@ def band_power(samples: np.ndarray, fs: float, band: tuple[float, float]) -> flo
     return float(np.sum((band_psd[1:] + band_psd[:-1]) * np.diff(band_freqs)) / 2.0)
 
 
-def raw_faa(
-    window: dict[str, np.ndarray],
-    fs: float,
-    channel_left: str = "F3",
-    channel_right: str = "F4",
-    band: tuple[float, float] = (8.0, 13.0),
-    eps: float = 1e-12,
-) -> float:
-    """ln(power_right) - ln(power_left) over one window of samples per channel."""
-    p_left = band_power(window[channel_left], fs, band) + eps
-    p_right = band_power(window[channel_right], fs, band) + eps
-    return float(np.log(p_right) - np.log(p_left))
+def _safe_float(value: Any) -> float | None:
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, int | float):
+        return float(value)
+    return None
+
+
+def _weighted_average(values: np.ndarray, weights: np.ndarray) -> float | None:
+    total = float(weights.sum())
+    if total <= 0:
+        return None
+    return float(np.average(values, weights=weights))
 
 
 @dataclass
@@ -84,11 +119,11 @@ class RunningBaseline:
 
 
 class FAARewardComputer:
-    """Sliding-window FAA -> baseline z-score -> clip to [-1, 1] = r(t).
+    """Sliding-window weighted FAA -> baseline z-score -> clip to [-1, 1] = r(t).
 
-    Feed it raw multi-channel samples as they arrive; call `update()` on the
-    cadence you want reward readings (every ~250ms per the spec) and it slices
-    the trailing `window_s` seconds out of its ring buffer.
+    Feed it raw multi-channel samples as they arrive; call `reward()` on the
+    cadence you want reward readings and it slices the trailing `window_s`
+    seconds out of its ring buffer.
     """
 
     def __init__(
@@ -97,48 +132,105 @@ class FAARewardComputer:
         channel_left: str = "F3",
         channel_right: str = "F4",
         band: tuple[float, float] = (8.0, 13.0),
-        window_s: float = 2.0,
+        window_s: float = 3.0,
         clip: tuple[float, float] = (-1.0, 1.0),
         channels: list[str] | None = None,
+        channel_pairs: list[list[str]] | list[tuple[str, str]] | None = None,
+        pair_weights: dict[str, float] | None = None,
     ):
         self.fs = fs
         self.channel_left = channel_left
         self.channel_right = channel_right
+        self.channel_pairs = self._normalize_pairs(channel_pairs)
+        self.pair_weights = self._normalize_pair_weights(pair_weights)
         self.band = band
         self.window_s = window_s
         self.clip = clip
         self._maxlen = int(fs * window_s) + 1
-        channel_names = list(dict.fromkeys([*(channels or []), channel_left, channel_right]))
+        pair_channels = [ch for pair in self.channel_pairs for ch in pair]
+        channel_names = list(dict.fromkeys([*(channels or []), *pair_channels]))
         self._buffers: dict[str, deque[float]] = {
             ch: deque(maxlen=self._maxlen) for ch in channel_names
         }
         self.baseline = RunningBaseline()
 
-    def push_sample(self, channel_values: dict[str, float]) -> None:
+    def _normalize_pairs(
+        self,
+        channel_pairs: list[list[str]] | list[tuple[str, str]] | None,
+    ) -> list[tuple[str, str]]:
+        pairs = channel_pairs or DEFAULT_FAA_PAIRS
+        normalized = []
+        for pair in pairs:
+            if len(pair) != 2:
+                raise ValueError(f"FAA channel pair must contain exactly 2 channels: {pair}")
+            normalized.append((str(pair[0]), str(pair[1])))
+        return normalized
+
+    def _normalize_pair_weights(self, pair_weights: dict[str, float] | None) -> dict[str, float]:
+        weights = dict(DEFAULT_FAA_PAIR_WEIGHTS)
+        if pair_weights:
+            for label, raw_weight in pair_weights.items():
+                value = _safe_float(raw_weight)
+                if value is None or value < 0:
+                    raise ValueError(f"FAA pair weight must be a non-negative number: {label}")
+                weights[str(label)] = value
+        return weights
+
+    def push_sample(self, channel_values: dict[str, Any]) -> None:
         for ch, value in channel_values.items():
+            if not isinstance(value, int | float):
+                continue
             if ch not in self._buffers:
                 self._buffers[ch] = deque(maxlen=self._maxlen)
-            if isinstance(value, int | float):
-                self._buffers[ch].append(float(value))
+            self._buffers[ch].append(float(value))
 
     def ready(self) -> bool:
-        return len(self._buffers[self.channel_left]) >= self._maxlen - 1
+        return any(
+            len(self._buffers.get(left, ())) >= self._maxlen - 1
+            and len(self._buffers.get(right, ())) >= self._maxlen - 1
+            for left, right in self.channel_pairs
+        )
+
+    def _calculate_pair_metrics(self) -> list[PairFAAMetrics]:
+        metrics = []
+        for left, right in self.channel_pairs:
+            if len(self._buffers.get(left, ())) < self._maxlen - 1:
+                continue
+            if len(self._buffers.get(right, ())) < self._maxlen - 1:
+                continue
+            left_samples = np.asarray(self._buffers[left], dtype=float)
+            right_samples = np.asarray(self._buffers[right], dtype=float)
+            p_left = band_power(left_samples, self.fs, self.band)
+            p_right = band_power(right_samples, self.fs, self.band)
+            raw = float(np.log(p_right + 1e-12) - np.log(p_left + 1e-12))
+            label = f"{left}/{right}"
+            metrics.append(
+                PairFAAMetrics(
+                    left=left,
+                    right=right,
+                    power_left=p_left,
+                    power_right=p_right,
+                    raw_faa=raw,
+                    pair_weight=self.pair_weights.get(label, 1.0),
+                )
+            )
+        return metrics
+
+    def _aggregate_pair_metrics(self, metrics: list[PairFAAMetrics]) -> float | None:
+        if not metrics:
+            return None
+        values = np.asarray([metric.raw_faa for metric in metrics], dtype=float)
+        weights = np.asarray([metric.pair_weight for metric in metrics], dtype=float)
+        return _weighted_average(values, weights)
 
     def raw_value(self) -> float | None:
         if not self.ready():
             return None
-        window = {ch: np.asarray(buf) for ch, buf in self._buffers.items()}
-        return raw_faa(window, self.fs, self.channel_left, self.channel_right, self.band)
+        return self._aggregate_pair_metrics(self._calculate_pair_metrics())
 
-    def band_powers(self) -> tuple[float, float] | None:
-        """(power_left, power_right) in the configured band over the current
-        window, or None if the buffer isn't full yet. Diagnostic helper - the
-        FAA index is ln(power_right) - ln(power_left)."""
-        if not self.ready():
-            return None
-        p_left = band_power(np.asarray(self._buffers[self.channel_left]), self.fs, self.band)
-        p_right = band_power(np.asarray(self._buffers[self.channel_right]), self.fs, self.band)
-        return p_left, p_right
+    def pair_metrics(self) -> list[dict[str, float | str]]:
+        """Pair-level alpha power and raw FAA values for diagnostics."""
+        return [metric.as_dict() for metric in self._calculate_pair_metrics()]
 
     def eeg_features(self, reward: float | None = None, raw: float | None = None) -> dict | None:
         """Compact EEG visualization payload for the frontend.
@@ -172,6 +264,8 @@ class FAARewardComputer:
                 "reward": reward if reward is not None else self.reward(),
                 "left_channel": self.channel_left,
                 "right_channel": self.channel_right,
+                "channel_pairs": [list(pair) for pair in self.channel_pairs],
+                "pair_metrics": self.pair_metrics(),
             },
         }
 

@@ -28,11 +28,14 @@ Nothing downstream of the Signal service knows or cares that `r(t)` came from
 
 ### The reward: frontal alpha asymmetry
 
-Every `faa.update_interval_s` (~250ms), over a `faa.window_s` (2s) sliding
-window: compute alpha-band (8-13Hz) power at F3 and F4, `FAA = ln(P_F4) -
-ln(P_F3)`. At session start, 30s of rest establishes a per-subject baseline
-mean/std; every reading is z-scored against it and clipped to `[-1, 1]`. That
-normalized value is `r(t)` - implemented in `src/signal_service/faa.py`.
+Every `faa.update_interval_s` (~250ms), over a `faa.window_s` (3.0s) sliding
+window: compute alpha-band (8-13Hz) power over the frontal mirror pairs
+F7/F8, AF3/AF4, F3/F4, and FC5/FC6. Each pair contributes
+`ln(P_right) - ln(P_left)`. The live composite is a fixed-weight mean:
+F3/F4 = 1.00, F7/F8 = 0.75, AF3/AF4 = 0.50, and FC5/FC6 = 0.50.
+At session start, 30s of rest establishes a per-subject baseline mean/std;
+every reading is z-scored against it and clipped to `[-1, 1]`. That normalized
+value is `r(t)` - implemented in `src/signal_service/faa.py`.
 
 ### The optimizer: hill-climbing on a noisy scalar
 

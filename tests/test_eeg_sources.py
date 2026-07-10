@@ -93,7 +93,6 @@ def test_emotiv_extracts_eeg_cols_from_subscribe_result():
         "MARKERS",
     ]
 
-
 def test_emotiv_formats_unpublished_app_error_with_owner_hint():
     message = EmotivCortexSource._format_api_error(
         "authorize",

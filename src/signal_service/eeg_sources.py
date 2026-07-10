@@ -8,22 +8,23 @@ from __future__ import annotations
 
 import os
 import time
-from typing import Iterator, Protocol
+from typing import Any, Iterator, Protocol
 
 import numpy as np
 
 
 class EEGSource(Protocol):
     def connect(self) -> None: ...
-    def stream(self) -> Iterator[tuple[float, dict[str, float]]]: ...
+    def stream(self) -> Iterator[tuple[float, dict[str, Any]]]: ...
     def close(self) -> None: ...
 
 
 class MockEEGSource:
     """Synthetic 14-channel EEG for development without hardware.
 
-    Alpha-band power at F3/F4 is modulated by `bias(t)` (defaults to slow
-    random drift) so FAARewardComputer has something non-trivial to decode.
+    Alpha-band power across the frontal mirror pairs is modulated by `bias(t)`
+    (defaults to slow random drift) so FAARewardComputer has something
+    non-trivial to decode.
     Pass a custom `bias_fn(t) -> float in [-1, 1]` to script a known ground
     truth for tests (e.g. "reward should rise for the first 10s").
     """
@@ -55,9 +56,9 @@ class MockEEGSource:
                 alpha = np.sin(2 * np.pi * 10.0 * self._t)
                 noise = self._rng.normal(0, 0.3)
                 gain = 1.0
-                if ch == "F4":
+                if ch in {"F8", "AF4", "F4", "FC6"}:
                     gain = 1.0 + 0.6 * bias
-                elif ch == "F3":
+                elif ch in {"F7", "AF3", "F3", "FC5"}:
                     gain = 1.0 - 0.6 * bias
                 sample[ch] = alpha * gain + noise
             yield self._t, sample
@@ -220,6 +221,20 @@ class EmotivCortexSource:
                 return list(item["cols"])
         return None
 
+    @staticmethod
+    def _is_eeg_sensor_col(col: Any, channels: list[str] | None = None) -> bool:
+        if not isinstance(col, str):
+            return False
+        if channels is not None:
+            return col in channels
+        return col not in {
+            "COUNTER",
+            "INTERPOLATED",
+            "RAW_CQ",
+            "MARKER_HARDWARE",
+            "MARKERS",
+        }
+
     def _wait_for_access(self) -> None:
         deadline = time.monotonic() + self.ACCESS_POLL_TIMEOUT_S
         printed_prompt = False
@@ -269,11 +284,15 @@ class EmotivCortexSource:
         self._session_id = session["id"]
         subscription = self._call(
             "subscribe",
-            {"cortexToken": self._cortex_token, "session": self._session_id, "streams": ["eeg"]},
+            {
+                "cortexToken": self._cortex_token,
+                "session": self._session_id,
+                "streams": ["eeg"],
+            },
         )
         self._eeg_cols = self._extract_eeg_cols(subscription)
 
-    def stream(self, channels: list[str] | None = None) -> Iterator[tuple[float, dict[str, float]]]:
+    def stream(self, channels: list[str] | None = None) -> Iterator[tuple[float, dict[str, Any]]]:
         import json
 
         assert self._ws is not None, "call connect() first"
@@ -286,7 +305,7 @@ class EmotivCortexSource:
                 sample = {
                     col: value
                     for col, value in zip(self._eeg_cols, values)
-                    if isinstance(value, (int, float))
+                    if self._is_eeg_sensor_col(col, channels) and isinstance(value, (int, float))
                 }
             else:
                 if channels is None:

@@ -24,12 +24,23 @@ eeg:
   sample_rate_hz: 128
 
 # Frontal alpha asymmetry: the entire reward signal, r(t).
-# FAA = ln(power_F4) - ln(power_F3), z-scored against the session baseline.
+# FAA = fixed-weight ln(power_right) - ln(power_left) across frontal mirror
+# pairs, z-scored against the session baseline.
 faa:
   channel_left: "F3"
   channel_right: "F4"
+  channel_pairs:
+    - ["F7", "F8"]
+    - ["AF3", "AF4"]
+    - ["F3", "F4"]
+    - ["FC5", "FC6"]
+  pair_weights:
+    "F3/F4": 1.0
+    "F7/F8": 0.75
+    "AF3/AF4": 0.5
+    "FC5/FC6": 0.5
   band_hz: [8.0, 13.0]
-  window_s: 2.0            # sliding window per FAA reading
+  window_s: 3.0            # sliding window per FAA reading
   update_interval_s: 0.25  # ~4 readings/sec
   baseline_duration_s: 30.0
   clip: [-1.0, 1.0]

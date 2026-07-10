@@ -19,8 +19,19 @@ DEFAULT_CONFIG_PATH = Path(__file__).resolve().parents[2] / "config" / "config.y
 class FAAConfig:
     channel_left: str = "F3"
     channel_right: str = "F4"
+    channel_pairs: list[list[str]] = field(
+        default_factory=lambda: [["F7", "F8"], ["AF3", "AF4"], ["F3", "F4"], ["FC5", "FC6"]]
+    )
+    pair_weights: dict[str, float] = field(
+        default_factory=lambda: {
+            "F3/F4": 1.0,
+            "F7/F8": 0.75,
+            "AF3/AF4": 0.5,
+            "FC5/FC6": 0.5,
+        }
+    )
     band_hz: tuple[float, float] = (8.0, 13.0)
-    window_s: float = 2.0
+    window_s: float = 3.0
     update_interval_s: float = 0.25
     baseline_duration_s: float = 30.0
     clip: tuple[float, float] = (-1.0, 1.0)

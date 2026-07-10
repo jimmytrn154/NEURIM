@@ -47,6 +47,9 @@ def main() -> None:
         band=config.faa.band_hz,
         window_s=config.faa.window_s,
         clip=config.faa.clip,
+        channels=config.eeg.channels,
+        channel_pairs=config.faa.channel_pairs,
+        pair_weights=config.faa.pair_weights,
     )
 
     try:

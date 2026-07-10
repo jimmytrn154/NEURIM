@@ -98,6 +98,8 @@ def build_faa_service(config: Config, eeg_source: EEGSource) -> SignalService:
         window_s=config.faa.window_s,
         clip=config.faa.clip,
         channels=config.eeg.channels,
+        channel_pairs=config.faa.channel_pairs,
+        pair_weights=config.faa.pair_weights,
     )
     source = FAARewardSource(eeg_source, computer)
     return SignalService(source, update_interval_s=config.faa.update_interval_s)
