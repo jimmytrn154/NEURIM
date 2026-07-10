@@ -3,6 +3,7 @@ from PIL import Image
 
 from src.generator.openai_image import OpenAIImageGenerator
 from src.generator.procedural import ProceduralRenderer
+from src.generator.remote_diffusion import RemoteDiffusionClient
 from src.generator.to_3d import ProceduralPseudo3D, mirrored_quadrants
 from src.optimizer.projection import AnchorInterpolationProjector, PCAProjector
 
@@ -89,3 +90,64 @@ def test_openai_image_generator_decodes_and_caches_prompt():
     assert img_b.size == (8, 8)
     assert len(client.images.calls) == 1
     assert client.images.calls[0]["model"] == "gpt-image-2"
+
+
+class _FakeHTTPResponse:
+    def __init__(self, content: bytes):
+        self.content = content
+        self.headers = {"content-type": "image/png"}
+
+    def raise_for_status(self):
+        return None
+
+
+class _FakeHTTPSession:
+    def __init__(self, content: bytes):
+        self.content = content
+        self.calls = []
+
+    def post(self, url, json, timeout):
+        self.calls.append({"url": url, "json": json, "timeout": timeout})
+        return _FakeHTTPResponse(self.content)
+
+
+def test_remote_diffusion_sends_optimizer_state_and_caches_step():
+    import io
+
+    src = Image.new("RGB", (16, 16), (0, 255, 0))
+    buf = io.BytesIO()
+    src.save(buf, format="PNG")
+    session = _FakeHTTPSession(buf.getvalue())
+    client = RemoteDiffusionClient(
+        url="http://gpu-box:8766",
+        timeout_s=12.0,
+        frame_size=8,
+        session=session,
+    )
+
+    img_a = client.render(
+        z=np.array([0.1, -0.2]),
+        prompt="a green square",
+        step_index=3,
+        state="refine",
+        reward_estimate=0.7,
+    )
+    img_b = client.render(
+        z=np.array([0.9, 0.8]),
+        prompt="a green square",
+        step_index=3,
+        state="refine",
+        reward_estimate=0.8,
+    )
+
+    assert img_a.size == (8, 8)
+    assert img_b.size == (8, 8)
+    assert len(session.calls) == 1
+    call = session.calls[0]
+    assert call["url"] == "http://gpu-box:8766/render"
+    assert call["timeout"] == 12.0
+    assert call["json"]["z"] == [0.1, -0.2]
+    assert call["json"]["prompt"] == "a green square"
+    assert call["json"]["step_index"] == 3
+    assert call["json"]["state"] == "refine"
+    assert call["json"]["reward_estimate"] == 0.7

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Phase 3: the real thing. Ties EEG (or --mock), the optimizer, and the
-generator (procedural, --backend diffusion, or --backend openai) together via the Orchestrator,
+generator (procedural, --backend diffusion, --backend remote_diffusion, or --backend openai)
+together via the Orchestrator,
 optionally serving frames to a frontend over websockets (--serve).
 """
 
@@ -54,7 +55,8 @@ async def run_served(config: Config, host: str, port: int) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mock", action="store_true", help="use synthetic EEG instead of real hardware")
-    parser.add_argument("--backend", choices=["procedural", "diffusion", "openai"], default=None)
+    parser.add_argument("--backend", choices=["procedural", "diffusion", "remote_diffusion", "openai"], default=None)
+    parser.add_argument("--remote-url", default=None, help="remote diffusion server URL when using remote_diffusion")
     parser.add_argument("--algorithm", choices=["hill_climb", "es_1p1", "gp_bo"], default=None)
     parser.add_argument("--serve", action="store_true", help="run the websocket hub instead of local mode")
     parser.add_argument("--host", default="0.0.0.0", help="websocket host when using --serve")
@@ -64,6 +66,8 @@ def main() -> None:
     config = Config.load()
     if args.backend:
         config.generator.backend = args.backend
+    if args.remote_url:
+        config.generator.remote_diffusion_url = args.remote_url
     if args.algorithm:
         config.optimizer.algorithm = args.algorithm
 

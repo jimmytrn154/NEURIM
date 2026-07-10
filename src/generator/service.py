@@ -1,8 +1,9 @@
 """The Generator service: z in, rendered pyramid frame out.
 
 Backend is picked by config.generator.backend ("procedural" for the
-GPU-free fallback / fake-reward loop, "diffusion" for SDXL-Turbo, "openai"
-for the OpenAI Image API). The
+GPU-free fallback / fake-reward loop, "diffusion" for local SDXL-Turbo,
+"remote_diffusion" for an external diffusion server, "openai" for the OpenAI
+Image API). The
 Optimizer only emits one z every 1-2s, so the Orchestrator interpolates
 between accepted latents and calls render() at 30-60fps for a smooth morph -
 see Interpolator below.
@@ -73,6 +74,14 @@ class GeneratorService:
                 config.generator.diffusion_model_id,
                 num_inference_steps=config.generator.diffusion_steps,
             )
+        elif self.backend == "remote_diffusion":
+            from src.generator.remote_diffusion import RemoteDiffusionClient
+
+            self._remote_diffusion = RemoteDiffusionClient(
+                url=config.generator.remote_diffusion_url,
+                timeout_s=config.generator.remote_diffusion_timeout_s,
+                frame_size=config.generator.frame_size,
+            )
         elif self.backend == "openai":
             from src.generator.openai_image import OpenAIImageGenerator
 
@@ -111,14 +120,25 @@ class GeneratorService:
         state: str = "explore",
         reward_estimate: float = 0.0,
     ) -> FrameMessage:
-        image = self.render_image(z)
+        if self.backend == "remote_diffusion":
+            image = self._remote_diffusion.render(
+                z=z,
+                prompt=self._anchor_prompt_for(z),
+                step_index=step_index,
+                state=state,
+                reward_estimate=reward_estimate,
+            )
+        else:
+            image = self.render_image(z)
         if as_pyramid:
             image = mirrored_quadrants(image, self.config.generator.frame_size)
+        frame_format = "png" if self.backend == "remote_diffusion" else "jpeg"
+        frame_b64 = _encode_png(image) if frame_format == "png" else _encode_jpeg(image)
         return FrameMessage(
-            frame_b64=_encode_jpeg(image),
+            frame_b64=frame_b64,
             z=list(map(float, z)),
             step_index=step_index,
-            format="jpeg",
+            format=frame_format,
             state=state,
             reward_estimate=reward_estimate,
         )

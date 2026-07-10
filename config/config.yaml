@@ -65,9 +65,11 @@ state_machine:
 
 generator:
   # OPENAI_API_KEY is read from environment (.env).
-  backend: "openai"         # "procedural" (CPU fallback) | "diffusion" (SDXL-Turbo) | "openai" (OpenAI Image API)
+  backend: "remote_diffusion"  # "procedural" | "diffusion" | "remote_diffusion" | "openai"
   diffusion_model_id: "stabilityai/sdxl-turbo"
   diffusion_steps: 2
+  remote_diffusion_url: "http://localhost:8766"
+  remote_diffusion_timeout_s: 30.0
   openai_image_model: "gpt-image-2"
   openai_image_size: "1024x1024"
   openai_image_quality: "low"
