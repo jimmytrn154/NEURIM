@@ -122,8 +122,43 @@ class EmotivCortexSource:
             if response.get("id") != req_id:
                 continue
             if "error" in response:
-                raise RuntimeError(f"Cortex API error on {method}: {response['error']}")
+                raise RuntimeError(self._format_api_error(method, response["error"]))
             return response["result"]
+
+    @staticmethod
+    def _format_api_error(method: str, error: dict) -> str:
+        code = error.get("code")
+        message = error.get("message", "")
+        detail = f"Cortex API error on {method}: {error}"
+        if code == -32142:
+            return (
+                f"{detail}\n"
+                "Unpublished Cortex apps can only be authorized by the EMOTIV ID "
+                "that owns the Cortex app credentials. Open EMOTIV Launcher and "
+                "confirm it is logged in as the account that created this "
+                "EMOTIV_CLIENT_ID, or publish/share the app through EMOTIV before "
+                "using these credentials from another account."
+            )
+        if code == -32102:
+            return (
+                f"{detail}\n"
+                "Open EMOTIV Launcher and approve this application in the pending "
+                "access request."
+            )
+        if code == -32021:
+            return (
+                f"{detail}\n"
+                "Check EMOTIV_CLIENT_ID and EMOTIV_CLIENT_SECRET; Cortex rejected "
+                "the client credentials."
+            )
+        if code == -32033:
+            return (
+                f"{detail}\n"
+                "Log in to EMOTIV Launcher before authorizing the Cortex app."
+            )
+        if message:
+            return detail
+        return f"Cortex API error on {method}: code={code}"
 
     def _query_headsets(self) -> list[dict]:
         params = {"id": self.headset_id} if self.headset_id else None

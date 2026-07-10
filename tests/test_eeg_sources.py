@@ -92,3 +92,26 @@ def test_emotiv_extracts_eeg_cols_from_subscribe_result():
         "F4",
         "MARKERS",
     ]
+
+
+def test_emotiv_formats_unpublished_app_error_with_owner_hint():
+    message = EmotivCortexSource._format_api_error(
+        "authorize",
+        {
+            "code": -32142,
+            "message": "Unpublished application can only be accessed by the Owner.",
+        },
+    )
+
+    assert "Cortex API error on authorize" in message
+    assert "logged in as the account that created this EMOTIV_CLIENT_ID" in message
+    assert "publish/share the app through EMOTIV" in message
+
+
+def test_emotiv_formats_unknown_api_error_with_raw_payload():
+    error = {"code": -39999, "message": "unexpected"}
+
+    assert (
+        EmotivCortexSource._format_api_error("authorize", error)
+        == f"Cortex API error on authorize: {error}"
+    )

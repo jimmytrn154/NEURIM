@@ -74,6 +74,12 @@ class GeneratorConfig:
     diffusion_steps: int = 2
     remote_diffusion_url: str = "http://localhost:8766"
     remote_diffusion_timeout_s: float = 30.0
+    # Pinned diffusion seed: keeps consecutive morph keyframes visually close so
+    # the client crossfade reads as a smooth morph, not a dissolve.
+    remote_diffusion_seed: int = 0
+    # Min seconds between server keyframe renders (also the crossfade window).
+    # ~0.2s ≈ 5 keyframes/s, about what remote SDXL-Turbo sustains over a tunnel.
+    remote_diffusion_keyframe_interval_s: float = 0.2
     openai_image_model: str = "gpt-image-2"
     openai_image_size: str = "1024x1024"
     openai_image_quality: str = "low"

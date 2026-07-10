@@ -81,6 +81,8 @@ class GeneratorService:
                 url=config.generator.remote_diffusion_url,
                 timeout_s=config.generator.remote_diffusion_timeout_s,
                 frame_size=config.generator.frame_size,
+                seed=config.generator.remote_diffusion_seed,
+                keyframe_interval_s=config.generator.remote_diffusion_keyframe_interval_s,
             )
         elif self.backend == "openai":
             from src.generator.openai_image import OpenAIImageGenerator
@@ -121,9 +123,11 @@ class GeneratorService:
         reward_estimate: float = 0.0,
     ) -> FrameMessage:
         if self.backend == "remote_diffusion":
+            # Send the continuous z itself: the server projects it to a full
+            # prompt embedding and renders a latent-morph keyframe. No argmax
+            # prompt collapse here - that discretization is what killed the morph.
             image = self._remote_diffusion.render(
                 z=z,
-                prompt=self._anchor_prompt_for(z),
                 step_index=step_index,
                 state=state,
                 reward_estimate=reward_estimate,

@@ -70,17 +70,32 @@ generator:
   diffusion_steps: 2
   remote_diffusion_url: "http://localhost:8766"
   remote_diffusion_timeout_s: 30.0
+  remote_diffusion_seed: 0                  # pinned seed -> smooth morph keyframes
+  remote_diffusion_keyframe_interval_s: 0.2 # ~5 true renders/s, crossfaded to target_fps
   openai_image_model: "gpt-image-2"
   openai_image_size: "1024x1024"
   openai_image_quality: "low"
   openai_image_output_format: "png"
   target_fps: 30
   frame_size: 512
+  # Morph quality depends almost entirely on this bank. Keep a FIXED scaffold
+  # (same subject/framing/background/lighting/phrasing) and vary ONE or two clean
+  # visual axes per prompt - fur color, coat, ears, collar, pose. That keeps every
+  # interpolated midpoint a coherent photo and makes consecutive keyframes close
+  # enough to crossfade smoothly. ~10 prompts fully span the 8-dim search space
+  # (PCA yields up to n_prompts-1 meaningful directions after centering).
   anchor_prompts:
-    - "a realistic golden retriever puppy sitting on rumpled white bedding, light golden-brown fluffy fur, cream chest, floppy ears, black nose, glossy dark eyes, slight curious head tilt"
-    - "a close portrait photo of a small golden-brown puppy on a white bed, soft wavy fur, rounded muzzle, long floppy ears, bright black eyes, gentle innocent expression, shallow depth of field"
-    - "a cute young puppy with honey-gold fur and pale cream markings, wearing a coral-orange collar with small silver metal rings, seated upright on white sheets, tail curled to the side"
-    - "a natural indoor photo of a fluffy golden puppy facing the camera, oversized paws, soft cream belly, tan ears, black button nose, white pillow background, warm diffused daylight"
+    - "a close portrait photo of a fluffy golden-brown puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
+    - "a close portrait photo of a pale cream puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
+    - "a close portrait photo of a chocolate-brown puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
+    - "a close portrait photo of a soft grey puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
+    - "a close portrait photo of a black and white puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
+    # - "a close portrait photo of a fluffy golden puppy sitting on soft white bedding, small pointed ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
+    # - "a close portrait photo of a fluffy golden puppy sitting on soft white bedding, floppy ears, wearing a coral-orange collar, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
+    # - "a close portrait photo of a fluffy golden puppy sitting on soft white bedding, floppy ears, wearing a soft blue collar, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
+    # - "a close portrait photo of a fluffy golden puppy on soft white bedding with a slight curious head tilt, floppy ears, black button nose, glossy dark eyes, alert happy expression, soft diffused daylight, shallow depth of field"
+    # - "a close portrait photo of a fluffy golden puppy lying relaxed on soft white bedding, floppy ears, black button nose, glossy dark eyes, sleepy calm expression, soft diffused daylight, shallow depth of field"
+
 
 loop:
   target_latency_ms: 250          # perceive -> acquire -> decode -> generate, end to end
