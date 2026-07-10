@@ -123,6 +123,62 @@ conservative benchmark, not an expected demo outcome. Even so: **keep the
 manual confirm as a backstop**, per the risk register below. `search_dims`
 defaults to 8 (the favorable end of the spec's 8-16 range) for this reason.
 
+## Milestone: real-time morph via StreamDiffusion (SD-Turbo)
+
+`scripts/run_diffusion_server.py` (raw `diffusers`, SDXL-Turbo) only reaches
+~5 real renders/sec, so the client (`src/generator/remote_diffusion.py`)
+crossfades between keyframes to fake `target_fps`. `scripts/run_streamdiffusion_server.py`
+is an alternative backend built on
+[StreamDiffusion](https://github.com/cumulo-autumn/StreamDiffusion), which is
+designed for genuinely continuous generation (a rolling image buffer across
+calls, ~30-100fps on an RTX 4090) - the crossfade becomes unnecessary once
+render itself is fast enough. Same `POST /render` wire contract, so the client
+and `GeneratorService` need no changes - only `remote_diffusion_url` and
+`remote_diffusion_keyframe_interval_s` (config.yaml) change.
+
+Two real constraints, not implementation details to paper over:
+- StreamDiffusion's public API only supports SD1.x-family models (no
+  `pooled_prompt_embeds`/`add_text_embeds`) - it cannot load
+  `stabilityai/sdxl-turbo`. This backend uses `stabilityai/sd-turbo` instead,
+  a different checkpoint with a different visual style than the SDXL path.
+- There is no official API to feed a continuous embedding instead of a text
+  prompt. The server encodes each `anchor_prompts` entry itself (mirroring
+  what `update_prompt()` does internally) to fit a `PCAProjector`, then on
+  every request overwrites the wrapper's internal `stream.prompt_embeds`
+  tensor directly with `projector.to_embedding(z)`. This is an undocumented
+  attribute, not a supported integration point, and could break on a future
+  StreamDiffusion release.
+
+### `t_index_list` tuning (found empirically - see `scripts/test_streamdiffusion.py`)
+
+`t_index_list` selects indices from the scheduler's noise-timestep schedule;
+each index is one denoising step the UNet actually runs. Index 0 = maximum
+noise (the starting point for generating from scratch); higher indices = less
+noise (the right range for lightly restyling an *existing* image). One value
+has to serve two different jobs here, and getting it wrong looks like two
+different bugs:
+
+- **`[32,45]`** (StreamDiffusion's documented img2img tutorial value) applied
+  to the from-scratch bootstrap frame: garbage. Telling the model "this
+  random noise tensor is already 32-45 steps denoised" when it isn't produces
+  a colored-mosaic non-image, not a puppy.
+- **`[0]`** alone: fixed content (real, coherent puppies matching the anchor
+  prompts) but broke continuity between frames. At index 0 the img2img step
+  treats the *previous frame* as pure noise too, so each call effectively
+  regenerates from scratch - every frame is a different, unrelated puppy
+  (different pose/background), just biased toward the right fur color.
+- **`[0,16]`** (current default): both fixed. Same pose/composition held
+  across an entire z-sweep while the conditioned attribute (fur color) drifts
+  smoothly frame to frame - a real morph, not a slideshow. `[0,32]` also
+  works about as well; `[0,16]` was picked for slightly more expressive color
+  range in side-by-side comparison, not a large margin.
+
+If you change the anchor prompts, the model, or the search dims, re-run
+`scripts/test_streamdiffusion.py --streamdiffusion-repo <path>` (writes a
+`t2img` sanity image plus a z-sweep to `data/processed/streamdiffusion_test/`)
+before assuming `[0,16]` still holds - this was tuned empirically against one
+specific anchor-prompt bank, not derived from a documented default.
+
 ## Risk register
 
 1. **FAA is too noisy/slow to converge in a loud demo hall.** Mitigated by
@@ -152,7 +208,9 @@ NEURIM/
 ├── scripts/
 │   ├── run_fake_loop.py          # build-order step 1 (see above)
 │   ├── run_calibration.py        # per-subject FAA baseline
-│   ├── run_diffusion_server.py    # remote diffusion HTTP server
+│   ├── run_diffusion_server.py    # remote diffusion HTTP server (SDXL-Turbo)
+│   ├── run_streamdiffusion_server.py  # remote diffusion HTTP server (SD-Turbo, StreamDiffusion, real-time)
+│   ├── test_streamdiffusion.py    # diagnostic: t_index_list tuning, see Milestone section above
 │   └── run_demo.py               # the real thing
 ├── data/
 │   ├── calibration/               # per-subject baselines (gitignored)

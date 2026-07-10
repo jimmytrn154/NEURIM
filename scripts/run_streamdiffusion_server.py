@@ -224,7 +224,7 @@ def main() -> None:
                               "lives in utils/wrapper.py at the repo root, which setup.py does NOT package, so "
                               "'pip install streamdiffusion' alone does not make it importable")
     parser.add_argument("--model-id", default="stabilityai/sd-turbo")
-    parser.add_argument("--t-index-list", default="32,45", help="comma-separated denoising step indices")
+    parser.add_argument("--t-index-list", default="0,16", help="comma-separated denoising step indices")
     parser.add_argument("--acceleration", default="xformers", choices=["none", "xformers", "tensorrt"])
     parser.add_argument("--seed", type=int, default=None, help="defaults to config.generator.remote_diffusion_seed")
     args = parser.parse_args()
