@@ -54,7 +54,7 @@ state_machine:
   settle_reward_threshold: 0.55
   settle_motion_threshold: 0.1
   settle_patience_steps: 3
-  min_steps_before_settle: 1000
+  min_steps_before_settle: 20
   recover_negative_streak: 4
   recover_widen_factor: 1.5
   max_steps: 100             # convergence expected in 10-30 steps for a
@@ -71,7 +71,13 @@ generator:
   remote_diffusion_url: "http://localhost:8766"
   remote_diffusion_timeout_s: 30.0
   remote_diffusion_seed: 0                  # pinned seed -> smooth morph keyframes
-  remote_diffusion_keyframe_interval_s: 0.2 # ~5 true renders/s, crossfaded to target_fps
+  # ~5 true renders/s for run_diffusion_server.py (SDXL-Turbo, crossfaded up to
+  # target_fps by the client). If instead running run_streamdiffusion_server.py
+  # (SD-Turbo via StreamDiffusion, genuinely ~30-100fps), lower this toward
+  # 0.02-0.03 so the background fetch loop runs near target_fps directly - the
+  # client crossfade code is unchanged either way, just becomes a near-instant
+  # blend once keyframes arrive fast enough.
+  remote_diffusion_keyframe_interval_s: 0.2
   openai_image_model: "gpt-image-2"
   openai_image_size: "1024x1024"
   openai_image_quality: "low"
