@@ -56,7 +56,10 @@ optimizer:
   step_momentum: 0.6
   noise_threshold: 0.05     # reward diffs smaller than this are EEG jitter
   reward_window_steps: 4    # ~1s of FAA readings averaged per accept/reject
-  bounds: 3.0
+  bounds: 1.5               # was 3.0; z is in anchor-bank std units (PCA whitens
+                            # per axis), so +/-1.5 still reaches every anchor
+                            # while cutting the box corner from ~8.5 to ~4.2 std,
+                            # out of the incoherent-embedding zone. Sweep 1.2-2.0.
   algorithm: "hill_climb"   # "hill_climb" | "es_1p1" | "gp_bo"
 
 # CALIBRATE -> EXPLORE -> REFINE -> SETTLE, with RECOVER as an escape hatch.
