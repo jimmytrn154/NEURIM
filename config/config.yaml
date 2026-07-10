@@ -54,6 +54,7 @@ state_machine:
   settle_reward_threshold: 0.55
   settle_motion_threshold: 0.1
   settle_patience_steps: 3
+  min_steps_before_settle: 12
   recover_negative_streak: 4
   recover_widen_factor: 1.5
   max_steps: 100             # convergence expected in 10-30 steps for a
@@ -63,16 +64,21 @@ state_machine:
   refine_exit_margin: 0.1
 
 generator:
-  backend: "procedural"     # "procedural" (CPU fallback) | "diffusion" (SDXL-Turbo)
+  # OPENAI_API_KEY is read from environment (.env).
+  backend: "openai"         # "procedural" (CPU fallback) | "diffusion" (SDXL-Turbo) | "openai" (OpenAI Image API)
   diffusion_model_id: "stabilityai/sdxl-turbo"
   diffusion_steps: 2
+  openai_image_model: "gpt-image-2"
+  openai_image_size: "1024x1024"
+  openai_image_quality: "low"
+  openai_image_output_format: "png"
   target_fps: 30
   frame_size: 512
   anchor_prompts:
-    - "a glowing crystalline sculpture"
-    - "a soft organic coral form"
-    - "a sharp angular metallic structure"
-    - "a warm wooden abstract shape"
+    - "a realistic golden retriever puppy sitting on rumpled white bedding, light golden-brown fluffy fur, cream chest, floppy ears, black nose, glossy dark eyes, slight curious head tilt"
+    - "a close portrait photo of a small golden-brown puppy on a white bed, soft wavy fur, rounded muzzle, long floppy ears, bright black eyes, gentle innocent expression, shallow depth of field"
+    - "a cute young puppy with honey-gold fur and pale cream markings, wearing a coral-orange collar with small silver metal rings, seated upright on white sheets, tail curled to the side"
+    - "a natural indoor photo of a fluffy golden puppy facing the camera, oversized paws, soft cream belly, tan ears, black button nose, white pillow background, warm diffused daylight"
 
 loop:
   target_latency_ms: 250          # perceive -> acquire -> decode -> generate, end to end

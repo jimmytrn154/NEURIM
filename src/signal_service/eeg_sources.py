@@ -6,6 +6,7 @@ these is plugged in - that's the point of the abstraction.
 
 from __future__ import annotations
 
+import os
 import time
 from typing import Iterator, Protocol
 
@@ -82,29 +83,95 @@ class EmotivCortexSource:
     ACCESS_POLL_TIMEOUT_S = 60.0
     DEVICE_CONNECT_TIMEOUT_S = 20.0
 
-    def __init__(self, client_id: str | None = None, client_secret: str | None = None):
+    def __init__(
+        self,
+        client_id: str | None = None,
+        client_secret: str | None = None,
+        headset_id: str | None = None,
+        connect_timeout_s: float = 20.0,
+    ):
         self.client_id = client_id
         self.client_secret = client_secret
+        self.headset_id = headset_id or os.environ.get("EMOTIV_HEADSET_ID")
+        self.connect_timeout_s = connect_timeout_s
         self._ws = None
         self._cortex_token: str | None = None
         self._session_id: str | None = None
+        self._eeg_cols: list[str] = []
         self._req_id = 0
 
     def _next_id(self) -> int:
         self._req_id += 1
         return self._req_id
 
-    def _call(self, method: str, params: dict) -> dict:
+    def _call(self, method: str, params: dict | None = None) -> dict:
         import json
 
         assert self._ws is not None
-        payload = {"jsonrpc": "2.0", "id": self._next_id(), "method": method, "params": params}
+        req_id = self._next_id()
+        payload = {"jsonrpc": "2.0", "id": req_id, "method": method}
+        if params is not None:
+            payload["params"] = params
         self._ws.send(json.dumps(payload))
-        response = json.loads(self._ws.recv())
-        if "error" in response:
-            raise RuntimeError(f"Cortex API error on {method}: {response['error']}")
-        print(response)
-        return response["result"]
+        while True:
+            response = json.loads(self._ws.recv())
+            if response.get("id") != req_id:
+                continue
+            if "error" in response:
+                raise RuntimeError(f"Cortex API error on {method}: {response['error']}")
+            return response["result"]
+
+    def _query_headsets(self) -> list[dict]:
+        params = {"id": self.headset_id} if self.headset_id else None
+        return self._call("queryHeadsets", params)
+
+    def _wait_for_connected_headset(self, headset_id: str) -> dict:
+        deadline = time.monotonic() + self.connect_timeout_s
+        last_status = "unknown"
+        while time.monotonic() < deadline:
+            matches = self._call("queryHeadsets", {"id": headset_id})
+            if matches:
+                headset = matches[0]
+                last_status = headset.get("status", "unknown")
+                if last_status == "connected":
+                    return headset
+            time.sleep(1.0)
+        raise RuntimeError(
+            f"Timed out waiting for Cortex headset {headset_id!r} to connect "
+            f"(last status: {last_status})"
+        )
+
+    def _select_headset(self) -> str:
+        self._call("controlDevice", {"command": "refresh"})
+
+        deadline = time.monotonic() + self.connect_timeout_s
+        headsets: list[dict] = []
+        while time.monotonic() < deadline:
+            headsets = self._query_headsets()
+            if headsets:
+                break
+            time.sleep(1.0)
+
+        if not headsets:
+            target = f" matching {self.headset_id!r}" if self.headset_id else ""
+            raise RuntimeError(f"No EMOTIV headset{target} found by Cortex")
+
+        connected = [h for h in headsets if h.get("status") == "connected"]
+        headset = connected[0] if connected else headsets[0]
+        headset_id = headset["id"]
+
+        if headset.get("status") != "connected":
+            self._call("controlDevice", {"command": "connect", "headset": headset_id})
+            headset = self._wait_for_connected_headset(headset_id)
+
+        if headset.get("connectedBy") == "usb cable":
+            raise RuntimeError(
+                f"Cortex reports headset {headset_id!r} is connected by USB cable; "
+                "createSession requires dongle or Bluetooth."
+            )
+
+        self.headset_id = headset_id
+        return headset_id
 
     def _wait_for_access(self) -> None:
         deadline = time.monotonic() + self.ACCESS_POLL_TIMEOUT_S
@@ -128,32 +195,6 @@ class EmotivCortexSource:
                 )
             time.sleep(self.ACCESS_POLL_INTERVAL_S)
 
-    def _connect_headset(self) -> str:
-        deadline = time.monotonic() + self.DEVICE_CONNECT_TIMEOUT_S
-        while True:
-            headsets = self._call("queryHeadsets", {})
-            if not headsets:
-                if time.monotonic() > deadline:
-                    raise RuntimeError(
-                        "No headset found via Cortex - check it's powered on and paired "
-                        "in EMOTIV Launcher"
-                    )
-                time.sleep(1.0)
-                continue
-
-            headset = headsets[0]
-            headset_id = headset["id"]
-            if headset.get("status") == "connected":
-                return headset_id
-
-            self._call("controlDevice", {"command": "connect", "headset": headset_id})
-            if time.monotonic() > deadline:
-                raise RuntimeError(
-                    f"Headset '{headset_id}' did not reach 'connected' status in time - "
-                    "check EMOTIV Launcher's device status"
-                )
-            time.sleep(1.0)
-
     def connect(self) -> None:
         import ssl
 
@@ -165,24 +206,30 @@ class EmotivCortexSource:
             )
         # Cortex serves a self-signed cert on localhost; there's no real MITM
         # risk to guard against on a loopback connection to your own machine.
-        self._ws = websocket.create_connection(self.CORTEX_URL, sslopt={"cert_reqs": ssl.CERT_NONE})
+        self._ws = websocket.create_connection(
+            self.CORTEX_URL, sslopt={"cert_reqs": ssl.CERT_NONE}
+        )
         self._wait_for_access()
         auth = self._call(
             "authorize", {"clientId": self.client_id, "clientSecret": self.client_secret}
         )
         self._cortex_token = auth["cortexToken"]
-        headset_id = self._connect_headset()
+        headset_id = self._select_headset()
         session = self._call(
             "createSession",
             {"cortexToken": self._cortex_token, "headset": headset_id, "status": "active"},
         )
         self._session_id = session["id"]
-        self._call(
+        subscription = self._call(
             "subscribe",
             {"cortexToken": self._cortex_token, "session": self._session_id, "streams": ["eeg"]},
         )
+        for item in subscription.get("success", []):
+            if item.get("streamName") == "eeg":
+                self._eeg_cols = item.get("cols", [])
+                break
 
-    def stream(self, channels: list[str]) -> Iterator[tuple[float, dict[str, float]]]:
+    def stream(self, channels: list[str] | None = None) -> Iterator[tuple[float, dict[str, float]]]:
         import json
 
         assert self._ws is not None, "call connect() first"
@@ -191,10 +238,18 @@ class EmotivCortexSource:
             if "eeg" not in msg:
                 continue
             values = msg["eeg"]
-            # Cortex sends [time, ch0, ch1, ...]; caller's channel order must
-            # match the subscribed montage from config.yaml.
-            t = values[0]
-            sample = dict(zip(channels, values[1:]))
+            t = msg["time"]
+            if self._eeg_cols:
+                sample = {
+                    col: value
+                    for col, value in zip(self._eeg_cols, values)
+                    if isinstance(value, int | float)
+                }
+            else:
+                # Fallback for tests or older callers: Cortex's EEG array is
+                # COUNTER, INTERPOLATED, then sensor values.
+                assert channels is not None, "Cortex subscribe did not return EEG columns"
+                sample = dict(zip(channels, values[2:]))
             yield t, sample
 
     def close(self) -> None:

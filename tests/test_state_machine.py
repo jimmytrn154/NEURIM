@@ -40,6 +40,16 @@ def test_settle_after_sustained_high_reward_low_motion():
     assert sm.state == "settle"
 
 
+def test_min_steps_before_settle_prevents_immediate_lock():
+    sm = _sm(min_steps_before_settle=5)
+    sm.mark_calibrated()
+    for _ in range(4):
+        sm.observe(reward=0.8, step_norm=0.01)
+    assert not sm.is_locked()
+    sm.observe(reward=0.8, step_norm=0.01)
+    assert sm.is_locked()
+
+
 def test_recover_after_negative_streak():
     sm = _sm(recover_negative_streak=3)
     sm.mark_calibrated()

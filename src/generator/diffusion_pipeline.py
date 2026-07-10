@@ -24,13 +24,9 @@ class DiffusionGenerator:
         self._torch = torch
 
         if self.device == "cuda":
-            # fp16 + the "fp16" weight variant is the fast path CUDA supports.
             self.dtype = torch.float16
             load_kwargs = {"torch_dtype": self.dtype, "variant": "fp16"}
         else:
-            # fp16 has a known black-image bug on MPS (Apple Silicon), and
-            # CPU has no native fp16 compute either - fp32 on both, slower
-            # but actually produces correct images.
             self.dtype = torch.float32
             load_kwargs = {"torch_dtype": self.dtype}
 
@@ -46,10 +42,7 @@ class DiffusionGenerator:
         return "cpu"
 
     def render_from_prompt(self, prompt: str):
-        """Straight text -> image, bypassing the embedding/projector path -
-        for sanity-checking the model/hardware before wiring up the
-        anchor-prompt projector that the live optimizer loop uses.
-        """
+        """Straight text -> image, bypassing the embedding/projector path."""
         image = self.pipe(
             prompt,
             num_inference_steps=self.num_inference_steps,
@@ -59,9 +52,6 @@ class DiffusionGenerator:
         return image
 
     def encode_prompts(self, prompts: list[str]) -> np.ndarray:
-        """Run each anchor prompt through the pipeline's text encoder(s) and
-        return stacked embeddings, for PCAProjector.fit() / anchor projection.
-        """
         embeddings = []
         for prompt in prompts:
             with self._torch.no_grad():
@@ -73,14 +63,19 @@ class DiffusionGenerator:
         return np.stack(embeddings)
 
     def render(self, embedding: np.ndarray):
-        """embedding: flattened prompt_embeds matching the pipeline's expected
-        shape (reshape happens against the pipe's own text-encoder output
-        shape, captured the first time encode_prompts() runs).
-        """
         prompt_embeds = self._torch.tensor(embedding, dtype=self.dtype, device=self.device)
         prompt_embeds = prompt_embeds.reshape(1, -1, prompt_embeds.shape[-1])
         image = self.pipe(
             prompt_embeds=prompt_embeds,
+            num_inference_steps=self.num_inference_steps,
+            guidance_scale=0.0,
+        ).images[0]
+        self._prev_image = image
+        return image
+
+    def render_prompt(self, prompt: str):
+        image = self.pipe(
+            prompt=prompt,
             num_inference_steps=self.num_inference_steps,
             guidance_scale=0.0,
         ).images[0]

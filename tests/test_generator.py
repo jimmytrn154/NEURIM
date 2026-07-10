@@ -1,6 +1,7 @@
 import numpy as np
 from PIL import Image
 
+from src.generator.openai_image import OpenAIImageGenerator
 from src.generator.procedural import ProceduralRenderer
 from src.generator.to_3d import ProceduralPseudo3D, mirrored_quadrants
 from src.optimizer.projection import AnchorInterpolationProjector, PCAProjector
@@ -53,3 +54,38 @@ def test_anchor_projector_stays_in_convex_hull():
     embedding = projector.to_embedding(np.array([0.0, 0.0, 0.0]))
     # Uniform softmax weights -> centroid of the anchors.
     assert np.allclose(embedding, anchors.mean(axis=0), atol=1e-6)
+
+
+class _FakeImages:
+    def __init__(self, b64_json: str):
+        self.b64_json = b64_json
+        self.calls = []
+
+    def generate(self, **kwargs):
+        self.calls.append(kwargs)
+        image = type("ImageResult", (), {"b64_json": self.b64_json})()
+        return type("ImageResponse", (), {"data": [image]})()
+
+
+class _FakeOpenAIClient:
+    def __init__(self, b64_json: str):
+        self.images = _FakeImages(b64_json)
+
+
+def test_openai_image_generator_decodes_and_caches_prompt():
+    import base64
+    import io
+
+    src = Image.new("RGB", (16, 16), (255, 0, 0))
+    buf = io.BytesIO()
+    src.save(buf, format="PNG")
+    client = _FakeOpenAIClient(base64.b64encode(buf.getvalue()).decode("ascii"))
+    generator = OpenAIImageGenerator(frame_size=8, client=client)
+
+    img_a = generator.render_prompt("a red square")
+    img_b = generator.render_prompt("a red square")
+
+    assert img_a.size == (8, 8)
+    assert img_b.size == (8, 8)
+    assert len(client.images.calls) == 1
+    assert client.images.calls[0]["model"] == "gpt-image-2"

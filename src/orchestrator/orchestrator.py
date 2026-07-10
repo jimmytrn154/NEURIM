@@ -4,7 +4,7 @@ Two flavors, same message protocol (src.common.messages):
 
   LocalOrchestrator - everything in one process/asyncio loop. What
       scripts/run_fake_loop.py and the convergence tests use; also fine for a
-      single-machine demo with real EEG + real diffusion, no network hop.
+      single-machine demo with real EEG + image generation.
 
   WebSocketOrchestrator - a hub server so the Signal service (possibly on a
       different machine, e.g. a laptop next to the headset) and the frontend

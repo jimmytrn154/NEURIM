@@ -15,10 +15,8 @@ pynput>=1.7.6
 
 # Generation - procedural fallback (always available)
 pillow>=10.2.0
-# Diffusion/TripoSR backend (generator.backend = "diffusion") needs torch,
-# diffusers, transformers, accelerate, tsr - see requirements-diffusion.txt.
-# Kept separate: they're multi-GB GPU deps you don't want for the fake-reward
-# loop or CI.
+# OpenAI image backend (generator.backend = "openai")
+openai>=1.0.0
 
 # Orchestrator <-> service bridge
 websockets>=12.0

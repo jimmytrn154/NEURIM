@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Phase 3: the real thing. Ties EEG (or --mock), the optimizer, and the
-generator (procedural or --backend diffusion) together via the Orchestrator,
+generator (procedural, --backend diffusion, or --backend openai) together via the Orchestrator,
 optionally serving frames to a frontend over websockets (--serve).
 """
 
@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import base64
+import errno
 import sys
 from pathlib import Path
 
@@ -45,7 +46,7 @@ async def run_served(config: Config, host: str, port: int) -> None:
     generator = GeneratorService(config)
     hub = WebSocketOrchestrator(config, generator, host=host, port=port)
     browser_host = "localhost" if host in {"0.0.0.0", "::"} else host
-    print(f"[demo] serving on ws://{browser_host}:{hub.port} "
+    print(f"[demo] starting websocket hub on ws://{browser_host}:{hub.port} "
           "(Signal service connects with {\"role\": \"signal\"}, frontend with {\"role\": \"display\"})")
     await hub.serve_forever()
 
@@ -53,7 +54,7 @@ async def run_served(config: Config, host: str, port: int) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--mock", action="store_true", help="use synthetic EEG instead of real hardware")
-    parser.add_argument("--backend", choices=["procedural", "diffusion"], default=None)
+    parser.add_argument("--backend", choices=["procedural", "diffusion", "openai"], default=None)
     parser.add_argument("--algorithm", choices=["hill_climb", "es_1p1", "gp_bo"], default=None)
     parser.add_argument("--serve", action="store_true", help="run the websocket hub instead of local mode")
     parser.add_argument("--host", default="0.0.0.0", help="websocket host when using --serve")
@@ -69,6 +70,17 @@ def main() -> None:
     if args.serve:
         try:
             asyncio.run(run_served(config, args.host, args.port))
+        except OSError as exc:
+            if exc.errno == errno.EADDRINUSE:
+                browser_host = "localhost" if args.host in {"0.0.0.0", "::"} else args.host
+                print(
+                    f"[demo] port {args.port} is already in use; a websocket hub may already be running at "
+                    f"ws://{browser_host}:{args.port}\n"
+                    f"[demo] stop the old process or start this one on another port, e.g. "
+                    f"--port {args.port + 1}"
+                )
+            else:
+                raise
         except KeyboardInterrupt:
             print("\n[demo] stopped")
         return

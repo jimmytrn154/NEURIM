@@ -1,7 +1,8 @@
 """The Generator service: z in, rendered pyramid frame out.
 
 Backend is picked by config.generator.backend ("procedural" for the
-GPU-free fallback / fake-reward loop, "diffusion" for SDXL-Turbo). The
+GPU-free fallback / fake-reward loop, "diffusion" for SDXL-Turbo, "openai"
+for the OpenAI Image API). The
 Optimizer only emits one z every 1-2s, so the Orchestrator interpolates
 between accepted latents and calls render() at 30-60fps for a smooth morph -
 see Interpolator below.
@@ -64,6 +65,7 @@ class GeneratorService:
         self.config = config
         self.backend = config.generator.backend
         self.projector = projector
+        self.anchor_prompts = config.generator.anchor_prompts
         if self.backend == "diffusion":
             from src.generator.diffusion_pipeline import DiffusionGenerator
 
@@ -71,14 +73,34 @@ class GeneratorService:
                 config.generator.diffusion_model_id,
                 num_inference_steps=config.generator.diffusion_steps,
             )
+        elif self.backend == "openai":
+            from src.generator.openai_image import OpenAIImageGenerator
+
+            self._openai = OpenAIImageGenerator(
+                model=config.generator.openai_image_model,
+                size=config.generator.openai_image_size,
+                quality=config.generator.openai_image_quality,
+                output_format=config.generator.openai_image_output_format,
+                frame_size=config.generator.frame_size,
+            )
         else:
             self._procedural = ProceduralRenderer()
 
+    def _anchor_prompt_for(self, z: np.ndarray) -> str:
+        prompts = self.anchor_prompts or ["a little brown puppy"]
+        weights = np.asarray(z[: len(prompts)], dtype=float)
+        if weights.size == 0:
+            return prompts[0]
+        return prompts[int(np.argmax(weights))]
+
     def render_image(self, z: np.ndarray) -> Image.Image:
         if self.backend == "diffusion":
-            assert self.projector is not None, "diffusion backend needs a projector"
-            embedding = self.projector.to_embedding(z)
-            return self._diffusion.render(embedding)
+            if self.projector is not None:
+                embedding = self.projector.to_embedding(z)
+                return self._diffusion.render(embedding)
+            return self._diffusion.render_prompt(self._anchor_prompt_for(z))
+        if self.backend == "openai":
+            return self._openai.render_prompt(self._anchor_prompt_for(z))
         return self._procedural.render(z, size=self.config.generator.frame_size)
 
     def render(

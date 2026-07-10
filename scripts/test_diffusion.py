@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 """Standalone sanity check for the diffusion generator backend.
 
-Proves SDXL-Turbo actually produces real images on this machine's hardware
-before wiring anything else up - no optimizer, no reward loop, no
-anchor-prompt projector, just text -> image. Matches the project's own
-"prove each piece independently" build order.
-
 Needs the heavy deps: pip install -r requirements-diffusion.txt
-First run downloads the SDXL-Turbo weights (~7GB) from Hugging Face.
+First run downloads the SDXL-Turbo weights from Hugging Face.
 """
 
 from __future__ import annotations
@@ -29,7 +24,7 @@ PROMPTS = [
 def main() -> None:
     from src.generator.diffusion_pipeline import DiffusionGenerator
 
-    print("[test-diffusion] loading SDXL-Turbo (first run downloads ~7GB - this may take a while)...")
+    print("[test-diffusion] loading SDXL-Turbo...")
     t0 = time.monotonic()
     generator = DiffusionGenerator(num_inference_steps=4)
     print(f"[test-diffusion] device={generator.device} dtype={generator.dtype} "

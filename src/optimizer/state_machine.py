@@ -71,7 +71,8 @@ class StateMachine:
         else:
             self.settle_streak = 0
 
-        if self.settle_streak >= self.sm_config.settle_patience_steps:
+        can_settle = self.step_index >= self.sm_config.min_steps_before_settle
+        if can_settle and self.settle_streak >= self.sm_config.settle_patience_steps:
             self.state = "settle"
             return self.state
 

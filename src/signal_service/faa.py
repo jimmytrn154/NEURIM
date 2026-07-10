@@ -3,7 +3,7 @@
 FAA = ln(alpha_power(F4)) - ln(alpha_power(F3)), z-scored against a per-subject
 resting baseline and clipped to [-1, 1]. Higher = more left-frontal activation
 = approach motivation, per the standard EEG asymmetry literature. This module
-only knows about numbers in, numbers out - it never sees the diffusion model,
+only knows about numbers in, numbers out - it never sees the image generator,
 the optimizer, or anything about images.
 
 F3 = Channel_3.csv and F4 = Channel_12.csv.

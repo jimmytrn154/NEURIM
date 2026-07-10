@@ -54,6 +54,7 @@ class StateMachineConfig:
     settle_reward_threshold: float = 0.55
     settle_motion_threshold: float = 0.1
     settle_patience_steps: int = 3
+    min_steps_before_settle: int = 0
     recover_negative_streak: int = 4
     recover_widen_factor: float = 1.5
     max_steps: int = 100
@@ -68,9 +69,13 @@ class StateMachineConfig:
 
 @dataclass
 class GeneratorConfig:
-    backend: str = "procedural"  # "procedural" | "diffusion"
+    backend: str = "procedural"  # "procedural" | "diffusion" | "openai"
     diffusion_model_id: str = "stabilityai/sdxl-turbo"
     diffusion_steps: int = 2
+    openai_image_model: str = "gpt-image-2"
+    openai_image_size: str = "1024x1024"
+    openai_image_quality: str = "low"
+    openai_image_output_format: str = "png"
     target_fps: int = 30
     frame_size: int = 512
     anchor_prompts: list[str] = field(default_factory=list)
@@ -120,7 +125,10 @@ def _tuple_fields(raw: dict) -> dict:
 
 
 def emotiv_credentials() -> tuple[str | None, str | None]:
-    from dotenv import load_dotenv
+    try:
+        from dotenv import load_dotenv
 
-    load_dotenv()
+        load_dotenv()
+    except ImportError:
+        pass
     return os.environ.get("EMOTIV_CLIENT_ID"), os.environ.get("EMOTIV_CLIENT_SECRET")
