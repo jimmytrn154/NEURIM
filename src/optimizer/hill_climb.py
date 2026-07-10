@@ -68,8 +68,10 @@ class MomentumHillClimb:
             self.velocity = new_dir / norm * self.step_size if norm > 1e-9 else new_dir
             return True
 
-        # Reward dropped clearly: reverse course.
-        self.velocity = -self.velocity
+        # Reward dropped clearly: reverse course, damped so the reversal shrinks
+        # rather than bouncing back at full magnitude (avoids reversal oscillation
+        # around the ridge; the next set_step_size renormalizes the direction).
+        self.velocity = -self.velocity * 0.75
         return False
 
     def set_step_size(self, step_size: float) -> None:
