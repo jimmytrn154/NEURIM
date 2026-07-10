@@ -71,3 +71,24 @@ def test_emotiv_stream_uses_cortex_cols_and_message_time():
     assert t == 1559902873.8976
     assert sample["F3"] == 4135.0
     assert sample["F4"] == 4130.0
+
+
+def test_emotiv_extracts_eeg_cols_from_subscribe_result():
+    result = {
+        "success": [
+            {
+                "streamName": "eeg",
+                "cols": ["COUNTER", "INTERPOLATED", "AF3", "F3", "F4", "MARKERS"],
+            }
+        ],
+        "failure": [],
+    }
+
+    assert EmotivCortexSource._extract_eeg_cols(result) == [
+        "COUNTER",
+        "INTERPOLATED",
+        "AF3",
+        "F3",
+        "F4",
+        "MARKERS",
+    ]

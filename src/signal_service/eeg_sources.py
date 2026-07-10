@@ -177,6 +177,14 @@ class EmotivCortexSource:
         self.headset_id = headset_id
         return headset_id
 
+    @staticmethod
+    def _extract_eeg_cols(subscription_result: dict) -> list[str] | None:
+        """Return Cortex EEG column labels from a subscribe response."""
+        for item in subscription_result.get("success", []):
+            if item.get("streamName") == "eeg" and item.get("cols"):
+                return list(item["cols"])
+        return None
+
     def _wait_for_access(self) -> None:
         deadline = time.monotonic() + self.ACCESS_POLL_TIMEOUT_S
         printed_prompt = False
@@ -228,10 +236,7 @@ class EmotivCortexSource:
             "subscribe",
             {"cortexToken": self._cortex_token, "session": self._session_id, "streams": ["eeg"]},
         )
-        for item in subscription.get("success", []):
-            if item.get("streamName") == "eeg":
-                self._eeg_cols = item.get("cols", [])
-                break
+        self._eeg_cols = self._extract_eeg_cols(subscription)
 
     def stream(self, channels: list[str] | None = None) -> Iterator[tuple[float, dict[str, float]]]:
         import json
@@ -242,16 +247,19 @@ class EmotivCortexSource:
             if "eeg" not in msg:
                 continue
             values = msg["eeg"]
-            t = msg.get("time", values[0])
             if self._eeg_cols:
                 sample = {
                     col: value
                     for col, value in zip(self._eeg_cols, values)
-                    if isinstance(value, int | float)
+                    if isinstance(value, (int, float))
                 }
             else:
-                assert channels is not None, "Cortex subscribe did not return EEG columns"
+                if channels is None:
+                    raise RuntimeError(
+                        "Cortex EEG column labels are unavailable; pass channels to stream()"
+                    )
                 sample = dict(zip(channels, values[2:]))
+            t = msg.get("time", time.time())
             yield t, sample
 
     def close(self) -> None:
