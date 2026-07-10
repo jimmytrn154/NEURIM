@@ -36,49 +36,122 @@ export async function POST(request: Request) {
   const model = process.env.OPENAI_PROMPT_MODEL ?? "gpt-5.5";
 
   try {
-    const metaPrompt = `You are generating anchor prompts for a real-time latent morphing image system.
+    const metaPrompt = `You are generating anchor prompts for a real-time latent-space image morphing system.
 
 User prompt:
-“${desired}”
+"${desired}"
 
 Task:
-Create a bank of anchor prompts based on the user prompt. These prompts will be embedded, reduced with PCA, and
-used for smooth latent-space interpolation. The anchor prompts must preserve the core subject and intent of the
-user prompt while spanning meaningful visual variation.
+Generate a bank of exactly 10 anchor prompts derived from the user prompt. The prompts will be converted into embeddings, reduced using PCA, and used as anchor points for smooth latent-space interpolation.
 
-Rules:
+The anchor bank must preserve the central semantic identity and visual intent of the user prompt while introducing controlled, coherent visual variation. The prompts should create useful latent directions without causing abrupt changes in subject, scene, composition, or artistic identity.
 
-Keep the same subject, setting, camera distance, composition, lighting, and style across all anchor prompts.
-Vary only 1-2 controlled visual attributes per prompt.
-Do not introduce new objects, new scenes, new characters, or different art styles unless the user prompt
-explicitly asks for them.
-Make the prompts different enough to create useful latent directions, but similar enough to morph smoothly.
-Use a consistent sentence scaffold for every prompt.
-If the user prompt is vague, infer a stable visual scaffold and vary safe visual attributes such as color,
-material, texture, pose, expression, shape, density, or lighting intensity.
-Return exactly 10 anchor prompts.
-Each anchor prompt must be one sentence.
-Also return a short list of the controlled variation axes.
+Instructions:
+
+1. Establish a stable visual scaffold from the user prompt. The scaffold may include:
+
+   * Main subject or subjects
+   * Environment or background
+   * Camera distance and viewing angle
+   * Composition and spatial arrangement
+   * Lighting setup
+   * Visual medium or artistic style
+   * Overall mood or atmosphere
+
+
+3. Identify 2-4 controlled variation axes that are:
+
+   * Visually meaningful
+   * Compatible with the original prompt
+   * Likely to produce smooth interpolation
+   * Independent enough to create useful latent directions
+
+4. Suitable variation axes may include:
+
+   * Color or hue
+   * Material
+   * Surface texture
+   * Shape or proportion
+   * Pose or orientation
+   * Facial expression
+   * Age or degree of transformation
+   * Object density
+   * Pattern complexity
+   * Motion intensity
+   * Weather intensity
+   * Lighting intensity or temperature
+   * Mood intensity
+   * Degree of realism
+   * Environmental state
+   * Abstract visual properties explicitly implied by the prompt
+
+6. Keep all non-varied attributes as consistent as possible.
+
+7. Do not introduce:
+
+   * New subjects
+   * New characters
+   * New objects
+   * New locations
+   * Unrelated actions
+   * Different camera compositions
+   * Different visual styles
+   * Major semantic changes
+
+   An exception is allowed only when the original user prompt explicitly requests variation in those elements.
+
+
+9. Write each anchor prompt as a complete, self-contained image-generation prompt. Do not use shorthand such as "same image but blue" or refer to another anchor prompt.
+
+
+11. Avoid extreme endpoints that could break subject identity, composition, or visual continuity.
+
+12. When the user prompt is vague:
+
+* Infer the simplest stable visual scaffold.
+* Do not add elaborate narrative details.
+* Prefer safe variations in color, material, texture, shape, pose, expression, density, atmosphere, or lighting intensity.
+* Keep inferred details consistent across every anchor.
+
+13. When the user prompt already contains several changing elements, select only the most visually useful and interpolation-friendly axes. Treat the remaining elements as fixed.
+
+14. Do not include explanations, commentary, numbering, interpolation values, or parameter syntax inside the anchor prompts.
+
+Output requirements:
+
+* Return exactly 10 anchor prompts.
+
+* Each anchor prompt must contain exactly one sentence.
+
+* Place every anchor prompt inside quotation marks.
+
+* Format every anchor prompt using exactly this prefix:
+
+* * "prompt example"
 
 Output format:
-Controlled axes:
 
-axis 1
-axis 2
-axis 3
 
 Anchor prompts:
 
-...
-...
-...
-...
-...
-...
-...
-...
-...
-...`;
+* * "[Anchor prompt 1]"
+* * "[Anchor prompt 2]"
+* * "[Anchor prompt 3]"
+* * "[Anchor prompt 4]"
+* * "[Anchor prompt 5]"
+* * "[Anchor prompt 6]"
+* * "[Anchor prompt 7]"
+* * "[Anchor prompt 8]"
+* * "[Anchor prompt 9]"
+* * "[Anchor prompt 10]"
+
+Before producing the output, silently verify that:
+
+* There are exactly 10 anchor prompts.
+* Every prompt preserves the same core subject and intent.
+* No unrequested objects, characters, scenes, or styles have been introduced.
+* The anchor bank supports gradual and visually coherent interpolation.
+`;
 
     const response = await client.responses.create({
       model,
