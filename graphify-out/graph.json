@@ -2280,7 +2280,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_run_demo",
-      "community": 14,
+      "community": 33,
       "norm_label": "run_demo.py"
     },
     {
@@ -2290,7 +2290,7 @@
       "source_location": "L28",
       "_origin": "ast",
       "id": "scripts_run_demo_save_frame",
-      "community": 14,
+      "community": 33,
       "norm_label": "_save_frame()"
     },
     {
@@ -2300,7 +2300,7 @@
       "source_location": "L34",
       "_origin": "ast",
       "id": "scripts_run_demo_sessionsnapshot",
-      "community": 14,
+      "community": 33,
       "norm_label": "_sessionsnapshot"
     },
     {
@@ -2310,7 +2310,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "scripts_run_demo_sessionsnapshot_init",
-      "community": 14,
+      "community": 33,
       "norm_label": ".__init__()"
     },
     {
@@ -2320,7 +2320,7 @@
       "source_location": "L47",
       "_origin": "ast",
       "id": "scripts_run_demo_sessionsnapshot_on_frame",
-      "community": 14,
+      "community": 33,
       "norm_label": ".on_frame()"
     },
     {
@@ -2330,7 +2330,7 @@
       "source_location": "L53",
       "_origin": "ast",
       "id": "scripts_run_demo_sessionsnapshot_save_end",
-      "community": 14,
+      "community": 33,
       "norm_label": ".save_end()"
     },
     {
@@ -2340,7 +2340,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "scripts_run_demo_run_local",
-      "community": 14,
+      "community": 33,
       "norm_label": "run_local()"
     },
     {
@@ -2350,7 +2350,7 @@
       "source_location": "L85",
       "_origin": "ast",
       "id": "scripts_run_demo_run_served",
-      "community": 14,
+      "community": 33,
       "norm_label": "run_served()"
     },
     {
@@ -2360,7 +2360,7 @@
       "source_location": "L94",
       "_origin": "ast",
       "id": "scripts_run_demo_main",
-      "community": 14,
+      "community": 33,
       "norm_label": "main()"
     },
     {
@@ -2370,7 +2370,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "scripts_run_demo_rationale_35",
-      "community": 14,
+      "community": 33,
       "norm_label": "saves the session's first and final frame to data/processed/, for the     offlin"
     },
     {
@@ -2454,23 +2454,183 @@
       "norm_label": "main()"
     },
     {
+      "label": "run_general_stable_diffusion.py",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion",
+      "community": 23,
+      "norm_label": "run_general_stable_diffusion.py"
+    },
+    {
+      "label": "encode_anchor_prompts()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_encode_anchor_prompts",
+      "community": 23,
+      "norm_label": "encode_anchor_prompts()"
+    },
+    {
+      "label": "random_latent()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L56",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_random_latent",
+      "community": 23,
+      "norm_label": "random_latent()"
+    },
+    {
+      "label": "make_anchor_latents()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_make_anchor_latents",
+      "community": 23,
+      "norm_label": "make_anchor_latents()"
+    },
+    {
+      "label": "make_cpu_generator()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_make_cpu_generator",
+      "community": 23,
+      "norm_label": "make_cpu_generator()"
+    },
+    {
+      "label": "softmax_weights()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L80",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_softmax_weights",
+      "community": 23,
+      "norm_label": "softmax_weights()"
+    },
+    {
+      "label": "ndarray",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_py_ndarray",
+      "community": 23,
+      "norm_label": "ndarray"
+    },
+    {
+      "label": "blend_prompt_embeds()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L87",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_blend_prompt_embeds",
+      "community": 23,
+      "norm_label": "blend_prompt_embeds()"
+    },
+    {
+      "label": "blend_noise_latents()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L95",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_blend_noise_latents",
+      "community": 23,
+      "norm_label": "blend_noise_latents()"
+    },
+    {
+      "label": "top_anchors()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L108",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_top_anchors",
+      "community": 23,
+      "norm_label": "top_anchors()"
+    },
+    {
+      "label": "AnchorMorphRenderServer",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_anchormorphrenderserver",
+      "community": 23,
+      "norm_label": "anchormorphrenderserver"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_anchormorphrenderserver_init",
+      "community": 23,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".render_png()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L147",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_anchormorphrenderserver_render_png",
+      "community": 23,
+      "norm_label": ".render_png()"
+    },
+    {
+      "label": "make_handler()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L193",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_make_handler",
+      "community": 23,
+      "norm_label": "make_handler()"
+    },
+    {
+      "label": "load_pipeline()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L227",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_load_pipeline",
+      "community": 23,
+      "norm_label": "load_pipeline()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L257",
+      "_origin": "ast",
+      "id": "scripts_run_general_stable_diffusion_main",
+      "community": 23,
+      "norm_label": "main()"
+    },
+    {
       "label": "run_mock_optimizer.py",
       "file_type": "code",
       "source_file": "scripts/run_mock_optimizer.py",
       "source_location": "L1",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer",
-      "community": 13,
+      "community": 30,
       "norm_label": "run_mock_optimizer.py"
     },
     {
       "label": "_softmax_weights()",
       "file_type": "code",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L56",
+      "source_location": "L60",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer_softmax_weights",
-      "community": 13,
+      "community": 30,
       "norm_label": "_softmax_weights()"
     },
     {
@@ -2480,78 +2640,158 @@
       "source_location": "",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer_py_ndarray",
-      "community": 13,
+      "community": 30,
       "norm_label": "ndarray"
     },
     {
       "label": "BreedTargetRewardSource",
       "file_type": "code",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L63",
+      "source_location": "L67",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer_breedtargetrewardsource",
-      "community": 13,
+      "community": 30,
       "norm_label": "breedtargetrewardsource"
     },
     {
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L66",
+      "source_location": "L70",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer_breedtargetrewardsource_init",
-      "community": 13,
+      "community": 30,
       "norm_label": ".__init__()"
     },
     {
       "label": ".read_reward()",
       "file_type": "code",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L83",
+      "source_location": "L87",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer_breedtargetrewardsource_read_reward",
-      "community": 13,
+      "community": 30,
       "norm_label": ".read_reward()"
+    },
+    {
+      "label": "_save_frame()",
+      "file_type": "code",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L107",
+      "_origin": "ast",
+      "id": "scripts_run_mock_optimizer_save_frame",
+      "community": 30,
+      "norm_label": "_save_frame()"
+    },
+    {
+      "label": "_SessionSnapshot",
+      "file_type": "code",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "scripts_run_mock_optimizer_sessionsnapshot",
+      "community": 30,
+      "norm_label": "_sessionsnapshot"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L116",
+      "_origin": "ast",
+      "id": "scripts_run_mock_optimizer_sessionsnapshot_init",
+      "community": 30,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".on_frame()",
+      "file_type": "code",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L119",
+      "_origin": "ast",
+      "id": "scripts_run_mock_optimizer_sessionsnapshot_on_frame",
+      "community": 30,
+      "norm_label": ".on_frame()"
+    },
+    {
+      "label": ".save_end()",
+      "file_type": "code",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L125",
+      "_origin": "ast",
+      "id": "scripts_run_mock_optimizer_sessionsnapshot_save_end",
+      "community": 30,
+      "norm_label": ".save_end()"
     },
     {
       "label": "_post_render()",
       "file_type": "code",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L103",
+      "source_location": "L129",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer_post_render",
-      "community": 13,
+      "community": 30,
       "norm_label": "_post_render()"
     },
     {
       "label": "_post_anchors()",
       "file_type": "code",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L116",
+      "source_location": "L142",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer_post_anchors",
-      "community": 13,
+      "community": 30,
       "norm_label": "_post_anchors()"
     },
     {
       "label": "main()",
       "file_type": "code",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L128",
+      "source_location": "L154",
       "_origin": "ast",
       "id": "scripts_run_mock_optimizer_main",
-      "community": 13,
+      "community": 30,
       "norm_label": "main()"
     },
     {
       "label": "Scripted reward for the breed-weight server: reward a selected breed.",
       "file_type": "rationale",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L64",
+      "source_location": "L68",
       "_origin": "ast",
-      "id": "scripts_run_mock_optimizer_rationale_64",
-      "community": 13,
+      "id": "scripts_run_mock_optimizer_rationale_68",
+      "community": 30,
       "norm_label": "scripted reward for the breed-weight server: reward a selected breed."
+    },
+    {
+      "label": "Mirror the real EEG optimizer's live/start/end frame capture behavior.",
+      "file_type": "rationale",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L114",
+      "_origin": "ast",
+      "id": "scripts_run_mock_optimizer_rationale_114",
+      "community": 30,
+      "norm_label": "mirror the real eeg optimizer's live/start/end frame capture behavior."
+    },
+    {
+      "label": "run_prompt_curation.py",
+      "file_type": "code",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "scripts_run_prompt_curation",
+      "community": 5,
+      "norm_label": "run_prompt_curation.py"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "scripts_run_prompt_curation_main",
+      "community": 5,
+      "norm_label": "main()"
     },
     {
       "label": "run_real_eeg_optimizer.py",
@@ -2567,7 +2807,7 @@
       "label": "_save_frame()",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L47",
+      "source_location": "L52",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_save_frame",
       "community": 14,
@@ -2577,7 +2817,7 @@
       "label": "_SessionSnapshot",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L53",
+      "source_location": "L58",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "community": 14,
@@ -2587,7 +2827,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L60",
+      "source_location": "L65",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_sessionsnapshot_init",
       "community": 14,
@@ -2597,7 +2837,7 @@
       "label": ".on_frame()",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L63",
+      "source_location": "L68",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_sessionsnapshot_on_frame",
       "community": 14,
@@ -2607,7 +2847,7 @@
       "label": ".save_end()",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L69",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_sessionsnapshot_save_end",
       "community": 14,
@@ -2617,7 +2857,7 @@
       "label": "_post_render()",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L73",
+      "source_location": "L78",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_post_render",
       "community": 14,
@@ -2637,7 +2877,7 @@
       "label": "_post_anchors()",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L86",
+      "source_location": "L91",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_post_anchors",
       "community": 14,
@@ -2647,7 +2887,7 @@
       "label": "_cue()",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L98",
+      "source_location": "L103",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_cue",
       "community": 14,
@@ -2657,7 +2897,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L106",
+      "source_location": "L111",
       "_origin": "ast",
       "id": "scripts_run_real_eeg_optimizer_main",
       "community": 14,
@@ -2667,9 +2907,9 @@
       "label": "Same start/end capture as run_demo.py's _SessionSnapshot, for the     optional o",
       "file_type": "rationale",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L54",
+      "source_location": "L59",
       "_origin": "ast",
-      "id": "scripts_run_real_eeg_optimizer_rationale_54",
+      "id": "scripts_run_real_eeg_optimizer_rationale_59",
       "community": 14,
       "norm_label": "same start/end capture as run_demo.py's _sessionsnapshot, for the     optional o"
     },
@@ -2990,7 +3230,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_common_config_optimizerconfig",
-      "community": 23,
+      "community": 20,
       "norm_label": "optimizerconfig"
     },
     {
@@ -3000,7 +3240,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_common_config_statemachineconfig",
-      "community": 23,
+      "community": 20,
       "norm_label": "statemachineconfig"
     },
     {
@@ -3017,7 +3257,7 @@
       "label": "LoopConfig",
       "file_type": "code",
       "source_file": "src/common/config.py",
-      "source_location": "L111",
+      "source_location": "L112",
       "_origin": "ast",
       "id": "src_common_config_loopconfig",
       "community": 14,
@@ -3027,7 +3267,7 @@
       "label": "PresentationConfig",
       "file_type": "code",
       "source_file": "src/common/config.py",
-      "source_location": "L117",
+      "source_location": "L118",
       "_origin": "ast",
       "id": "src_common_config_presentationconfig",
       "community": 14,
@@ -3037,17 +3277,17 @@
       "label": "Config",
       "file_type": "code",
       "source_file": "src/common/config.py",
-      "source_location": "L129",
+      "source_location": "L130",
       "_origin": "ast",
       "id": "src_common_config_config",
-      "community": 14,
+      "community": 33,
       "norm_label": "config"
     },
     {
       "label": ".load()",
       "file_type": "code",
       "source_file": "src/common/config.py",
-      "source_location": "L139",
+      "source_location": "L140",
       "_origin": "ast",
       "id": "src_common_config_config_load",
       "community": 14,
@@ -3059,7 +3299,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "path",
+      "id": "src_common_config_py_path",
       "community": 14,
       "norm_label": "path"
     },
@@ -3067,7 +3307,7 @@
       "label": "_tuple_fields()",
       "file_type": "code",
       "source_file": "src/common/config.py",
-      "source_location": "L157",
+      "source_location": "L158",
       "_origin": "ast",
       "id": "src_common_config_tuple_fields",
       "community": 14,
@@ -3077,7 +3317,7 @@
       "label": "emotiv_credentials()",
       "file_type": "code",
       "source_file": "src/common/config.py",
-      "source_location": "L167",
+      "source_location": "L168",
       "_origin": "ast",
       "id": "src_common_config_emotiv_credentials",
       "community": 14,
@@ -3097,9 +3337,9 @@
       "label": "YAML lists need to become tuples for band_hz/clip fields.",
       "file_type": "rationale",
       "source_file": "src/common/config.py",
-      "source_location": "L158",
+      "source_location": "L159",
       "_origin": "ast",
-      "id": "src_common_config_rationale_158",
+      "id": "src_common_config_rationale_159",
       "community": 14,
       "norm_label": "yaml lists need to become tuples for band_hz/clip fields."
     },
@@ -3110,7 +3350,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_common_messages",
-      "community": 13,
+      "community": 34,
       "norm_label": "messages.py"
     },
     {
@@ -3140,7 +3380,7 @@
       "source_location": "L32",
       "_origin": "ast",
       "id": "src_common_messages_rewardmessage_from_json",
-      "community": 13,
+      "community": 42,
       "norm_label": ".from_json()"
     },
     {
@@ -3180,7 +3420,7 @@
       "source_location": "L55",
       "_origin": "ast",
       "id": "src_common_messages_framemessage",
-      "community": 13,
+      "community": 34,
       "norm_label": "framemessage"
     },
     {
@@ -3190,7 +3430,7 @@
       "source_location": "L72",
       "_origin": "ast",
       "id": "src_common_messages_framemessage_to_json",
-      "community": 13,
+      "community": 34,
       "norm_label": ".to_json()"
     },
     {
@@ -3200,7 +3440,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_common_messages_framemessage_from_json",
-      "community": 13,
+      "community": 34,
       "norm_label": ".from_json()"
     },
     {
@@ -3210,7 +3450,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_common_messages_controlmessage",
-      "community": 13,
+      "community": 34,
       "norm_label": "controlmessage"
     },
     {
@@ -3220,7 +3460,7 @@
       "source_location": "L88",
       "_origin": "ast",
       "id": "src_common_messages_controlmessage_to_json",
-      "community": 13,
+      "community": 34,
       "norm_label": ".to_json()"
     },
     {
@@ -3230,7 +3470,7 @@
       "source_location": "L92",
       "_origin": "ast",
       "id": "src_common_messages_controlmessage_from_json",
-      "community": 13,
+      "community": 42,
       "norm_label": ".from_json()"
     },
     {
@@ -3240,7 +3480,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_common_messages_rationale_1",
-      "community": 13,
+      "community": 34,
       "norm_label": "wire format for the websocket messages passed between services.  signal -> orche"
     },
     {
@@ -3270,7 +3510,7 @@
       "source_location": "L56",
       "_origin": "ast",
       "id": "src_common_messages_rationale_56",
-      "community": 13,
+      "community": 34,
       "norm_label": "generator service -> orchestrator. one rendered frame, ready to display.      ex"
     },
     {
@@ -3280,7 +3520,7 @@
       "source_location": "L82",
       "_origin": "ast",
       "id": "src_common_messages_rationale_82",
-      "community": 13,
+      "community": 34,
       "norm_label": "orchestrator -> any service. session control (start/stop/reset/calibrate)."
     },
     {
@@ -3292,6 +3532,66 @@
       "id": "src_generator_init",
       "community": 44,
       "norm_label": "__init__.py"
+    },
+    {
+      "label": "anchor_session.py",
+      "file_type": "code",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generator_anchor_session",
+      "community": 5,
+      "norm_label": "anchor_session.py"
+    },
+    {
+      "label": "load_prompt_session_manifest()",
+      "file_type": "code",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "id": "src_generator_anchor_session_load_prompt_session_manifest",
+      "community": 5,
+      "norm_label": "load_prompt_session_manifest()"
+    },
+    {
+      "label": "Path",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "src_generator_anchor_session_py_path",
+      "community": 5,
+      "norm_label": "path"
+    },
+    {
+      "label": "manifest_metadata()",
+      "file_type": "code",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "src_generator_anchor_session_manifest_metadata",
+      "community": 5,
+      "norm_label": "manifest_metadata()"
+    },
+    {
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "src_generator_anchor_session_py_any",
+      "community": 5,
+      "norm_label": "any"
+    },
+    {
+      "label": "Helpers for manifest-backed anchor sessions used by the generalized server.",
+      "file_type": "rationale",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generator_anchor_session_rationale_1",
+      "community": 5,
+      "norm_label": "helpers for manifest-backed anchor sessions used by the generalized server."
     },
     {
       "label": "diffusion_pipeline.py",
@@ -3690,7 +3990,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_generator_procedural",
-      "community": 24,
+      "community": 15,
       "norm_label": "procedural.py"
     },
     {
@@ -3750,8 +4050,138 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_generator_procedural_rationale_1",
-      "community": 24,
+      "community": 15,
       "norm_label": "cpu-only fallback renderer: a deterministic function of z, no gpu or model weigh"
+    },
+    {
+      "label": "prompt_curation.py",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation",
+      "community": 5,
+      "norm_label": "prompt_curation.py"
+    },
+    {
+      "label": "PromptCurationManifest",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L54",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_promptcurationmanifest",
+      "community": 5,
+      "norm_label": "promptcurationmanifest"
+    },
+    {
+      "label": ".to_dict()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L65",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_promptcurationmanifest_to_dict",
+      "community": 5,
+      "norm_label": ".to_dict()"
+    },
+    {
+      "label": "Any",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_py_any",
+      "community": 5,
+      "norm_label": "any"
+    },
+    {
+      "label": "_load_default_client()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L69",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_load_default_client",
+      "community": 5,
+      "norm_label": "_load_default_client()"
+    },
+    {
+      "label": "_extract_response_text()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L82",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_extract_response_text",
+      "community": 5,
+      "norm_label": "_extract_response_text()"
+    },
+    {
+      "label": "_strip_code_fences()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L104",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_strip_code_fences",
+      "community": 5,
+      "norm_label": "_strip_code_fences()"
+    },
+    {
+      "label": "parse_prompt_curation_json()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L113",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_parse_prompt_curation_json",
+      "community": 5,
+      "norm_label": "parse_prompt_curation_json()"
+    },
+    {
+      "label": "_clean_string_list()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L130",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_clean_string_list",
+      "community": 5,
+      "norm_label": "_clean_string_list()"
+    },
+    {
+      "label": "validate_prompt_curation_payload()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L141",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "community": 5,
+      "norm_label": "validate_prompt_curation_payload()"
+    },
+    {
+      "label": "curate_prompt_manifest()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L182",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_curate_prompt_manifest",
+      "community": 5,
+      "norm_label": "curate_prompt_manifest()"
+    },
+    {
+      "label": "format_manifest_summary()",
+      "file_type": "code",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L207",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_format_manifest_summary",
+      "community": 5,
+      "norm_label": "format_manifest_summary()"
+    },
+    {
+      "label": "OpenAI-backed prompt curation for session-oriented diffusion runs.  This stage t",
+      "file_type": "rationale",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "src_generator_prompt_curation_rationale_1",
+      "community": 5,
+      "norm_label": "openai-backed prompt curation for session-oriented diffusion runs.  this stage t"
     },
     {
       "label": "remote_diffusion.py",
@@ -3890,7 +4320,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_generator_service",
-      "community": 27,
+      "community": 15,
       "norm_label": "service.py"
     },
     {
@@ -3930,7 +4360,7 @@
       "source_location": "L42",
       "_origin": "ast",
       "id": "src_generator_service_interpolator",
-      "community": 27,
+      "community": 30,
       "norm_label": "interpolator"
     },
     {
@@ -3940,7 +4370,7 @@
       "source_location": "L48",
       "_origin": "ast",
       "id": "src_generator_service_interpolator_init",
-      "community": 27,
+      "community": 30,
       "norm_label": ".__init__()"
     },
     {
@@ -3980,7 +4410,7 @@
       "source_location": "L65",
       "_origin": "ast",
       "id": "src_generator_service_generatorservice",
-      "community": 27,
+      "community": 33,
       "norm_label": "generatorservice"
     },
     {
@@ -3990,7 +4420,7 @@
       "source_location": "L66",
       "_origin": "ast",
       "id": "src_generator_service_generatorservice_init",
-      "community": 15,
+      "community": 29,
       "norm_label": ".__init__()"
     },
     {
@@ -4050,7 +4480,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_generator_service_rationale_1",
-      "community": 27,
+      "community": 15,
       "norm_label": "the generator service: z in, rendered pyramid frame out.  backend is picked by c"
     },
     {
@@ -4070,7 +4500,7 @@
       "source_location": "L43",
       "_origin": "ast",
       "id": "src_generator_service_rationale_43",
-      "community": 27,
+      "community": 30,
       "norm_label": "-- morphing process (animation)     linear interpolation between the last two ac"
     },
     {
@@ -4130,7 +4560,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_generator_to_3d_proceduralpseudo3d",
-      "community": 15,
+      "community": 51,
       "norm_label": "proceduralpseudo3d"
     },
     {
@@ -4180,7 +4610,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_generator_to_3d_rationale_36",
-      "community": 15,
+      "community": 51,
       "norm_label": "rotates the flat sprite to fake a 3d viewing angle - no mesh, no gpu."
     },
     {
@@ -4210,7 +4640,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_optimizer_evolution",
-      "community": 17,
+      "community": 2,
       "norm_label": "evolution.py"
     },
     {
@@ -4350,7 +4780,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_optimizer_evolution_rationale_1",
-      "community": 17,
+      "community": 2,
       "norm_label": "upgrades over the plain hill-climb, for when there's time: a (1+1) evolution str"
     },
     {
@@ -4930,7 +5360,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_optimizer_service",
-      "community": 1,
+      "community": 2,
       "norm_label": "service.py"
     },
     {
@@ -4940,7 +5370,7 @@
       "source_location": "L29",
       "_origin": "ast",
       "id": "src_optimizer_service_build_algorithm",
-      "community": 17,
+      "community": 2,
       "norm_label": "_build_algorithm()"
     },
     {
@@ -4960,7 +5390,7 @@
       "source_location": "L54",
       "_origin": "ast",
       "id": "src_optimizer_service_optimizerservice_init",
-      "community": 17,
+      "community": 21,
       "norm_label": ".__init__()"
     },
     {
@@ -5040,7 +5470,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_optimizer_service_rationale_1",
-      "community": 1,
+      "community": 2,
       "norm_label": "the optimizer service: reward in, latent stream out. ~150 lines including the st"
     },
     {
@@ -5090,7 +5520,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_optimizer_state_machine",
-      "community": 23,
+      "community": 20,
       "norm_label": "state_machine.py"
     },
     {
@@ -5190,7 +5620,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_optimizer_state_machine_rationale_1",
-      "community": 23,
+      "community": 20,
       "norm_label": "calibrate -> explore -> refine -> settle, with a recover escape hatch.  calibrat"
     },
     {
@@ -5230,7 +5660,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator",
-      "community": 13,
+      "community": 34,
       "norm_label": "orchestrator.py"
     },
     {
@@ -5240,7 +5670,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_localorchestrator",
-      "community": 14,
+      "community": 33,
       "norm_label": "localorchestrator"
     },
     {
@@ -5250,7 +5680,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_localorchestrator_init",
-      "community": 22,
+      "community": 33,
       "norm_label": ".__init__()"
     },
     {
@@ -5260,7 +5690,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_py_framemessage",
-      "community": 22,
+      "community": 33,
       "norm_label": "framemessage"
     },
     {
@@ -5270,7 +5700,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_localorchestrator_calibrate",
-      "community": 14,
+      "community": 33,
       "norm_label": ".calibrate()"
     },
     {
@@ -5280,7 +5710,7 @@
       "source_location": "L93",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_localorchestrator_reward_loop",
-      "community": 14,
+      "community": 33,
       "norm_label": "._reward_loop()"
     },
     {
@@ -5290,7 +5720,7 @@
       "source_location": "L125",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_localorchestrator_render_loop",
-      "community": 14,
+      "community": 33,
       "norm_label": "._render_loop()"
     },
     {
@@ -5300,7 +5730,7 @@
       "source_location": "L148",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_localorchestrator_run",
-      "community": 14,
+      "community": 33,
       "norm_label": ".run()"
     },
     {
@@ -5310,7 +5740,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator",
-      "community": 13,
+      "community": 42,
       "norm_label": "websocketorchestrator"
     },
     {
@@ -5320,7 +5750,7 @@
       "source_location": "L170",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator_init",
-      "community": 27,
+      "community": 33,
       "norm_label": ".__init__()"
     },
     {
@@ -5330,7 +5760,7 @@
       "source_location": "L185",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator_handle_signal_client",
-      "community": 13,
+      "community": 42,
       "norm_label": "._handle_signal_client()"
     },
     {
@@ -5340,7 +5770,7 @@
       "source_location": "L197",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator_handle_display_client",
-      "community": 13,
+      "community": 42,
       "norm_label": "._handle_display_client()"
     },
     {
@@ -5350,7 +5780,7 @@
       "source_location": "L204",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator_handle_control_client",
-      "community": 13,
+      "community": 42,
       "norm_label": "._handle_control_client()"
     },
     {
@@ -5360,7 +5790,7 @@
       "source_location": "L219",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator_router",
-      "community": 13,
+      "community": 42,
       "norm_label": "._router()"
     },
     {
@@ -5370,7 +5800,7 @@
       "source_location": "L229",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator_broadcast",
-      "community": 13,
+      "community": 42,
       "norm_label": "._broadcast()"
     },
     {
@@ -5380,7 +5810,7 @@
       "source_location": "L239",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator_render_loop",
-      "community": 13,
+      "community": 42,
       "norm_label": "._render_loop()"
     },
     {
@@ -5390,7 +5820,7 @@
       "source_location": "L256",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_websocketorchestrator_serve_forever",
-      "community": 13,
+      "community": 42,
       "norm_label": ".serve_forever()"
     },
     {
@@ -5400,7 +5830,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_rationale_1",
-      "community": 13,
+      "community": 34,
       "norm_label": "wires signal -> optimizer -> generator together and drives the timing.  two flav"
     },
     {
@@ -5410,7 +5840,7 @@
       "source_location": "L77",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_rationale_77",
-      "community": 14,
+      "community": 33,
       "norm_label": "real faa needs 30s of rest to fit the baseline; fake reward sources         (key"
     },
     {
@@ -5420,7 +5850,7 @@
       "source_location": "L165",
       "_origin": "ast",
       "id": "src_orchestrator_orchestrator_rationale_165",
-      "community": 13,
+      "community": 42,
       "norm_label": "hub server: signal service clients push rewardmessages; display clients     rece"
     },
     {
@@ -5490,7 +5920,7 @@
       "source_location": "L16",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_eegsource",
-      "community": 14,
+      "community": 13,
       "norm_label": "eegsource"
     },
     {
@@ -5500,7 +5930,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "protocol",
-      "community": 14,
+      "community": 13,
       "norm_label": "protocol"
     },
     {
@@ -5510,7 +5940,7 @@
       "source_location": "L17",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_eegsource_connect",
-      "community": 14,
+      "community": 13,
       "norm_label": ".connect()"
     },
     {
@@ -5520,7 +5950,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_eegsource_stream",
-      "community": 5,
+      "community": 14,
       "norm_label": ".stream()"
     },
     {
@@ -5530,7 +5960,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_py_any",
-      "community": 5,
+      "community": 14,
       "norm_label": "any"
     },
     {
@@ -5540,7 +5970,7 @@
       "source_location": "L19",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_eegsource_close",
-      "community": 14,
+      "community": 13,
       "norm_label": ".close()"
     },
     {
@@ -5600,7 +6030,7 @@
       "source_location": "L70",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource",
-      "community": 5,
+      "community": 14,
       "norm_label": "emotivcortexsource"
     },
     {
@@ -5610,7 +6040,7 @@
       "source_location": "L87",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_init",
-      "community": 5,
+      "community": 14,
       "norm_label": ".__init__()"
     },
     {
@@ -5620,7 +6050,7 @@
       "source_location": "L108",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_next_id",
-      "community": 5,
+      "community": 14,
       "norm_label": "._next_id()"
     },
     {
@@ -5630,7 +6060,7 @@
       "source_location": "L112",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_call",
-      "community": 5,
+      "community": 14,
       "norm_label": "._call()"
     },
     {
@@ -5640,7 +6070,7 @@
       "source_location": "L130",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_format_api_error",
-      "community": 5,
+      "community": 14,
       "norm_label": "._format_api_error()"
     },
     {
@@ -5650,7 +6080,7 @@
       "source_location": "L164",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_query_headsets",
-      "community": 5,
+      "community": 14,
       "norm_label": "._query_headsets()"
     },
     {
@@ -5660,7 +6090,7 @@
       "source_location": "L168",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_wait_for_connected_headset",
-      "community": 5,
+      "community": 14,
       "norm_label": "._wait_for_connected_headset()"
     },
     {
@@ -5670,7 +6100,7 @@
       "source_location": "L184",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_select_headset",
-      "community": 5,
+      "community": 14,
       "norm_label": "._select_headset()"
     },
     {
@@ -5680,7 +6110,7 @@
       "source_location": "L217",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_extract_eeg_cols",
-      "community": 5,
+      "community": 14,
       "norm_label": "._extract_eeg_cols()"
     },
     {
@@ -5690,7 +6120,7 @@
       "source_location": "L225",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_is_eeg_sensor_col",
-      "community": 5,
+      "community": 14,
       "norm_label": "._is_eeg_sensor_col()"
     },
     {
@@ -5700,7 +6130,7 @@
       "source_location": "L238",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_wait_for_access",
-      "community": 5,
+      "community": 14,
       "norm_label": "._wait_for_access()"
     },
     {
@@ -5710,7 +6140,7 @@
       "source_location": "L260",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_connect",
-      "community": 5,
+      "community": 14,
       "norm_label": ".connect()"
     },
     {
@@ -5720,7 +6150,7 @@
       "source_location": "L295",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_stream",
-      "community": 5,
+      "community": 14,
       "norm_label": ".stream()"
     },
     {
@@ -5730,7 +6160,7 @@
       "source_location": "L319",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_emotivcortexsource_close",
-      "community": 5,
+      "community": 14,
       "norm_label": ".close()"
     },
     {
@@ -5740,7 +6170,7 @@
       "source_location": "L340",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_brainflowlslsource",
-      "community": 5,
+      "community": 14,
       "norm_label": "brainflowlslsource"
     },
     {
@@ -5750,7 +6180,7 @@
       "source_location": "L345",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_brainflowlslsource_init",
-      "community": 5,
+      "community": 14,
       "norm_label": ".__init__()"
     },
     {
@@ -5760,7 +6190,7 @@
       "source_location": "L350",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_brainflowlslsource_connect",
-      "community": 5,
+      "community": 14,
       "norm_label": ".connect()"
     },
     {
@@ -5770,7 +6200,7 @@
       "source_location": "L358",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_brainflowlslsource_stream",
-      "community": 5,
+      "community": 14,
       "norm_label": ".stream()"
     },
     {
@@ -5780,7 +6210,7 @@
       "source_location": "L364",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_brainflowlslsource_close",
-      "community": 5,
+      "community": 14,
       "norm_label": ".close()"
     },
     {
@@ -5820,7 +6250,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_rationale_71",
-      "community": 5,
+      "community": 14,
       "norm_label": "emotiv cortex api client for the epoc x headset (websocket json-rpc).      flow:"
     },
     {
@@ -5830,7 +6260,7 @@
       "source_location": "L218",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_rationale_218",
-      "community": 5,
+      "community": 14,
       "norm_label": "return cortex eeg column labels from a subscribe response."
     },
     {
@@ -5840,7 +6270,7 @@
       "source_location": "L341",
       "_origin": "ast",
       "id": "src_signal_service_eeg_sources_rationale_341",
-      "community": 5,
+      "community": 14,
       "norm_label": "pulls eeg from an lsl stream (e.g. brainflow's lsl output). lazy-imports     pyl"
     },
     {
@@ -6160,7 +6590,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward",
-      "community": 13,
+      "community": 52,
       "norm_label": "fake_reward.py"
     },
     {
@@ -6190,7 +6620,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_keyboardrewardsource",
-      "community": 13,
+      "community": 52,
       "norm_label": "keyboardrewardsource"
     },
     {
@@ -6200,7 +6630,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_keyboardrewardsource_init",
-      "community": 13,
+      "community": 52,
       "norm_label": ".__init__()"
     },
     {
@@ -6210,7 +6640,7 @@
       "source_location": "L44",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_keyboardrewardsource_on_press",
-      "community": 13,
+      "community": 52,
       "norm_label": "._on_press()"
     },
     {
@@ -6220,7 +6650,7 @@
       "source_location": "L52",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_keyboardrewardsource_read_reward",
-      "community": 13,
+      "community": 52,
       "norm_label": ".read_reward()"
     },
     {
@@ -6230,7 +6660,7 @@
       "source_location": "L57",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_keyboardrewardsource_close",
-      "community": 13,
+      "community": 52,
       "norm_label": ".close()"
     },
     {
@@ -6240,7 +6670,7 @@
       "source_location": "L62",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_scriptedrewardsource",
-      "community": 13,
+      "community": 30,
       "norm_label": "scriptedrewardsource"
     },
     {
@@ -6250,7 +6680,7 @@
       "source_location": "L78",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_scriptedrewardsource_post_init",
-      "community": 13,
+      "community": 30,
       "norm_label": ".__post_init__()"
     },
     {
@@ -6260,7 +6690,7 @@
       "source_location": "L81",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_scriptedrewardsource_read_reward",
-      "community": 13,
+      "community": 30,
       "norm_label": ".read_reward()"
     },
     {
@@ -6270,7 +6700,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_rationale_1",
-      "community": 13,
+      "community": 52,
       "norm_label": "fake reward sources with the exact same interface faa reward has: a scalar in [-"
     },
     {
@@ -6290,7 +6720,7 @@
       "source_location": "L27",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_rationale_27",
-      "community": 13,
+      "community": 52,
       "norm_label": "up/down arrow keys nudge reward; it decays toward 0 between presses.      uses `"
     },
     {
@@ -6300,7 +6730,7 @@
       "source_location": "L63",
       "_origin": "ast",
       "id": "src_signal_service_fake_reward_rationale_63",
-      "community": 13,
+      "community": 30,
       "norm_label": "deterministic reward = similarity between a hidden target and whatever     z `ge"
     },
     {
@@ -6520,7 +6950,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "src_signal_service_service_faarewardsource",
-      "community": 14,
+      "community": 13,
       "norm_label": "faarewardsource"
     },
     {
@@ -6530,7 +6960,7 @@
       "source_location": "L25",
       "_origin": "ast",
       "id": "src_signal_service_service_faarewardsource_init",
-      "community": 14,
+      "community": 13,
       "norm_label": ".__init__()"
     },
     {
@@ -6600,7 +7030,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "src_signal_service_service_build_faa_service",
-      "community": 14,
+      "community": 13,
       "norm_label": "build_faa_service()"
     },
     {
@@ -6620,7 +7050,7 @@
       "source_location": "L23",
       "_origin": "ast",
       "id": "src_signal_service_service_rationale_23",
-      "community": 14,
+      "community": 13,
       "norm_label": "wraps an eegsource + faarewardcomputer behind the rewardsource interface."
     },
     {
@@ -6652,6 +7082,86 @@
       "id": "tests_init",
       "community": 49,
       "norm_label": "__init__.py"
+    },
+    {
+      "label": "test_anchor_session.py",
+      "file_type": "code",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_anchor_session",
+      "community": 5,
+      "norm_label": "test_anchor_session.py"
+    },
+    {
+      "label": "_manifest_payload()",
+      "file_type": "code",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "tests_test_anchor_session_manifest_payload",
+      "community": 5,
+      "norm_label": "_manifest_payload()"
+    },
+    {
+      "label": "test_load_prompt_session_manifest_accepts_valid_file()",
+      "file_type": "code",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "tests_test_anchor_session_test_load_prompt_session_manifest_accepts_valid_file",
+      "community": 5,
+      "norm_label": "test_load_prompt_session_manifest_accepts_valid_file()"
+    },
+    {
+      "label": "test_load_prompt_session_manifest_rejects_missing_file()",
+      "file_type": "code",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_missing_file",
+      "community": 5,
+      "norm_label": "test_load_prompt_session_manifest_rejects_missing_file()"
+    },
+    {
+      "label": "test_load_prompt_session_manifest_rejects_malformed_json()",
+      "file_type": "code",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_malformed_json",
+      "community": 5,
+      "norm_label": "test_load_prompt_session_manifest_rejects_malformed_json()"
+    },
+    {
+      "label": "test_load_prompt_session_manifest_rejects_wrong_anchor_count()",
+      "file_type": "code",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L51",
+      "_origin": "ast",
+      "id": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_anchor_count",
+      "community": 5,
+      "norm_label": "test_load_prompt_session_manifest_rejects_wrong_anchor_count()"
+    },
+    {
+      "label": "test_load_prompt_session_manifest_rejects_wrong_anchor_label_count()",
+      "file_type": "code",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L61",
+      "_origin": "ast",
+      "id": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_anchor_label_count",
+      "community": 5,
+      "norm_label": "test_load_prompt_session_manifest_rejects_wrong_anchor_label_count()"
+    },
+    {
+      "label": "test_load_prompt_session_manifest_rejects_wrong_realized_prompt_count()",
+      "file_type": "code",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_realized_prompt_count",
+      "community": 5,
+      "norm_label": "test_load_prompt_session_manifest_rejects_wrong_realized_prompt_count()"
     },
     {
       "label": "test_api_server.py",
@@ -6830,7 +7340,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_eeg_sources",
-      "community": 5,
+      "community": 14,
       "norm_label": "test_eeg_sources.py"
     },
     {
@@ -6840,7 +7350,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "tests_test_eeg_sources_fakewebsocket",
-      "community": 5,
+      "community": 14,
       "norm_label": "fakewebsocket"
     },
     {
@@ -6850,7 +7360,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "tests_test_eeg_sources_fakewebsocket_init",
-      "community": 5,
+      "community": 14,
       "norm_label": ".__init__()"
     },
     {
@@ -6860,7 +7370,7 @@
       "source_location": "L10",
       "_origin": "ast",
       "id": "tests_test_eeg_sources_fakewebsocket_recv",
-      "community": 5,
+      "community": 14,
       "norm_label": ".recv()"
     },
     {
@@ -6870,7 +7380,7 @@
       "source_location": "L14",
       "_origin": "ast",
       "id": "tests_test_eeg_sources_test_emotiv_stream_uses_cortex_cols_and_message_time",
-      "community": 5,
+      "community": 14,
       "norm_label": "test_emotiv_stream_uses_cortex_cols_and_message_time()"
     },
     {
@@ -6880,7 +7390,7 @@
       "source_location": "L76",
       "_origin": "ast",
       "id": "tests_test_eeg_sources_test_emotiv_extracts_eeg_cols_from_subscribe_result",
-      "community": 5,
+      "community": 14,
       "norm_label": "test_emotiv_extracts_eeg_cols_from_subscribe_result()"
     },
     {
@@ -6890,7 +7400,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "tests_test_eeg_sources_test_emotiv_formats_unpublished_app_error_with_owner_hint",
-      "community": 5,
+      "community": 14,
       "norm_label": "test_emotiv_formats_unpublished_app_error_with_owner_hint()"
     },
     {
@@ -6900,7 +7410,7 @@
       "source_location": "L110",
       "_origin": "ast",
       "id": "tests_test_eeg_sources_test_emotiv_formats_unknown_api_error_with_raw_payload",
-      "community": 5,
+      "community": 14,
       "norm_label": "test_emotiv_formats_unknown_api_error_with_raw_payload()"
     },
     {
@@ -7012,6 +7522,76 @@
       "id": "tests_test_faa_test_faa_eeg_features_include_all_configured_channels",
       "community": 0,
       "norm_label": "test_faa_eeg_features_include_all_configured_channels()"
+    },
+    {
+      "label": "test_general_stable_diffusion.py",
+      "file_type": "code",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_general_stable_diffusion",
+      "community": 23,
+      "norm_label": "test_general_stable_diffusion.py"
+    },
+    {
+      "label": "_png_bytes()",
+      "file_type": "code",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "tests_test_general_stable_diffusion_png_bytes",
+      "community": 23,
+      "norm_label": "_png_bytes()"
+    },
+    {
+      "label": "test_softmax_weights_sum_to_one()",
+      "file_type": "code",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "tests_test_general_stable_diffusion_test_softmax_weights_sum_to_one",
+      "community": 23,
+      "norm_label": "test_softmax_weights_sum_to_one()"
+    },
+    {
+      "label": "test_top_anchors_orders_by_weight()",
+      "file_type": "code",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L27",
+      "_origin": "ast",
+      "id": "tests_test_general_stable_diffusion_test_top_anchors_orders_by_weight",
+      "community": 23,
+      "norm_label": "test_top_anchors_orders_by_weight()"
+    },
+    {
+      "label": "test_render_server_rejects_wrong_z_shape()",
+      "file_type": "code",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "id": "tests_test_general_stable_diffusion_test_render_server_rejects_wrong_z_shape",
+      "community": 23,
+      "norm_label": "test_render_server_rejects_wrong_z_shape()"
+    },
+    {
+      "label": "test_make_handler_accepts_render_payload_shape()",
+      "file_type": "code",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L58",
+      "_origin": "ast",
+      "id": "tests_test_general_stable_diffusion_test_make_handler_accepts_render_payload_shape",
+      "community": 23,
+      "norm_label": "test_make_handler_accepts_render_payload_shape()"
+    },
+    {
+      "label": "test_cli_smoke_loads_manifest_and_initializes_server()",
+      "file_type": "code",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L90",
+      "_origin": "ast",
+      "id": "tests_test_general_stable_diffusion_test_cli_smoke_loads_manifest_and_initializes_server",
+      "community": 23,
+      "norm_label": "test_cli_smoke_loads_manifest_and_initializes_server()"
     },
     {
       "label": "test_generator.py",
@@ -7150,7 +7730,7 @@
       "source_location": "L95",
       "_origin": "ast",
       "id": "tests_test_generator_fakehttpresponse",
-      "community": 15,
+      "community": 51,
       "norm_label": "_fakehttpresponse"
     },
     {
@@ -7160,7 +7740,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "tests_test_generator_fakehttpresponse_init",
-      "community": 15,
+      "community": 51,
       "norm_label": ".__init__()"
     },
     {
@@ -7170,7 +7750,7 @@
       "source_location": "L100",
       "_origin": "ast",
       "id": "tests_test_generator_fakehttpresponse_raise_for_status",
-      "community": 15,
+      "community": 51,
       "norm_label": ".raise_for_status()"
     },
     {
@@ -7180,7 +7760,7 @@
       "source_location": "L104",
       "_origin": "ast",
       "id": "tests_test_generator_fakehttpsession",
-      "community": 15,
+      "community": 51,
       "norm_label": "_fakehttpsession"
     },
     {
@@ -7190,7 +7770,7 @@
       "source_location": "L105",
       "_origin": "ast",
       "id": "tests_test_generator_fakehttpsession_init",
-      "community": 15,
+      "community": 51,
       "norm_label": ".__init__()"
     },
     {
@@ -7200,7 +7780,7 @@
       "source_location": "L109",
       "_origin": "ast",
       "id": "tests_test_generator_fakehttpsession_post",
-      "community": 15,
+      "community": 51,
       "norm_label": ".post()"
     },
     {
@@ -7210,7 +7790,7 @@
       "source_location": "L114",
       "_origin": "ast",
       "id": "tests_test_generator_test_remote_diffusion_sends_optimizer_state_and_caches_step",
-      "community": 15,
+      "community": 51,
       "norm_label": "test_remote_diffusion_sends_optimizer_state_and_caches_step()"
     },
     {
@@ -7390,7 +7970,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "tests_test_optimizer_run_hidden_target_search",
-      "community": 23,
+      "community": 22,
       "norm_label": "_run_hidden_target_search()"
     },
     {
@@ -7400,7 +7980,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "tests_test_optimizer_test_optimizer_converges_toward_hidden_target",
-      "community": 23,
+      "community": 20,
       "norm_label": "test_optimizer_converges_toward_hidden_target()"
     },
     {
@@ -7520,8 +8100,138 @@
       "source_location": "L59",
       "_origin": "ast",
       "id": "tests_test_presentation_test_observe_observation_takes_one_step",
-      "community": 23,
+      "community": 20,
       "norm_label": "test_observe_observation_takes_one_step()"
+    },
+    {
+      "label": "test_prompt_curation.py",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation",
+      "community": 5,
+      "norm_label": "test_prompt_curation.py"
+    },
+    {
+      "label": "_payload()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_payload",
+      "community": 5,
+      "norm_label": "_payload()"
+    },
+    {
+      "label": "test_validate_prompt_curation_payload_accepts_valid_shape()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_validate_prompt_curation_payload_accepts_valid_shape",
+      "community": 5,
+      "norm_label": "test_validate_prompt_curation_payload_accepts_valid_shape()"
+    },
+    {
+      "label": "test_validate_prompt_curation_payload_rejects_missing_scaffold()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_missing_scaffold",
+      "community": 5,
+      "norm_label": "test_validate_prompt_curation_payload_rejects_missing_scaffold()"
+    },
+    {
+      "label": "test_validate_prompt_curation_payload_rejects_duplicate_anchor_labels()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L47",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_duplicate_anchor_labels",
+      "community": 5,
+      "norm_label": "test_validate_prompt_curation_payload_rejects_duplicate_anchor_labels()"
+    },
+    {
+      "label": "test_validate_prompt_curation_payload_rejects_empty_anchor_labels()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L55",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_empty_anchor_labels",
+      "community": 5,
+      "norm_label": "test_validate_prompt_curation_payload_rejects_empty_anchor_labels()"
+    },
+    {
+      "label": "test_validate_prompt_curation_payload_rejects_wrong_realized_prompt_count()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_wrong_realized_prompt_count",
+      "community": 5,
+      "norm_label": "test_validate_prompt_curation_payload_rejects_wrong_realized_prompt_count()"
+    },
+    {
+      "label": "test_validate_prompt_curation_payload_rejects_template_without_placeholder()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L71",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_template_without_placeholder",
+      "community": 5,
+      "norm_label": "test_validate_prompt_curation_payload_rejects_template_without_placeholder()"
+    },
+    {
+      "label": "test_parse_prompt_curation_json_handles_code_fences()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_parse_prompt_curation_json_handles_code_fences",
+      "community": 5,
+      "norm_label": "test_parse_prompt_curation_json_handles_code_fences()"
+    },
+    {
+      "label": "test_parse_prompt_curation_json_rejects_malformed_payload()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L87",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_parse_prompt_curation_json_rejects_malformed_payload",
+      "community": 5,
+      "norm_label": "test_parse_prompt_curation_json_rejects_malformed_payload()"
+    },
+    {
+      "label": "test_curate_prompt_manifest_uses_openai_client_response_text()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L92",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_curate_prompt_manifest_uses_openai_client_response_text",
+      "community": 5,
+      "norm_label": "test_curate_prompt_manifest_uses_openai_client_response_text()"
+    },
+    {
+      "label": "test_format_manifest_summary_mentions_anchor_labels()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L109",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_format_manifest_summary_mentions_anchor_labels",
+      "community": 5,
+      "norm_label": "test_format_manifest_summary_mentions_anchor_labels()"
+    },
+    {
+      "label": "test_cli_writes_json_manifest()",
+      "file_type": "code",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L118",
+      "_origin": "ast",
+      "id": "tests_test_prompt_curation_test_cli_writes_json_manifest",
+      "community": 5,
+      "norm_label": "test_cli_writes_json_manifest()"
     },
     {
       "label": "test_service.py",
@@ -11802,8 +12512,411 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_anchormorphrenderserver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_blend_noise_latents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_blend_prompt_embeds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_encode_anchor_prompts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L227",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_load_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L257",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_make_anchor_latents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_make_cpu_generator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_make_handler",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_random_latent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_softmax_weights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion_top_anchors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "src_common_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "src_common_config_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "src_generator_anchor_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "tests_test_general_stable_diffusion",
+      "target": "scripts_run_general_stable_diffusion",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L307",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_main",
+      "target": "scripts_run_general_stable_diffusion_encode_anchor_prompts",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_make_anchor_latents",
+      "target": "scripts_run_general_stable_diffusion_random_latent",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L312",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_main",
+      "target": "scripts_run_general_stable_diffusion_make_anchor_latents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L311",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_main",
+      "target": "scripts_run_general_stable_diffusion_make_cpu_generator",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L162",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_anchormorphrenderserver_render_png",
+      "target": "scripts_run_general_stable_diffusion_softmax_weights",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_softmax_weights",
+      "target": "scripts_run_general_stable_diffusion_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_blend_noise_latents",
+      "target": "scripts_run_general_stable_diffusion_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_blend_prompt_embeds",
+      "target": "scripts_run_general_stable_diffusion_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L108",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_top_anchors",
+      "target": "scripts_run_general_stable_diffusion_py_ndarray",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L172",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_anchormorphrenderserver_render_png",
+      "target": "scripts_run_general_stable_diffusion_blend_prompt_embeds",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L173",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_anchormorphrenderserver_render_png",
+      "target": "scripts_run_general_stable_diffusion_blend_noise_latents",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L170",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_anchormorphrenderserver_render_png",
+      "target": "scripts_run_general_stable_diffusion_top_anchors",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_anchormorphrenderserver",
+      "target": "scripts_run_general_stable_diffusion_anchormorphrenderserver_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_anchormorphrenderserver",
+      "target": "scripts_run_general_stable_diffusion_anchormorphrenderserver_render_png",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L39",
+      "weight": 0.8,
+      "source": "scripts_run_general_stable_diffusion_anchormorphrenderserver",
+      "target": "src_common_config_config",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L316",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_main",
+      "target": "scripts_run_general_stable_diffusion_anchormorphrenderserver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L193",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_make_handler",
+      "target": "scripts_run_general_stable_diffusion_anchormorphrenderserver",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L332",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_main",
+      "target": "scripts_run_general_stable_diffusion_make_handler",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L304",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_main",
+      "target": "scripts_run_general_stable_diffusion_load_pipeline",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L290",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_main",
+      "target": "src_common_config_config_load"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_general_stable_diffusion.py",
+      "source_location": "L284",
+      "weight": 1.0,
+      "source": "scripts_run_general_stable_diffusion_main",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L63",
+      "source_location": "L67",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "scripts_run_mock_optimizer_breedtargetrewardsource",
@@ -11813,7 +12926,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L128",
+      "source_location": "L154",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "scripts_run_mock_optimizer_main",
@@ -11823,7 +12936,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L116",
+      "source_location": "L142",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "scripts_run_mock_optimizer_post_anchors",
@@ -11833,7 +12946,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L103",
+      "source_location": "L129",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "scripts_run_mock_optimizer_post_render",
@@ -11843,7 +12956,27 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L56",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer",
+      "target": "scripts_run_mock_optimizer_save_frame",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer",
+      "target": "scripts_run_mock_optimizer_sessionsnapshot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L60",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "scripts_run_mock_optimizer_softmax_weights",
@@ -11854,7 +12987,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L38",
+      "source_location": "L41",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_common_config",
@@ -11865,7 +12998,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L38",
+      "source_location": "L41",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_common_config_config",
@@ -11876,7 +13009,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L84",
+      "source_location": "L88",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_common_messages_rewardmessage",
@@ -11887,7 +13020,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L39",
+      "source_location": "L42",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_generator_service",
@@ -11898,7 +13031,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L39",
+      "source_location": "L42",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_generator_service_interpolator",
@@ -11909,7 +13042,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L40",
+      "source_location": "L43",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_optimizer_service",
@@ -11920,7 +13053,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L40",
+      "source_location": "L43",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_optimizer_service_optimizerservice",
@@ -11931,7 +13064,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L41",
+      "source_location": "L44",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_signal_service_fake_reward",
@@ -11942,7 +13075,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L41",
+      "source_location": "L44",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer",
       "target": "src_signal_service_fake_reward_scriptedrewardsource",
@@ -11953,7 +13086,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L87",
+      "source_location": "L91",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_breedtargetrewardsource_read_reward",
       "target": "scripts_run_mock_optimizer_softmax_weights",
@@ -11964,7 +13097,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L228",
+      "source_location": "L256",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_main",
       "target": "scripts_run_mock_optimizer_softmax_weights",
@@ -11975,7 +13108,7 @@
       "context": "return_type",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L56",
+      "source_location": "L60",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_softmax_weights",
       "target": "scripts_run_mock_optimizer_py_ndarray",
@@ -11986,7 +13119,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L103",
+      "source_location": "L129",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_post_render",
       "target": "scripts_run_mock_optimizer_py_ndarray",
@@ -11996,7 +13129,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L66",
+      "source_location": "L70",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_breedtargetrewardsource",
       "target": "scripts_run_mock_optimizer_breedtargetrewardsource_init",
@@ -12006,7 +13139,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L83",
+      "source_location": "L87",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_breedtargetrewardsource",
       "target": "scripts_run_mock_optimizer_breedtargetrewardsource_read_reward",
@@ -12016,7 +13149,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L38",
+      "source_location": "L41",
       "weight": 0.8,
       "source": "scripts_run_mock_optimizer_breedtargetrewardsource",
       "target": "src_common_config_config",
@@ -12026,7 +13159,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L84",
+      "source_location": "L88",
       "weight": 0.8,
       "source": "scripts_run_mock_optimizer_breedtargetrewardsource",
       "target": "src_common_messages_rewardmessage",
@@ -12036,7 +13169,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L39",
+      "source_location": "L42",
       "weight": 0.8,
       "source": "scripts_run_mock_optimizer_breedtargetrewardsource",
       "target": "src_generator_service_interpolator",
@@ -12046,7 +13179,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L41",
+      "source_location": "L44",
       "weight": 0.8,
       "source": "scripts_run_mock_optimizer_breedtargetrewardsource",
       "target": "src_signal_service_fake_reward_scriptedrewardsource",
@@ -12057,7 +13190,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L172",
+      "source_location": "L199",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_main",
       "target": "scripts_run_mock_optimizer_breedtargetrewardsource",
@@ -12067,9 +13200,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L64",
+      "source_location": "L68",
       "weight": 1.0,
-      "source": "scripts_run_mock_optimizer_rationale_64",
+      "source": "scripts_run_mock_optimizer_rationale_68",
       "target": "scripts_run_mock_optimizer_breedtargetrewardsource",
       "confidence_score": 1.0
     },
@@ -12079,7 +13212,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L92",
+      "source_location": "L96",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_breedtargetrewardsource_read_reward",
       "target": "src_common_messages_rewardmessage"
@@ -12089,7 +13222,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L217",
+      "source_location": "L245",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_main",
       "target": "scripts_run_mock_optimizer_breedtargetrewardsource_read_reward",
@@ -12100,7 +13233,142 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L193",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot_on_frame",
+      "target": "scripts_run_mock_optimizer_save_frame",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L126",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot_save_end",
+      "target": "scripts_run_mock_optimizer_save_frame",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L229",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_main",
+      "target": "scripts_run_mock_optimizer_sessionsnapshot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_rationale_114",
+      "target": "scripts_run_mock_optimizer_sessionsnapshot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L116",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot",
+      "target": "scripts_run_mock_optimizer_sessionsnapshot_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L119",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot",
+      "target": "scripts_run_mock_optimizer_sessionsnapshot_on_frame",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot",
+      "target": "scripts_run_mock_optimizer_sessionsnapshot_save_end",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L41",
+      "weight": 0.8,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot",
+      "target": "src_common_config_config",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L88",
+      "weight": 0.8,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot",
+      "target": "src_common_messages_rewardmessage",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L42",
+      "weight": 0.8,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot",
+      "target": "src_generator_service_interpolator",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L44",
+      "weight": 0.8,
+      "source": "scripts_run_mock_optimizer_sessionsnapshot",
+      "target": "src_signal_service_fake_reward_scriptedrewardsource",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L279",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_main",
+      "target": "scripts_run_mock_optimizer_sessionsnapshot_save_end",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L278",
+      "weight": 1.0,
+      "source": "scripts_run_mock_optimizer_main",
+      "target": "scripts_run_mock_optimizer_post_render",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_mock_optimizer.py",
+      "source_location": "L220",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_main",
       "target": "scripts_run_mock_optimizer_post_anchors",
@@ -12112,7 +13380,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L152",
+      "source_location": "L179",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_main",
       "target": "src_common_config_config_load"
@@ -12122,7 +13390,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L187",
+      "source_location": "L214",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_main",
       "target": "src_generator_service_interpolator",
@@ -12133,7 +13401,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L169",
+      "source_location": "L196",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_main",
       "target": "src_optimizer_service_optimizerservice",
@@ -12144,7 +13412,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_mock_optimizer.py",
-      "source_location": "L181",
+      "source_location": "L208",
       "weight": 1.0,
       "source": "scripts_run_mock_optimizer_main",
       "target": "src_signal_service_fake_reward_scriptedrewardsource",
@@ -12153,8 +13421,106 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation",
+      "target": "scripts_run_prompt_curation_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation",
+      "target": "src_common_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation",
+      "target": "src_common_config_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation",
+      "target": "src_generator_prompt_curation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation",
+      "target": "src_generator_prompt_curation_curate_prompt_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation",
+      "target": "src_generator_prompt_curation_format_manifest_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation_main",
+      "target": "src_common_config_config_load"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation_main",
+      "target": "src_generator_prompt_curation_curate_prompt_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "scripts/run_prompt_curation.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "scripts_run_prompt_curation_main",
+      "target": "src_generator_prompt_curation_format_manifest_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L98",
+      "source_location": "L103",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "scripts_run_real_eeg_optimizer_cue",
@@ -12164,7 +13530,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L106",
+      "source_location": "L111",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "scripts_run_real_eeg_optimizer_main",
@@ -12174,7 +13540,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L86",
+      "source_location": "L91",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "scripts_run_real_eeg_optimizer_post_anchors",
@@ -12184,7 +13550,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L73",
+      "source_location": "L78",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "scripts_run_real_eeg_optimizer_post_render",
@@ -12194,7 +13560,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L47",
+      "source_location": "L52",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "scripts_run_real_eeg_optimizer_save_frame",
@@ -12204,7 +13570,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L53",
+      "source_location": "L58",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "scripts_run_real_eeg_optimizer_sessionsnapshot",
@@ -12215,7 +13581,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L37",
+      "source_location": "L42",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_common_config",
@@ -12226,7 +13592,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L37",
+      "source_location": "L42",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_common_config_config",
@@ -12237,7 +13603,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L37",
+      "source_location": "L42",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_common_config_emotiv_credentials",
@@ -12248,7 +13614,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L38",
+      "source_location": "L43",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_generator_service",
@@ -12259,7 +13625,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L38",
+      "source_location": "L43",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_generator_service_interpolator",
@@ -12270,7 +13636,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L39",
+      "source_location": "L44",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_optimizer_service",
@@ -12281,7 +13647,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L39",
+      "source_location": "L44",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_optimizer_service_optimizerservice",
@@ -12292,7 +13658,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L40",
+      "source_location": "L45",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_signal_service_baseline",
@@ -12303,7 +13669,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L40",
+      "source_location": "L45",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_signal_service_baseline_calibrate_baseline",
@@ -12314,7 +13680,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L41",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_signal_service_eeg_sources",
@@ -12325,7 +13691,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L41",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_signal_service_eeg_sources_emotivcortexsource",
@@ -12336,7 +13702,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L41",
+      "source_location": "L46",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_signal_service_eeg_sources_mockeegsource",
@@ -12347,7 +13713,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L42",
+      "source_location": "L47",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_signal_service_service",
@@ -12358,7 +13724,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L42",
+      "source_location": "L47",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_signal_service_service_build_faa_service",
@@ -12369,7 +13735,7 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L42",
+      "source_location": "L47",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer",
       "target": "src_signal_service_service_faarewardsource",
@@ -12380,7 +13746,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L64",
+      "source_location": "L69",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot_on_frame",
       "target": "scripts_run_real_eeg_optimizer_save_frame",
@@ -12391,7 +13757,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L70",
+      "source_location": "L75",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot_save_end",
       "target": "scripts_run_real_eeg_optimizer_save_frame",
@@ -12402,7 +13768,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L167",
+      "source_location": "L173",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "scripts_run_real_eeg_optimizer_sessionsnapshot",
@@ -12412,9 +13778,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L54",
+      "source_location": "L59",
       "weight": 1.0,
-      "source": "scripts_run_real_eeg_optimizer_rationale_54",
+      "source": "scripts_run_real_eeg_optimizer_rationale_59",
       "target": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "confidence_score": 1.0
     },
@@ -12422,7 +13788,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L60",
+      "source_location": "L65",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "target": "scripts_run_real_eeg_optimizer_sessionsnapshot_init",
@@ -12432,7 +13798,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L63",
+      "source_location": "L68",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "target": "scripts_run_real_eeg_optimizer_sessionsnapshot_on_frame",
@@ -12442,7 +13808,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L69",
+      "source_location": "L74",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "target": "scripts_run_real_eeg_optimizer_sessionsnapshot_save_end",
@@ -12452,7 +13818,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L37",
+      "source_location": "L42",
       "weight": 0.8,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "target": "src_common_config_config",
@@ -12462,7 +13828,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L38",
+      "source_location": "L43",
       "weight": 0.8,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "target": "src_generator_service_interpolator",
@@ -12472,7 +13838,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L41",
+      "source_location": "L46",
       "weight": 0.8,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "target": "src_signal_service_eeg_sources_emotivcortexsource",
@@ -12482,7 +13848,7 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L41",
+      "source_location": "L46",
       "weight": 0.8,
       "source": "scripts_run_real_eeg_optimizer_sessionsnapshot",
       "target": "src_signal_service_eeg_sources_mockeegsource",
@@ -12493,7 +13859,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L210",
+      "source_location": "L216",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "scripts_run_real_eeg_optimizer_sessionsnapshot_save_end",
@@ -12504,7 +13870,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L209",
+      "source_location": "L215",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "scripts_run_real_eeg_optimizer_post_render",
@@ -12515,7 +13881,7 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L73",
+      "source_location": "L78",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_post_render",
       "target": "scripts_run_real_eeg_optimizer_py_ndarray",
@@ -12526,7 +13892,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L159",
+      "source_location": "L165",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "scripts_run_real_eeg_optimizer_post_anchors",
@@ -12537,7 +13903,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L194",
+      "source_location": "L200",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "scripts_run_real_eeg_optimizer_cue",
@@ -12549,7 +13915,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L125",
+      "source_location": "L131",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "src_common_config_config_load"
@@ -12559,7 +13925,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L134",
+      "source_location": "L140",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "src_common_config_emotiv_credentials",
@@ -12570,7 +13936,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L153",
+      "source_location": "L159",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "src_generator_service_interpolator",
@@ -12581,7 +13947,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L151",
+      "source_location": "L157",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "src_optimizer_service_optimizerservice",
@@ -12592,7 +13958,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L146",
+      "source_location": "L152",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "src_signal_service_baseline_calibrate_baseline",
@@ -12603,7 +13969,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L135",
+      "source_location": "L141",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "src_signal_service_eeg_sources_emotivcortexsource",
@@ -12614,7 +13980,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L132",
+      "source_location": "L138",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "src_signal_service_eeg_sources_mockeegsource",
@@ -12625,7 +13991,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "scripts/run_real_eeg_optimizer.py",
-      "source_location": "L141",
+      "source_location": "L147",
       "weight": 1.0,
       "source": "scripts_run_real_eeg_optimizer_main",
       "target": "src_signal_service_service_build_faa_service",
@@ -13349,7 +14715,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L129",
+      "source_location": "L130",
       "weight": 1.0,
       "source": "src_common_config",
       "target": "src_common_config_config",
@@ -13369,7 +14735,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L167",
+      "source_location": "L168",
       "weight": 1.0,
       "source": "src_common_config",
       "target": "src_common_config_emotiv_credentials",
@@ -13399,7 +14765,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L111",
+      "source_location": "L112",
       "weight": 1.0,
       "source": "src_common_config",
       "target": "src_common_config_loopconfig",
@@ -13419,7 +14785,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L117",
+      "source_location": "L118",
       "weight": 1.0,
       "source": "src_common_config",
       "target": "src_common_config_presentationconfig",
@@ -13439,7 +14805,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L157",
+      "source_location": "L158",
       "weight": 1.0,
       "source": "src_common_config",
       "target": "src_common_config_tuple_fields",
@@ -13548,7 +14914,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L148",
+      "source_location": "L149",
       "weight": 1.0,
       "source": "src_common_config_config_load",
       "target": "src_common_config_faaconfig",
@@ -13559,7 +14925,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "src/common/config.py",
-      "source_location": "L147",
+      "source_location": "L148",
       "weight": 1.0,
       "source": "src_common_config_config_load",
       "target": "src_common_config_eegconfig",
@@ -13570,7 +14936,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "src/common/config.py",
-      "source_location": "L149",
+      "source_location": "L150",
       "weight": 1.0,
       "source": "src_common_config_config_load",
       "target": "src_common_config_optimizerconfig",
@@ -13668,7 +15034,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "src/common/config.py",
-      "source_location": "L150",
+      "source_location": "L151",
       "weight": 1.0,
       "source": "src_common_config_config_load",
       "target": "src_common_config_statemachineconfig",
@@ -13766,7 +15132,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "src/common/config.py",
-      "source_location": "L151",
+      "source_location": "L152",
       "weight": 1.0,
       "source": "src_common_config_config_load",
       "target": "src_common_config_generatorconfig",
@@ -13777,7 +15143,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "src/common/config.py",
-      "source_location": "L152",
+      "source_location": "L153",
       "weight": 1.0,
       "source": "src_common_config_config_load",
       "target": "src_common_config_loopconfig",
@@ -13788,7 +15154,7 @@
       "context": "argument",
       "confidence": "INFERRED",
       "source_file": "src/common/config.py",
-      "source_location": "L153",
+      "source_location": "L154",
       "weight": 1.0,
       "source": "src_common_config_config_load",
       "target": "src_common_config_presentationconfig",
@@ -13798,7 +15164,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L139",
+      "source_location": "L140",
       "weight": 1.0,
       "source": "src_common_config_config",
       "target": "src_common_config_config_load",
@@ -14033,10 +15399,10 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L139",
+      "source_location": "L140",
       "weight": 1.0,
       "source": "src_common_config_config_load",
-      "target": "path",
+      "target": "src_common_config_py_path",
       "confidence_score": 1.0
     },
     {
@@ -14044,7 +15410,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L148",
+      "source_location": "L149",
       "weight": 1.0,
       "source": "src_common_config_config_load",
       "target": "src_common_config_tuple_fields",
@@ -14054,9 +15420,9 @@
       "relation": "rationale_for",
       "confidence": "EXTRACTED",
       "source_file": "src/common/config.py",
-      "source_location": "L158",
+      "source_location": "L159",
       "weight": 1.0,
-      "source": "src_common_config_rationale_158",
+      "source": "src_common_config_rationale_159",
       "target": "src_common_config_tuple_fields",
       "confidence_score": 1.0
     },
@@ -14679,6 +16045,212 @@
       "weight": 1.0,
       "source": "src_orchestrator_orchestrator_websocketorchestrator_handle_control_client",
       "target": "src_common_messages_controlmessage_from_json"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session",
+      "target": "src_generator_anchor_session_manifest_metadata",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session",
+      "target": "src_generator_prompt_curation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session",
+      "target": "src_generator_prompt_curation_promptcurationmanifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session_rationale_1",
+      "target": "src_generator_anchor_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "src_generator_anchor_session",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session_load_prompt_session_manifest",
+      "target": "src_generator_anchor_session_py_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session_load_prompt_session_manifest",
+      "target": "src_generator_prompt_curation_promptcurationmanifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session_load_prompt_session_manifest",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_accepts_valid_file",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_malformed_json",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_missing_file",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_anchor_count",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_anchor_label_count",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_realized_prompt_count",
+      "target": "src_generator_anchor_session_load_prompt_session_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session_manifest_metadata",
+      "target": "src_generator_anchor_session_py_any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/anchor_session.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "src_generator_anchor_session_manifest_metadata",
+      "target": "src_generator_prompt_curation_promptcurationmanifest",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -15706,6 +17278,501 @@
       "weight": 1.0,
       "source": "src_generator_procedural_proceduralrenderer_render",
       "target": "src_generator_procedural_py_image",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_clean_string_list",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_curate_prompt_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_extract_response_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L207",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_format_manifest_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L69",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_load_default_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_parse_prompt_curation_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_promptcurationmanifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_strip_code_fences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_rationale_1",
+      "target": "src_generator_prompt_curation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "src_generator_prompt_curation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "src_generator_prompt_curation",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_curate_prompt_manifest",
+      "target": "src_generator_prompt_curation_promptcurationmanifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L207",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_format_manifest_summary",
+      "target": "src_generator_prompt_curation_promptcurationmanifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_promptcurationmanifest",
+      "target": "src_generator_prompt_curation_promptcurationmanifest_to_dict",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "target": "src_generator_prompt_curation_promptcurationmanifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "src_generator_prompt_curation_promptcurationmanifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "indirect_call",
+      "context": "argument",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_accepts_valid_shape",
+      "target": "src_generator_prompt_curation_promptcurationmanifest"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_promptcurationmanifest_to_dict",
+      "target": "src_generator_prompt_curation_py_any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_clean_string_list",
+      "target": "src_generator_prompt_curation_py_any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_curate_prompt_manifest",
+      "target": "src_generator_prompt_curation_py_any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_extract_response_text",
+      "target": "src_generator_prompt_curation_py_any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_parse_prompt_curation_json",
+      "target": "src_generator_prompt_curation_py_any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "target": "src_generator_prompt_curation_py_any",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L195",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_curate_prompt_manifest",
+      "target": "src_generator_prompt_curation_load_default_client",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L202",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_curate_prompt_manifest",
+      "target": "src_generator_prompt_curation_extract_response_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L114",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_parse_prompt_curation_json",
+      "target": "src_generator_prompt_curation_strip_code_fences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L203",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_curate_prompt_manifest",
+      "target": "src_generator_prompt_curation_parse_prompt_curation_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "src_generator_prompt_curation_parse_prompt_curation_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L82",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_parse_prompt_curation_json_handles_code_fences",
+      "target": "src_generator_prompt_curation_parse_prompt_curation_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L89",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_parse_prompt_curation_json_rejects_malformed_payload",
+      "target": "src_generator_prompt_curation_parse_prompt_curation_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L157",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "target": "src_generator_prompt_curation_clean_string_list",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "src/generator/prompt_curation.py",
+      "source_location": "L204",
+      "weight": 1.0,
+      "source": "src_generator_prompt_curation_curate_prompt_manifest",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_format_manifest_summary_mentions_anchor_labels",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_accepts_valid_shape",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_duplicate_anchor_labels",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_empty_anchor_labels",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_missing_scaffold",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_template_without_placeholder",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_wrong_realized_prompt_count",
+      "target": "src_generator_prompt_curation_validate_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "src_generator_prompt_curation_curate_prompt_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_cli_writes_json_manifest",
+      "target": "src_generator_prompt_curation_curate_prompt_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L103",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_curate_prompt_manifest_uses_openai_client_response_text",
+      "target": "src_generator_prompt_curation_curate_prompt_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "src_generator_prompt_curation_format_manifest_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L112",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_format_manifest_summary_mentions_anchor_labels",
+      "target": "src_generator_prompt_curation_format_manifest_summary",
       "confidence_score": 1.0
     },
     {
@@ -21905,6 +23972,120 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "tests_test_anchor_session_manifest_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "tests_test_anchor_session_test_load_prompt_session_manifest_accepts_valid_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_malformed_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_missing_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_anchor_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L61",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_anchor_label_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session",
+      "target": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_realized_prompt_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_accepts_valid_file",
+      "target": "tests_test_anchor_session_manifest_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_anchor_count",
+      "target": "tests_test_anchor_session_manifest_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_anchor_label_count",
+      "target": "tests_test_anchor_session_manifest_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_anchor_session.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "tests_test_anchor_session_test_load_prompt_session_manifest_rejects_wrong_realized_prompt_count",
+      "target": "tests_test_anchor_session_manifest_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_api_server.py",
       "source_location": "L42",
       "weight": 1.0,
@@ -22406,6 +24587,66 @@
       "weight": 1.0,
       "source": "tests_test_faa_test_faa_reward_computer_uses_default_epoc_x_pair_weights",
       "target": "tests_test_faa_push_window",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "tests_test_general_stable_diffusion",
+      "target": "tests_test_general_stable_diffusion_png_bytes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "tests_test_general_stable_diffusion",
+      "target": "tests_test_general_stable_diffusion_test_cli_smoke_loads_manifest_and_initializes_server",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L58",
+      "weight": 1.0,
+      "source": "tests_test_general_stable_diffusion",
+      "target": "tests_test_general_stable_diffusion_test_make_handler_accepts_render_payload_shape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "tests_test_general_stable_diffusion",
+      "target": "tests_test_general_stable_diffusion_test_render_server_rejects_wrong_z_shape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "tests_test_general_stable_diffusion",
+      "target": "tests_test_general_stable_diffusion_test_softmax_weights_sum_to_one",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_general_stable_diffusion.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "tests_test_general_stable_diffusion",
+      "target": "tests_test_general_stable_diffusion_test_top_anchors_orders_by_weight",
       "confidence_score": 1.0
     },
     {
@@ -22926,6 +25167,214 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L118",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_cli_writes_json_manifest",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L92",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_curate_prompt_manifest_uses_openai_client_response_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L109",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_format_manifest_summary_mentions_anchor_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L79",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_parse_prompt_curation_json_handles_code_fences",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L87",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_parse_prompt_curation_json_rejects_malformed_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_validate_prompt_curation_payload_accepts_valid_shape",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_duplicate_anchor_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_empty_anchor_labels",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_missing_scaffold",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_template_without_placeholder",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation",
+      "target": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_wrong_realized_prompt_count",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L110",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_format_manifest_summary_mentions_anchor_labels",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_parse_prompt_curation_json_handles_code_fences",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_accepts_valid_shape",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_duplicate_anchor_labels",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_empty_anchor_labels",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_missing_scaffold",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_template_without_placeholder",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_prompt_curation.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "source": "tests_test_prompt_curation_test_validate_prompt_curation_payload_rejects_wrong_realized_prompt_count",
+      "target": "tests_test_prompt_curation_payload",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "tests/test_service.py",
       "source_location": "L18",
       "weight": 1.0,
@@ -23429,5 +25878,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "12b124757a61bfc09fb54f2b657907b08e322972"
+  "built_at_commit": "6f5eb27644a75b316e8bb167445a58e00eb901d0"
 }

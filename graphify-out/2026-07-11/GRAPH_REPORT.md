@@ -1,7 +1,7 @@
 # Graph Report - NEURIM  (2026-07-11)
 
 ## Corpus Check
-- 79 files · ~34,277 words
+- 79 files · ~34,282 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
