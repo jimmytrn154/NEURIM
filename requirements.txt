@@ -20,6 +20,8 @@ openai>=1.0.0
 
 # Orchestrator <-> service bridge
 websockets>=12.0
+fastapi>=0.111.0
+uvicorn>=0.30.0
 
 # Config / utils
 pyyaml>=6.0.1
