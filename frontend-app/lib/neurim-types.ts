@@ -88,3 +88,27 @@ export function stateBadge(state: FrameState): string {
 export function decodeFrameSrc(msg: FrameMessage): string {
   return `data:image/${msg.format || "jpeg"};base64,${msg.frame_b64}`;
 }
+
+// ---- EEG connection lifecycle (mirrors src/server/api/eeg.py status()) -----
+
+// The connection state machine reported by the backend EEGConnectionManager.
+// `unknown` is a client-only placeholder before the first status arrives.
+export type EegState =
+  | "unknown"
+  | "disconnected"
+  | "connecting"
+  | "connected"
+  | "calibrating"
+  | "ready"
+  | "error";
+
+export type EegStatus = {
+  state: EegState;
+  connected: boolean;
+  calibrated: boolean;
+  calibration_seconds: number;
+  last_error: string | null;
+  last_connected_at: string | null;
+  last_calibrated_at: string | null;
+  next_retry_at: string | null;
+};

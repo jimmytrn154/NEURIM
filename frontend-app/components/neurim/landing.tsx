@@ -95,12 +95,6 @@ export function Landing({
         </div>
       </div>
 
-      {/* Footer hint */}
-      <div className="absolute bottom-[18px] left-0 right-0 flex items-center justify-center gap-2 font-sans text-[12px] font-medium text-[#98a2b3] dark:text-muted-foreground">
-        <span className="h-[7px] w-[7px] rounded-full bg-primary animate-blink" />
-        EPOC X connected · baseline set · ready to search
-      </div>
-
       {/* Floating light/dark toggle (bottom-right) */}
       <ThemeToggle className="fixed bottom-5 right-5 z-30 h-10 w-10 rounded-full border border-border bg-card/80 backdrop-blur shadow-sm" />
     </div>
