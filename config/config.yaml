@@ -109,7 +109,7 @@ generator:
   # interpolated midpoint a coherent photo and makes consecutive keyframes close
   # enough to crossfade smoothly. ~10 prompts fully span the 8-dim search space
   # (PCA yields up to n_prompts-1 meaningful directions after centering).
-anchor_prompts:
+  anchor_prompts:
   - "A white cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a calm expression and a forward-facing gaze."
   - "A cream cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a relaxed expression and a slightly left-facing gaze."
   - "A pale orange cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a gentle expression and a slightly right-facing gaze."
