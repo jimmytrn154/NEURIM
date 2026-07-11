@@ -106,6 +106,113 @@ and composes four mirrored quadrants for a tabletop hologram pyramid.
 4. **The pyramid and 3D.** `src/generator/to_3d.py`.
 5. **Polish.**
 
+## Current pipeline
+
+The repo now has two practical runtime paths:
+
+1. **Generalized manifest-driven diffusion**
+   This is the current customizable path. A user prompt is first curated into
+   a 7-anchor manifest, then a generalized diffusion server renders from that
+   manifest, and finally the optimizer streams `z` values into the server.
+2. **Dog-specific legacy diffusion**
+   This is the older hardcoded path around dog-breed anchors in
+   `scripts/run_stablediffusion.py`. Keep it for regression checks and tuning
+   against the old setup.
+
+### Generalized manifest-driven flow
+
+Run these in sequence.
+
+| Step | Role | File | Runs where | Purpose |
+|---|---|---|---|---|
+| 1 | prompt curation | `scripts/run_prompt_curation.py` | **local terminal** | Takes one user prompt and calls OpenAI once to produce a 7-anchor manifest JSON. |
+| 2 | diffusion render server | `scripts/run_general_stable_diffusion.py` | **GPU/server terminal** | Loads the manifest, maps incoming 7-D `z` to softmax anchor weights, and serves `POST /render`. |
+| 3a | mock optimizer client | `scripts/run_mock_optimizer.py` | **local terminal** | Sends a scripted converging `z` stream to the server to verify the rendering pipeline without EEG hardware. |
+| 3b | real EEG optimizer client | `scripts/run_real_eeg_optimizer.py` | **local terminal** | Sends a real FAA-driven `z` stream to the same server. Use `--mock` here if you want to verify the FAA/optimizer wiring without the headset. |
+| 4 | live image viewer | `frontend/live_view.html` | **browser on local machine** | Polls `data/processed/live_frame.png` so you can watch the latest rendered frame update in real time. |
+
+### Terminal layout
+
+- **Terminal A (local):** prompt curation, then later run either
+  `run_mock_optimizer.py` or `run_real_eeg_optimizer.py`.
+- **Terminal B (GPU/server):** run `run_general_stable_diffusion.py`.
+- **Browser (local):** open `frontend/live_view.html`.
+
+### Recommended run sequence
+
+1. Create a curated prompt-session manifest from the user's prompt:
+
+```powershell
+python .\scripts\run_prompt_curation.py `
+  --user-prompt "Woolly mammoths" `
+  --out data\processed\prompt_sessions\mammoth_v2.json `
+  --verbose
+```
+
+2. Start the generalized diffusion server on the machine with the diffusion
+   model and GPU:
+
+```powershell
+python .\scripts\run_general_stable_diffusion.py `
+  --session-manifest data\processed\prompt_sessions\mammoth_v2.json `
+  --host 0.0.0.0 `
+  --port 8766
+```
+
+3. Open [live_view.html](<C:\Users\jimmy\Documents\Random Project\NEURIM\frontend\live_view.html>) in a browser.
+
+4. Validate convergence with the scripted optimizer before using EEG:
+
+```powershell
+python .\scripts\run_mock_optimizer.py `
+  --server-url http://127.0.0.1:8766 `
+  --seed 3
+```
+
+5. When the mock path looks correct, switch to the EEG client:
+
+```powershell
+python .\scripts\run_real_eeg_optimizer.py `
+  --server-url http://127.0.0.1:8766
+```
+
+For a no-headset wiring check, use:
+
+```powershell
+python .\scripts\run_real_eeg_optimizer.py `
+  --mock `
+  --server-url http://127.0.0.1:8766
+```
+
+### File roles in the generalized path
+
+- `scripts/run_prompt_curation.py`: CLI entrypoint for the first-stage prompt
+  curation step. This is the piece most likely to become a frontend-facing API
+  endpoint later.
+- `src/generator/prompt_curation.py`: OpenAI meta-prompt, response parsing,
+  manifest validation, and morph-compatibility checks.
+- `scripts/run_general_stable_diffusion.py`: generalized 7-anchor render
+  server. Consumes `realized_prompts` from the manifest and exposes the same
+  `/render` contract the optimizer clients already expect.
+- `scripts/run_mock_optimizer.py`: scripted reward client for convergence and
+  transport testing. It updates `data/processed/live_frame.png` but does not
+  archive every frame.
+- `scripts/run_real_eeg_optimizer.py`: real FAA-based optimizer client that
+  writes `live_frame.png`, `session_start.png`, and `session_end.png`.
+- `frontend/live_view.html`: simple polling viewer for the current live frame.
+
+### Legacy dog-specific path
+
+Use this only if you explicitly want the older hardcoded dog-breed setup:
+
+```powershell
+python .\scripts\run_stablediffusion.py
+python .\scripts\run_mock_optimizer.py --target-breed Dalmatian --server-url http://127.0.0.1:8766
+```
+
+That path does **not** use a curated manifest. It uses fixed dog-breed anchors
+embedded directly in `scripts/run_stablediffusion.py`.
+
 ## Tuning notes: hill-climb convergence is dimension-sensitive
 
 `tests/test_optimizer.py` proves the loop makes real progress toward a
@@ -235,7 +342,13 @@ python scripts/run_demo.py --backend remote_diffusion --remote-url http://GPU_HO
 pytest tests/                             # unit tests + convergence proof
 python scripts/run_fake_loop.py --mode scripted   # end-to-end, no hardware
 
-# Frontend + local API bridge
+# Current generalized manifest pipeline
+python scripts/run_prompt_curation.py --user-prompt "world cup players" --out data/processed/prompt_sessions/world_cup_players.json
+python scripts/run_general_stable_diffusion.py --session-manifest data/processed/prompt_sessions/world_cup_players.json --port 8766
+python scripts/run_mock_optimizer.py --server-url http://127.0.0.1:8766
+python scripts/run_real_eeg_optimizer.py --server-url http://127.0.0.1:8766
+
+# Frontend + local API bridge (separate from live_view.html polling page)
 python scripts/api_server.py --host 127.0.0.1 --port 8000
 cd frontend-app && NEURIM_API_URL=http://127.0.0.1:8000 npm run dev
 ```
