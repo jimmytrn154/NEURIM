@@ -57,7 +57,7 @@ class NoiseAwareLatentTuRBO:
         n_candidates: int = 256,
         improve_delta: float = 0.05,
         success_prob_tau: float = 0.6,
-        motion_limit: float = 0.4,
+        motion_limit: float = 0.2,
         recency_halflife: float = 25.0,
         recovery_reward_floor: float = 0.2,
         rng: np.random.Generator | None = None,

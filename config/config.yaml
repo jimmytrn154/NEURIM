@@ -51,12 +51,12 @@ faa:
 # budget - see tests/test_optimizer.py and the tuning notes in README.md.
 optimizer:
   search_dims: 8
-  step_size_explore: 0.5
+  step_size_explore: 0.2
   step_size_refine_min: 0.03
   step_momentum: 0.6
   noise_threshold: 0.05     # reward diffs smaller than this are EEG jitter
   reward_window_steps: 4    # ~1s of FAA readings averaged per accept/reject
-  bounds: 1.5               # was 3.0; z is in anchor-bank std units (PCA whitens
+  bounds: 1               # was 3.0; z is in anchor-bank std units (PCA whitens
                             # per axis), so +/-1.5 still reaches every anchor
                             # while cutting the box corner from ~8.5 to ~4.2 std,
                             # out of the incoherent-embedding zone. Sweep 1.2-2.0.
@@ -113,6 +113,7 @@ generator:
   # enough to crossfade smoothly. ~10 prompts fully span the 8-dim search space
   # (PCA yields up to n_prompts-1 meaningful directions after centering).
   anchor_prompts:
+  - "Salmon"
   - "A white cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a calm expression and a forward-facing gaze."
   - "A cream cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a relaxed expression and a slightly left-facing gaze."
   - "A pale orange cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a gentle expression and a slightly right-facing gaze."
