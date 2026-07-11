@@ -45,6 +45,23 @@ class EEGConfig:
 
 
 @dataclass
+class PreprocessingConfig:
+    # Streaming signal conditioning (src/signal_service/preprocessing.py).
+    # enabled=False keeps the legacy raw-EEG path; enabled=True inserts
+    # bandpass + mains notch + common-average reference before band power.
+    enabled: bool = True
+    bandpass_low_hz: float = 1.0
+    bandpass_high_hz: float = 40.0
+    notch_hz: float = 60.0        # mains frequency; set 50.0 outside NA
+    notch_q: float = 30.0
+    filter_order: int = 4
+    common_average: bool = True
+    eog_channels: list[str] = field(default_factory=lambda: ["AF3", "AF4", "F7", "F8"])
+    blink_threshold_mad: float = 5.0
+    emg_threshold_mad: float = 6.0
+
+
+@dataclass
 class OptimizerConfig:
     # 8 dims (the favorable end of the spec's 8-16 range) converges
     # noticeably more reliably than 12+ within a demo-length step budget -
@@ -129,6 +146,7 @@ class PresentationConfig:
 @dataclass
 class Config:
     eeg: EEGConfig = field(default_factory=EEGConfig)
+    preprocessing: PreprocessingConfig = field(default_factory=PreprocessingConfig)
     faa: FAAConfig = field(default_factory=FAAConfig)
     optimizer: OptimizerConfig = field(default_factory=OptimizerConfig)
     state_machine: StateMachineConfig = field(default_factory=StateMachineConfig)
@@ -146,6 +164,7 @@ class Config:
 
         return cls(
             eeg=section("eeg", EEGConfig),
+            preprocessing=section("preprocessing", PreprocessingConfig),
             faa=FAAConfig(**{**raw.get("faa", {}), **_tuple_fields(raw.get("faa", {}))}),
             optimizer=section("optimizer", OptimizerConfig),
             state_machine=section("state_machine", StateMachineConfig),

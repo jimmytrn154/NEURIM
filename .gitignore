@@ -2,6 +2,9 @@
 data/raw/
 data/calibration/
 data/processed/
+data/candidates_ai
+data/targets_real
+data/stimuli/
 
 # pytest
 .pytest_cache/
@@ -20,6 +23,9 @@ node_modules/
 out/
 frontend-app/node_modules/
 frontend-app/.next/
+
+# Generated / local HTML artifacts
+*.html
 
 # Env / secrets
 .env
@@ -43,4 +49,5 @@ streamdiffusion_test/
 streamdiffusion_test_/
 mock_stream/
 graphify-out/cache/*
+graphify-out/20*/
 .codex/

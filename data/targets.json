@@ -1,0 +1,17 @@
+[
+  {"name": "01_golden_retriever", "prompt": "a photo of a golden retriever dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "02_poodle", "prompt": "a photo of a white standard poodle dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "03_siberian_husky", "prompt": "a photo of a siberian husky dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "04_german_shepherd", "prompt": "a photo of a german shepherd dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "05_shiba_inu", "prompt": "a photo of a shiba inu dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "06_dalmatian", "prompt": "a photo of a dalmatian dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "07_beagle", "prompt": "a photo of a beagle dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "08_border_collie", "prompt": "a photo of a border collie dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "09_french_bulldog", "prompt": "a photo of a french bulldog dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "10_pembroke_welsh_corgi", "prompt": "a photo of a pembroke welsh corgi dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "11_labrador_retriever", "prompt": "a photo of a labrador retriever dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "12_boxer_dog", "prompt": "a photo of a boxer dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "13_dobermann", "prompt": "a photo of a dobermann dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "14_chihuahua", "prompt": "a photo of a chihuahua dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"},
+  {"name": "15_pug", "prompt": "a photo of a pug dog sitting, centered, plain neutral background, soft studio lighting, realistic, forward-facing"}
+]
