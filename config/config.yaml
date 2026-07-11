@@ -60,14 +60,10 @@ optimizer:
                             # per axis), so +/-1.5 still reaches every anchor
                             # while cutting the box corner from ~8.5 to ~4.2 std,
                             # out of the incoherent-embedding zone. Sweep 1.2-2.0.
-<<<<<<< Updated upstream
-  algorithm: "gp_bo"   # "hill_climb" | "es_1p1" | "gp_bo"
-=======
-  algorithm: "hill_climb"   # "hill_climb" | "es_1p1" | "gp_bo" | "latent_turbo"
+  algorithm: "latent_turbo"   # "hill_climb" | "es_1p1" | "gp_bo" | "latent_turbo"
                             # latent_turbo = Noise-Aware Latent TuRBO: local GP +
                             # heteroscedastic noise + Thompson sampling + adaptive
                             # trust region. Best for a noisy FAA reward.
->>>>>>> Stashed changes
 
 # CALIBRATE -> EXPLORE -> REFINE -> SETTLE, with RECOVER as an escape hatch.
 state_machine:
