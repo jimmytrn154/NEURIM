@@ -99,6 +99,7 @@ class GeneratorConfig:
     # ~0.2s ≈ 5 keyframes/s, about what remote SDXL-Turbo sustains over a tunnel.
     remote_diffusion_keyframe_interval_s: float = 0.2
     openai_image_model: str = "gpt-image-2"
+    openai_text_model: str = "gpt-5-mini"
     openai_image_size: str = "1024x1024"
     openai_image_quality: str = "low"
     openai_image_output_format: str = "png"
