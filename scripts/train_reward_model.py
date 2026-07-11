@@ -13,7 +13,7 @@ The deployed artifact is a calibrated bagged PreferenceEnsemble (mean probabilit
 
 Example:
     python scripts/train_reward_model.py \
-        --data scripts/data/reward_training/pref_trials.csv \
+        --data data/reward_training/pref_trials.csv \
         --model lda --out models/preference_model.joblib
 """
 

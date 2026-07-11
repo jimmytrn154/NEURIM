@@ -1,11 +1,11 @@
 # Graph Report - NEURIM  (2026-07-12)
 
 ## Corpus Check
-- 126 files · ~48,363 words
+- 126 files · ~298,263 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 1206 nodes · 2365 edges · 97 communities (80 shown, 17 thin omitted)
+- 1206 nodes · 2365 edges · 98 communities (81 shown, 17 thin omitted)
 - Extraction: 93% EXTRACTED · 7% INFERRED · 0% AMBIGUOUS · INFERRED: 167 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
@@ -37,6 +37,7 @@
 - Community 20
 - Community 21
 - Community 22
+- Community 23
 - Community 24
 - Community 25
 - Community 29
@@ -104,7 +105,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (97 total, 17 thin omitted)
+## Communities (98 total, 17 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.06
@@ -186,6 +187,10 @@ Nodes (15): aliases, components, hooks, lib, ui, utils, iconLibrary, rsc (+7 mor
 Cohesion: 0.10
 Nodes (21): eslint, eslint-config-next, devDependencies, eslint, eslint-config-next, tailwindcss, @tailwindcss/postcss, @types/node (+13 more)
 
+### Community 23 - "Community 23"
+Cohesion: 0.29
+Nodes (3): _FakeHTTPResponse, _FakeHTTPSession, test_remote_diffusion_sends_optimizer_state_and_caches_step()
+
 ### Community 24 - "Community 24"
 Cohesion: 0.07
 Nodes (28): DiffusionClient, Any, ndarray, HTTP client for a private manifest-driven diffusion server., FrameStore, Path, Atomic live-frame and session snapshot storage., Local optimizer session clients and persistence. (+20 more)
@@ -211,8 +216,8 @@ Cohesion: 0.14
 Nodes (26): _as_feature_tensor(), _build_presenter(), build_trials(), capture_window(), _clip_embed(), embed_images(), fit_session_baseline(), _images_in() (+18 more)
 
 ### Community 42 - "WebSocketOrchestrator"
-Cohesion: 0.15
-Nodes (11): _encode_jpeg(), _encode_png(), GeneratorService, FrameMessage, Image, ndarray, The Generator service: z in, rendered pyramid frame out.  Backend is picked by c, JPEG is 5-10x smaller than PNG and decodes faster in the browser.     Forces RGB (+3 more)
+Cohesion: 0.21
+Nodes (7): _encode_jpeg(), _encode_png(), GeneratorService, FrameMessage, Image, ndarray, JPEG is 5-10x smaller than PNG and decodes faster in the browser.     Forces RGB
 
 ### Community 43 - "Community 43"
 Cohesion: 0.67
@@ -255,8 +260,8 @@ Cohesion: 0.15
 Nodes (12): MockPreferenceEEGSource, Synthetic EEG carrying a controllable, decodable *preference* signal.  MockEEGSo, 14-channel synthetic EEG with a tunable-SNR preference signal.      SNR is gover, _make_reward(), _quiet(), Headless tests for the pairwise preference reward + optimizer core.  Exercises t, A near-target candidate must out-reward a far-from-target one (deterministic)., _run_loop() (+4 more)
 
 ### Community 86 - "test_generator.py"
-Cohesion: 0.21
-Nodes (11): ProceduralRenderer, CPU-only fallback renderer: a deterministic function of z, no GPU or model weigh, ProceduralPseudo3D, Rotates the flat sprite to fake a 3D viewing angle - no mesh, no GPU., _FakeHTTPResponse, _FakeHTTPSession, test_mirrored_quadrants_composes_full_canvas(), test_procedural_renderer_changes_with_z() (+3 more)
+Cohesion: 0.23
+Nodes (12): ProceduralRenderer, CPU-only fallback renderer: a deterministic function of z, no GPU or model weigh, The Generator service: z in, rendered pyramid frame out.  Backend is picked by c, mirrored_quadrants(), ProceduralPseudo3D, Image -> pseudo-3D pyramid quadrants.  Real-time text-to-3D (TripoSR) is the par, Rotates the flat sprite to fake a 3D viewing angle - no mesh, no GPU., Compose 4 copies of `image`, each facing outward from center, for a     tabletop (+4 more)
 
 ### Community 88 - "package.json"
 Cohesion: 0.22
@@ -290,7 +295,7 @@ Nodes (4): LatentMessage, Optimizer service -> Orchestrator. Next point in the l
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Config` connect `Config` to `Community 0`, `Community 2`, `Community 3`, `Community 4`, `run_poodle_turbo_morph.py`, `Community 6`, `record_reward_trials.py`, `Community 10`, `WebSocketOrchestrator`, `LearnedPreferenceReward`, `WebSocketOrchestrator`, `Community 24`, `LocalOrchestrator`, `AGENTS.md`?**
+- **Why does `Config` connect `Config` to `Community 0`, `Community 2`, `Community 3`, `Community 4`, `run_poodle_turbo_morph.py`, `Community 6`, `record_reward_trials.py`, `Community 10`, `WebSocketOrchestrator`, `LearnedPreferenceReward`, `WebSocketOrchestrator`, `test_generator.py`, `Community 24`, `LocalOrchestrator`, `AGENTS.md`?**
   _High betweenness centrality (0.209) - this node is a cross-community bridge._
 - **Why does `Interpolator` connect `Config` to `Community 5`, `WebSocketOrchestrator`, `Community 13`, `PCAProjector`, `WebSocketOrchestrator`, `test_generator.py`, `Community 24`, `RemoteDiffusionClient`, `LocalOrchestrator`, `AGENTS.md`?**
   _High betweenness centrality (0.044) - this node is a cross-community bridge._

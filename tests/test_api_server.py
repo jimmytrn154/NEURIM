@@ -2,7 +2,8 @@ import io
 
 from fastapi.testclient import TestClient
 
-from scripts import api_server
+from src.server.api.app import create_app
+from src.server.api.manager import SessionManager
 
 
 class FakeProcess:
@@ -39,7 +40,7 @@ class FakeProcess:
         self._exit_code = -9
 
 
-def _client(monkeypatch):
+def _client():
     processes = []
 
     def fake_popen(cmd, **kwargs):
@@ -47,19 +48,18 @@ def _client(monkeypatch):
         processes.append(process)
         return process
 
-    monkeypatch.setattr(api_server.subprocess, "Popen", fake_popen)
-    monkeypatch.setattr(api_server, "manager", api_server.SessionManager())
-    monkeypatch.setattr(api_server.manager, "_start_reader", lambda _process: None)
-    return TestClient(api_server.app), processes
+    manager = SessionManager(process_factory=fake_popen)
+    manager._start_reader = lambda _process: None
+    return TestClient(create_app(session_manager=manager)), processes, manager
 
 
 def test_health(monkeypatch):
-    client, _ = _client(monkeypatch)
+    client, _, _ = _client()
     assert client.get("/health").json() == {"ok": True}
 
 
 def test_start_mock_session_builds_command(monkeypatch):
-    client, processes = _client(monkeypatch)
+    client, processes, _ = _client()
 
     response = client.post(
         "/session/start",
@@ -75,7 +75,7 @@ def test_start_mock_session_builds_command(monkeypatch):
     assert response.json()["running"] is True
     assert response.json()["prompt"] == "cat"
     cmd = processes[0].cmd
-    assert cmd[:3] == [api_server.sys.executable, "scripts/run_real_eeg_optimizer.py", "--mock"]
+    assert cmd[1:3] == ["scripts/run_real_eeg_optimizer.py", "--mock"]
     assert "--baseline" in cmd
     assert "5.0" in cmd
     assert "--server-url" in cmd
@@ -84,7 +84,7 @@ def test_start_mock_session_builds_command(monkeypatch):
 
 
 def test_start_real_session_omits_mock(monkeypatch):
-    client, processes = _client(monkeypatch)
+    client, processes, _ = _client()
 
     response = client.post(
         "/session/start",
@@ -96,7 +96,7 @@ def test_start_real_session_omits_mock(monkeypatch):
 
 
 def test_duplicate_start_returns_conflict(monkeypatch):
-    client, _ = _client(monkeypatch)
+    client, _, _ = _client()
 
     first = client.post("/session/start", json={"mock": True})
     second = client.post("/session/start", json={"mock": True})
@@ -106,7 +106,7 @@ def test_duplicate_start_returns_conflict(monkeypatch):
 
 
 def test_stop_without_session_is_harmless(monkeypatch):
-    client, _ = _client(monkeypatch)
+    client, _, _ = _client()
 
     response = client.post("/session/stop")
 
@@ -115,7 +115,7 @@ def test_stop_without_session_is_harmless(monkeypatch):
 
 
 def test_stop_terminates_running_session(monkeypatch):
-    client, processes = _client(monkeypatch)
+    client, processes, _ = _client()
     client.post("/session/start", json={"mock": True})
 
     response = client.post("/session/stop")
@@ -126,8 +126,8 @@ def test_stop_terminates_running_session(monkeypatch):
 
 
 def test_logs_clamps_line_count(monkeypatch):
-    client, _ = _client(monkeypatch)
-    api_server.manager._logs.extend(str(i) for i in range(1200))
+    client, _, manager = _client()
+    manager._logs.extend(str(i) for i in range(1200))
 
     response = client.get("/session/logs?lines=1000")
 
@@ -137,7 +137,7 @@ def test_logs_clamps_line_count(monkeypatch):
 
 
 def test_rejects_invalid_server_url(monkeypatch):
-    client, _ = _client(monkeypatch)
+    client, _, _ = _client()
 
     response = client.post("/session/start", json={"server_url": "localhost:8766"})
 

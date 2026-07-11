@@ -176,8 +176,8 @@ def test_format_manifest_summary_mentions_anchor_labels():
     assert "1. axis_0:" in summary
 
 
-def test_cli_writes_json_manifest(tmp_path, capsys):
-    import scripts.run_prompt_curation as cli
+def test_cli_writes_json_manifest(tmp_path, capsys, monkeypatch):
+    from src.session import curation as cli
 
     class FakeResponses:
         def create(self, **kwargs):
@@ -191,12 +191,8 @@ def test_cli_writes_json_manifest(tmp_path, capsys):
         return curate_prompt_manifest(user_prompt, model=model, client=FakeClient())
 
     out_path = tmp_path / "manifest.json"
-    original = cli.curate_prompt_manifest
-    cli.curate_prompt_manifest = fake_curate
-    try:
-        exit_code = cli.main(["--user-prompt", "red sneakers", "--out", str(out_path)])
-    finally:
-        cli.curate_prompt_manifest = original
+    monkeypatch.setattr(cli.PromptCurationService, "curate", lambda self, prompt: fake_curate(prompt, self.model))
+    exit_code = cli.main(["--user-prompt", "red sneakers", "--out", str(out_path)])
 
     captured = capsys.readouterr()
     payload = json.loads(captured.out)

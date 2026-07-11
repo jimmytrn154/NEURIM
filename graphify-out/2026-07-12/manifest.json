@@ -590,8 +590,8 @@
     "semantic_hash": ""
   },
   "tests/test_preference_closed_loop.py": {
-    "mtime": 1783790948.2956529,
-    "ast_hash": "c6e94ff00aad987ee2c5ba90250b77fe",
+    "mtime": 1783790513.948114,
+    "ast_hash": "62b2c6b4ce0ae2defd4add70d5a7a3f5",
     "semantic_hash": ""
   },
   "tests/test_preprocessing.py": {
@@ -645,8 +645,168 @@
     "semantic_hash": ""
   },
   "docs/preference-reward.md": {
-    "mtime": 1783790948.3836915,
-    "ast_hash": "ec8646ebbb066bd60072e51126b5f62f",
+    "mtime": 1783790514.0374246,
+    "ast_hash": "acae70ee574a3fe85a49bf5deb862b8a",
+    "semantic_hash": ""
+  },
+  "data/processed/poodle_turbo_morph_20260711_140706.png": {
+    "mtime": 1783790070.1796427,
+    "ast_hash": "5b613bcad45b0cc3faef8d0a0c743ead",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_01.jpg": {
+    "mtime": 1783790070.1495223,
+    "ast_hash": "c95f2348945709d88957a90f37a2ed06",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_02.jpg": {
+    "mtime": 1783790070.1503687,
+    "ast_hash": "26820dbc945e1131e9f4ee3f180f9da4",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_03.jpg": {
+    "mtime": 1783790070.1510427,
+    "ast_hash": "a3dd353d201cfc6389175c7e5ee74b7e",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_04.jpg": {
+    "mtime": 1783790070.151524,
+    "ast_hash": "fd34f903ec63b68847491bdd20e726a9",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_05.jpeg": {
+    "mtime": 1783790070.1528523,
+    "ast_hash": "4ac4fc4bc98452064c04c2514d7b44d0",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_06.jpg": {
+    "mtime": 1783790070.1531055,
+    "ast_hash": "4c12fa93716a39a0855dd8b917b04eb3",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_07.jpg": {
+    "mtime": 1783790070.1534722,
+    "ast_hash": "13fa9a83e9fc444ef36b850b5b24a820",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_08.jpg": {
+    "mtime": 1783790070.1544592,
+    "ast_hash": "e48c9772fbcfb827060293d119d2bd98",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_09.jpg": {
+    "mtime": 1783790070.1548657,
+    "ast_hash": "7e8ff995f24724c2db285ca979e5720b",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_10.jpg": {
+    "mtime": 1783790070.1556597,
+    "ast_hash": "015ebc96cf6930b411a6f8aa7b73fa59",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_11.jpg": {
+    "mtime": 1783790070.1559675,
+    "ast_hash": "93a9f75c0428b81c17d37e7d0263d2b5",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_12.jpg": {
+    "mtime": 1783790070.1571739,
+    "ast_hash": "a947831c05e6433e41d8a0f3ca38d1a3",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_13.jpg": {
+    "mtime": 1783790070.1593084,
+    "ast_hash": "01f269f16b5f0eef038a00b902800532",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_14.jpg": {
+    "mtime": 1783790070.1612294,
+    "ast_hash": "f061df08c64a0a59aa4cf41abb1c2fd0",
+    "semantic_hash": ""
+  },
+  "data/stimuli/other_dogs/dog_15.jpg": {
+    "mtime": 1783790070.1626859,
+    "ast_hash": "9eab44ddef5e9cc09fb343238d76d4c0",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_01.jpg": {
+    "mtime": 1783790070.1631415,
+    "ast_hash": "316ac8b8fdc1b87eb6d95f8e3fa69426",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_02.jpg": {
+    "mtime": 1783790070.1639106,
+    "ast_hash": "0199c3e49ffab491952588caac01b795",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_03.jpg": {
+    "mtime": 1783790070.1649237,
+    "ast_hash": "a1720e10a1e234aef4451a018a6f1d20",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_04.jpg": {
+    "mtime": 1783790070.165419,
+    "ast_hash": "c6439f8dfc4d8ddc496082c91b834c7d",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_05.jpg": {
+    "mtime": 1783790070.165918,
+    "ast_hash": "c01763d842a5ee5b5f15ddd0909d1ae9",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_06.jpg": {
+    "mtime": 1783790070.167464,
+    "ast_hash": "8420b63cfcb045fc2b13c99867c538d1",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_07.jpg": {
+    "mtime": 1783790070.1681862,
+    "ast_hash": "192ba0d4f553c96d9968518b346d1cbd",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_08.jpg": {
+    "mtime": 1783790070.168449,
+    "ast_hash": "f924c961f4ce5eac5e613aff2381eccc",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_09.jpg": {
+    "mtime": 1783790070.16904,
+    "ast_hash": "0c9eadd2315572e9c56b023b71c60f77",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_10.jpg": {
+    "mtime": 1783790070.1695294,
+    "ast_hash": "c488f3793f01eeffb5436c343d481929",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_11.jpg": {
+    "mtime": 1783790070.171669,
+    "ast_hash": "fdf3b85cf0fff3509bb7c43c8bc0ab10",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_12.jpg": {
+    "mtime": 1783790070.1718705,
+    "ast_hash": "92ac015e07533e129d1db653e77c5dea",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_13.jpg": {
+    "mtime": 1783790070.173597,
+    "ast_hash": "568a6b94665ac495ef1a3590f11e21b7",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_14.jpg": {
+    "mtime": 1783790070.178321,
+    "ast_hash": "71d616aab842649fc7659d6391b78b05",
+    "semantic_hash": ""
+  },
+  "data/stimuli/poodle/poodle_15.jpg": {
+    "mtime": 1783790070.1789534,
+    "ast_hash": "86fc2d13843febdbd2e401eddc1d6cff",
+    "semantic_hash": ""
+  },
+  "data/processed/poodle_turbo_morph.mp4": {
+    "mtime": 1783790070.1403158,
+    "ast_hash": "620754d9307140e3a3c4aa2d98f021db",
     "semantic_hash": ""
   }
 }

@@ -535,7 +535,8 @@ def open_video_writer(output_path: Path | None, size: int, fps: float) -> cv2.Vi
 def save_still(frame: np.ndarray) -> Path:
     import cv2
 
-    path = Path(f"poodle_turbo_morph_{datetime.now():%Y%m%d_%H%M%S}.png")
+    path = Path("data/processed") / f"poodle_turbo_morph_{datetime.now():%Y%m%d_%H%M%S}.png"
+    path.parent.mkdir(parents=True, exist_ok=True)
     if not cv2.imwrite(str(path), frame):
         raise RuntimeError(f"Could not save frame to {path}")
     return path

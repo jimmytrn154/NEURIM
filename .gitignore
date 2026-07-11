@@ -4,6 +4,7 @@ data/calibration/
 data/processed/
 data/candidates_ai
 data/targets_real
+data/stimuli/
 
 # pytest
 .pytest_cache/
