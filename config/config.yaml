@@ -60,7 +60,7 @@ optimizer:
                             # per axis), so +/-1.5 still reaches every anchor
                             # while cutting the box corner from ~8.5 to ~4.2 std,
                             # out of the incoherent-embedding zone. Sweep 1.2-2.0.
-  algorithm: "hill_climb"   # "hill_climb" | "es_1p1" | "gp_bo"
+  algorithm: "gp_bo"   # "hill_climb" | "es_1p1" | "gp_bo"
 
 # CALIBRATE -> EXPLORE -> REFINE -> SETTLE, with RECOVER as an escape hatch.
 state_machine:
