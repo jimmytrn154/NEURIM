@@ -80,28 +80,40 @@ class OptimizerService:
         """Feed one reward reading. Returns a LatentMessage once a full
         window has accumulated and a step decision has been made; otherwise
         None (caller should keep interpolating toward the pending candidate).
+
+        This is the simple per-window path (average the last N readings). The
+        scheduled path - one clean Observation per candidate, gathered only
+        during the scoring interval - calls `observe_observation` instead; see
+        src/signal_service/presentation.py.
         """
         self._reward_buffer.append(r)
         if len(self._reward_buffer) < self.config.optimizer.reward_window_steps:
             return None
+        observation = window_statistics(
+            self._reward_buffer, clip=self.config.faa.clip, t=self._step_index
+        )
+        self._reward_buffer.clear()
+        return self._apply_step(observation)
 
-        windowed_reward = float(np.mean(self._reward_buffer))
+    def observe_observation(self, observation) -> LatentMessage:
+        """Feed one fully-formed Observation (mean + variance + effective N +
+        artifact fraction) for the current candidate and take exactly one
+        optimizer step. Used by the presentation-schedule path, where the
+        Observation is aggregated only from the scoring interval."""
+        return self._apply_step(observation)
+
+    def _apply_step(self, observation) -> LatentMessage:
+        windowed_reward = float(observation.reward_mean)
         reward_before = self._current_reward_estimate
         candidate = self._candidate
 
         # Uncertainty-aware optimizers (Noise-Aware Latent TuRBO) consume the
-        # whole window as an Observation - mean + variance + effective N +
-        # artifact fraction - rather than a single averaged scalar, so a stable
-        # reading weighs more than a motion-artifact one. Everything else gets
-        # the plain windowed mean.
+        # whole Observation - so a stable reading weighs more than a
+        # motion-artifact one. Everything else gets the plain scalar mean.
         if getattr(self.optimizer, "wants_observation", False):
-            observation = window_statistics(
-                self._reward_buffer, clip=self.config.faa.clip, t=self._step_index
-            )
             accepted = self.optimizer.observe(candidate, observation)
         else:
             accepted = self.optimizer.update(candidate, reward_before, windowed_reward)
-        self._reward_buffer.clear()
         if accepted:
             self._current_reward_estimate = windowed_reward
 

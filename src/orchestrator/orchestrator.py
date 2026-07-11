@@ -25,6 +25,7 @@ from src.common.config import Config
 from src.common.messages import ControlMessage, FrameMessage, LatentMessage, RewardMessage
 from src.generator.service import GeneratorService, Interpolator
 from src.optimizer.service import OptimizerService
+from src.signal_service.presentation import PresentationSchedule, ScoringGate
 from src.signal_service.service import SignalService
 
 if TYPE_CHECKING:
@@ -56,6 +57,22 @@ class LocalOrchestrator:
         self._last_reward_estimate: float = 0.0
         self._last_eeg_features: dict | None = None
 
+        # Presentation schedule (morph -> stabilize -> score). When enabled, the
+        # reward for a candidate is aggregated ONLY from its scoring interval,
+        # and the morph completes within the transition interval and then holds.
+        self._schedule: PresentationSchedule | None = None
+        self._gate: ScoringGate | None = None
+        if config.presentation.enabled:
+            self._schedule = PresentationSchedule(
+                transition_s=config.presentation.transition_s,
+                stabilize_s=config.presentation.stabilize_s,
+                score_s=config.presentation.score_s,
+            )
+            for warning in self._schedule.validate(config.faa.window_s):
+                print(f"[orchestrator] presentation schedule warning: {warning}")
+            self._gate = ScoringGate(self._schedule, clip=config.faa.clip)
+        self._candidate_presented_at = time.monotonic()
+
     async def calibrate(self) -> None:
         """Real FAA needs 30s of rest to fit the baseline; fake reward sources
         (keyboard/scripted) skip straight to EXPLORE.
@@ -76,18 +93,34 @@ class LocalOrchestrator:
     async def _reward_loop(self) -> None:
         async for msg in self.signal_service.stream():
             self._last_eeg_features = msg.eeg_features
-            result = self.optimizer.observe_reward(msg.r)
-            if result is not None:
-                self.interpolator.set_target(np.array(result.z, dtype=float))
-                self._last_step_index = result.step_index
-                self._last_state = result.state
-                self._last_reward_estimate = result.reward_estimate
-                self._step_started_at = time.monotonic()
-                self.on_step(result)
-                if self.optimizer.state_machine.should_stop():
-                    assert self._stop_event is not None
-                    self._stop_event.set()
-                    return
+
+            if self._gate is not None:
+                # Scheduled path: only the scoring interval counts; the gate
+                # returns one Observation per candidate when its window closes.
+                elapsed = time.monotonic() - self._candidate_presented_at
+                observation = self._gate.feed(elapsed, msg.r)
+                if observation is None:
+                    continue
+                result = self.optimizer.observe_observation(observation)
+            else:
+                # Simple per-window averaging path.
+                result = self.optimizer.observe_reward(msg.r)
+                if result is None:
+                    continue
+
+            self.interpolator.set_target(np.array(result.z, dtype=float))
+            self._last_step_index = result.step_index
+            self._last_state = result.state
+            self._last_reward_estimate = result.reward_estimate
+            self._step_started_at = time.monotonic()
+            self._candidate_presented_at = self._step_started_at
+            if self._gate is not None:
+                self._gate.reset()
+            self.on_step(result)
+            if self.optimizer.state_machine.should_stop():
+                assert self._stop_event is not None
+                self._stop_event.set()
+                return
 
     async def _render_loop(self) -> None:
         frame_interval = 1.0 / self.config.generator.target_fps
@@ -95,7 +128,12 @@ class LocalOrchestrator:
         assert self._stop_event is not None
         while not self._stop_event.is_set():
             elapsed = time.monotonic() - self._step_started_at
-            alpha = min(1.0, elapsed / step_interval) if step_interval > 0 else 1.0
+            if self._schedule is not None:
+                # Morph completes within the transition interval, then holds at
+                # the candidate so it's stable while the scoring interval runs.
+                alpha = self._schedule.morph_alpha(elapsed)
+            else:
+                alpha = min(1.0, elapsed / step_interval) if step_interval > 0 else 1.0
             z = self.interpolator.sample(alpha)
             frame = self.generator.render(
                 z,

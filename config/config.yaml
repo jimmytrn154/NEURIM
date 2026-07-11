@@ -40,7 +40,9 @@ faa:
     "AF3/AF4": 0.5
     "FC5/FC6": 0.5
   band_hz: [8.0, 13.0]
-  window_s: 3.0            # sliding window per FAA reading
+  window_s: 2.0            # sliding window per FAA reading. Kept <= presentation
+                          # stabilize_s so the scoring window's EEG is entirely
+                          # post-morph. 2s of alpha is still ~16-26 cycles.
   update_interval_s: 0.25  # ~4 readings/sec
   baseline_duration_s: 30.0
   clip: [-1.0, 1.0]
@@ -60,10 +62,14 @@ optimizer:
                             # per axis), so +/-1.5 still reaches every anchor
                             # while cutting the box corner from ~8.5 to ~4.2 std,
                             # out of the incoherent-embedding zone. Sweep 1.2-2.0.
+<<<<<<< Updated upstream
   algorithm: "latent_turbo"   # "hill_climb" | "es_1p1" | "gp_bo" | "latent_turbo"
                             # latent_turbo = Noise-Aware Latent TuRBO: local GP +
                             # heteroscedastic noise + Thompson sampling + adaptive
                             # trust region. Best for a noisy FAA reward.
+=======
+  algorithm: "gp_bo"   # "hill_climb" | "es_1p1" | "gp_bo"
+>>>>>>> Stashed changes
 
 # CALIBRATE -> EXPLORE -> REFINE -> SETTLE, with RECOVER as an escape hatch.
 state_machine:
@@ -128,3 +134,14 @@ generator:
 loop:
   target_latency_ms: 250          # perceive -> acquire -> decode -> generate, end to end
   optimizer_step_interval_s: 1.0   # matches faa.update_interval_s * reward_window_steps
+
+# Per-candidate presentation schedule (see src/signal_service/presentation.py).
+# Fixes reward-delay: morph, then hold, then score - and only the scoring
+# interval's FAA is attributed to the candidate. When enabled, one clean
+# candidate takes transition_s + stabilize_s + score_s (~5s here) instead of
+# ~1s, which favors sample-efficient BO (algorithm: latent_turbo recommended).
+presentation:
+  enabled: false            # true = scored-interval path; false = simple per-window averaging
+  transition_s: 1.5         # morph A -> B (not scored)
+  stabilize_s: 2.0          # hold B; FAA window fills with stable EEG (not scored). MUST be >= faa.window_s
+  score_s: 1.5              # scoring window - the FAA here is the reward for B

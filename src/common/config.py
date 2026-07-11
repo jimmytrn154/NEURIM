@@ -114,6 +114,18 @@ class LoopConfig:
 
 
 @dataclass
+class PresentationConfig:
+    # Per-candidate presentation schedule (see src/signal_service/presentation.py).
+    # enabled=False keeps the simple per-window path (average the last N FAA
+    # readings); enabled=True scores only the scoring interval, fixing the
+    # reward-delay/credit-assignment problem.
+    enabled: bool = False
+    transition_s: float = 1.5   # morph A -> B; not scored
+    stabilize_s: float = 2.0    # hold B; FAA window fills with stable EEG; MUST be >= faa.window_s
+    score_s: float = 1.5        # scoring window; the FAA here is the reward
+
+
+@dataclass
 class Config:
     eeg: EEGConfig = field(default_factory=EEGConfig)
     faa: FAAConfig = field(default_factory=FAAConfig)
@@ -121,6 +133,7 @@ class Config:
     state_machine: StateMachineConfig = field(default_factory=StateMachineConfig)
     generator: GeneratorConfig = field(default_factory=GeneratorConfig)
     loop: LoopConfig = field(default_factory=LoopConfig)
+    presentation: PresentationConfig = field(default_factory=PresentationConfig)
 
     @classmethod
     def load(cls, path: str | Path = DEFAULT_CONFIG_PATH) -> "Config":
@@ -137,6 +150,7 @@ class Config:
             state_machine=section("state_machine", StateMachineConfig),
             generator=section("generator", GeneratorConfig),
             loop=section("loop", LoopConfig),
+            presentation=section("presentation", PresentationConfig),
         )
 
 
