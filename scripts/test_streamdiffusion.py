@@ -1,21 +1,21 @@
 #!/usr/bin/env python3
-"""Diagnostic for the StreamDiffusion backend - run it on the GPU server in
-streamdiffusion-env to localize WHERE the pipeline is failing, since the three
-failure modes look similar in the live demo but have different fixes:
+"""Diagnostic for the latent-walk backend (run_streamdiffusion_server.py) -
+run it on the GPU server to localize WHERE the pipeline is failing, since
+different failure modes look similar in the live demo but have different fixes:
 
-  Test A (official API, no z-injection): does SD-Turbo + our wrapper config
-     generate a coherent image AT ALL from a plain text prompt? If this is
-     garbage/grey, the problem is model/config (t_index_list, acceleration,
-     model download) - NOT our z-injection.
+  Test A (official API, no z-injection): does the model + steps/guidance
+     config generate a coherent image AT ALL from a plain text prompt? If
+     this is garbage, the problem is model/config, not our z-injection.
 
-  Test B (our full path): bootstrap + inject z -> embedding -> img2img stream.
-     Saves a z-sweep so you can flip through frames and see whether it (a) looks
-     like the anchor prompts and (b) morphs smoothly. If Test A is fine but this
-     is bad, the problem is our injection / projector / img2img strength.
+  Test B (our path): z -> PCAProjector.to_embedding(z) -> prompt_embeds,
+     rendered fresh (fixed latent, no img2img) at each point in a z-sweep.
+     Flip through the frames: should look like the anchor prompts and change
+     smoothly. If Test A is fine but this is bad, the problem is the
+     projector/anchor-prompt fit, not the model/generation config.
 
 Writes PNGs to data/processed/streamdiffusion_test/. Eyeball them.
 
-    python scripts/test_streamdiffusion.py --streamdiffusion-repo ~/chun/StreamDiffusion
+    python scripts/test_streamdiffusion.py
 """
 
 from __future__ import annotations
@@ -35,46 +35,50 @@ OUT_DIR = Path(__file__).resolve().parents[1] / "data" / "processed" / "streamdi
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--streamdiffusion-repo", required=True)
     parser.add_argument("--model-id", default="stabilityai/sd-turbo")
-    parser.add_argument("--t-index-list", default="32,45")
-    parser.add_argument("--acceleration", default="xformers", choices=["none", "xformers", "tensorrt"])
+    parser.add_argument("--steps", type=int, default=1)
+    parser.add_argument("--guidance-scale", type=float, default=0.0)
     parser.add_argument("--sweep-frames", type=int, default=12, help="frames in the Test B z-sweep")
     parser.add_argument("--sweep-dim", type=int, default=0, help="which z dimension to sweep in Test B")
     args = parser.parse_args()
 
-    # Imported here so build_wrapper's sys.path insertion happens first.
-    from run_streamdiffusion_server import StreamDiffusionRenderServer, _fit_projector, build_wrapper
+    # Imported here (not at module level) so any import-time errors are clearly
+    # attributed to the server module, not this script.
+    from run_streamdiffusion_server import LatentWalkRenderServer, _fit_projector, load_pipeline
 
     config = Config.load()
     seed = config.generator.remote_diffusion_seed
     frame_size = config.generator.frame_size
-    t_index_list = [int(x) for x in args.t_index_list.split(",")]
-    # Tag the output folder by t_index so re-runs with different values don't
-    # overwrite each other, e.g. .../streamdiffusion_test/t0_16/A_official_txt2img.png
-    out_dir = OUT_DIR / ("t" + "_".join(str(t) for t in t_index_list))
+    # Tag the output folder by steps/guidance so re-runs with different values
+    # don't overwrite each other, e.g. .../streamdiffusion_test/s1_g0.0/A_official.png
+    out_dir = OUT_DIR / f"s{args.steps}_g{args.guidance_scale}"
     out_dir.mkdir(parents=True, exist_ok=True)
     print(f"[test] writing to {out_dir}")
 
-    wrapper = build_wrapper(config, args.streamdiffusion_repo, args.model_id, t_index_list,
-                            args.acceleration, seed, frame_size)
+    pipe, fixed_latent, device, dtype = load_pipeline(args.model_id, seed, frame_size)
 
-    # --- Test A: raw generation via the official API, no injection ------------
+    # --- Test A: raw generation via the official API, no z-injection ----------
     anchor = config.generator.anchor_prompts[0] if config.generator.anchor_prompts else "a golden retriever puppy"
-    print(f"[test] A: official txt2img for prompt: {anchor!r}")
-    # Passing prompt= makes the wrapper call stream.update_prompt() internally -
-    # the official conditioning path, independent of our z-injection.
-    img = wrapper.txt2img(prompt=anchor)
-    if isinstance(img, list):
-        img = img[0]
-    img.save(out_dir / "A_official_txt2img.png")
-    print(f"[test] A: saved {out_dir / 'A_official_txt2img.png'} - if this isn't a coherent image, "
-          "the problem is model/config, not our injection")
+    print(f"[test] A: official generation for prompt: {anchor!r}")
+    image = pipe(
+        prompt=anchor,
+        latents=fixed_latent,
+        height=frame_size,
+        width=frame_size,
+        num_inference_steps=args.steps,
+        guidance_scale=args.guidance_scale,
+        output_type="pil",
+    ).images[0]
+    image.save(out_dir / "A_official.png")
+    print(f"[test] A: saved {out_dir / 'A_official.png'} - if this isn't a coherent image, "
+          "the problem is model/steps/guidance_scale, not our z-injection")
 
-    # --- Test B: our injected z -> embedding -> bootstrap + img2img morph -----
-    projector, embed_shape = _fit_projector(wrapper, config.generator.anchor_prompts, config.optimizer.search_dims)
-    server = StreamDiffusionRenderServer(wrapper, projector, embed_shape, frame_size)
-    server._bootstrap_frame().save(out_dir / "B_bootstrap.png")
+    # --- Test B: our injected z -> embedding -> fresh render, swept ----------
+    projector, embed_shape = _fit_projector(pipe, config.generator.anchor_prompts, config.optimizer.search_dims, device)
+    server = LatentWalkRenderServer(
+        pipe, projector, embed_shape, frame_size, config.optimizer.search_dims,
+        fixed_latent, device, dtype, args.steps, args.guidance_scale,
+    )
 
     dim = min(args.sweep_dim, projector.dims - 1)
     print(f"[test] B: sweeping z[{dim}] from -1 to +1 over {args.sweep_frames} frames via our render path")

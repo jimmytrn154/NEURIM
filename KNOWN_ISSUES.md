@@ -81,29 +81,20 @@ format `WebSocketOrchestrator` expects.
 
 ---
 
-## 3. [Design gap] `/anchors` endpoint exists on one diffusion server, not the other
+## 3. [RESOLVED] `/anchors` endpoint gap - and the server it applied to no longer exists
 
-**Where:** `scripts/run_diffusion_server.py` (SDXL-Turbo) has
-`DiffusionRenderServer.set_anchor_prompts()` + a `POST /anchors` route that re-fits the
-projector on the fly. `scripts/run_streamdiffusion_server.py` (SD-Turbo/StreamDiffusion,
-the currently-preferred real-time backend) has **no equivalent** - anchors are only
-fit once at startup from `config.yaml`.
+Originally: `run_diffusion_server.py` (SDXL-Turbo) had a live `/anchors` endpoint;
+`run_streamdiffusion_server.py` (the StreamDiffusion-based backend) didn't, so the
+frontend-app's "Apply anchors" button and `--set-anchors` in the optimizer scripts
+would 404 against it.
 
-**Impact:**
-- The frontend-app's "Apply anchors" button (`app/api/anchor-prompts/apply/route.ts`,
-  POSTs to `${base}/anchors`) will fail (404) against a running
-  `run_streamdiffusion_server.py`.
-- `scripts/run_mock_optimizer.py` and `scripts/run_real_eeg_optimizer.py`'s
-  `--set-anchors` flag will likewise fail against the StreamDiffusion server - only
-  works against the SDXL-Turbo one.
-
-**Workaround today:** edit `config.yaml`'s `anchor_prompts` and restart
-`run_streamdiffusion_server.py` manually (see item 5 below - restart is mandatory,
-config isn't hot-reloaded).
-
-**Not yet built:** a `/anchors` route for the StreamDiffusion server, mirroring the
-SDXL one's `set_anchor_prompts()` (re-run `_fit_projector()` against new prompts,
-thread-safe under the existing `render_server.lock`).
+**Since resolved from two directions:**
+1. `run_streamdiffusion_server.py` gained its own `/anchors` route
+   (`LatentWalkRenderServer.set_anchor_prompts()`), matching the SDXL server's behavior.
+2. More fundamentally, `run_streamdiffusion_server.py` **no longer uses StreamDiffusion
+   at all** - see item 7 below, which replaces this whole file's rendering engine.
+   `/anchors` still works the same way (re-fits `PCAProjector` against the new prompts,
+   thread-safe under `render_server.lock`), just against a plain diffusers pipeline now.
 
 ---
 
@@ -153,14 +144,36 @@ yet reviewed/validated.
 
 ---
 
-## 7. [Tuning note, not a bug] `t_index_list=[0,16]` is empirically fit to the current anchor bank
+## 7. [RESOLVED - architecture change] `run_streamdiffusion_server.py` no longer uses StreamDiffusion
 
-Found by trial (`scripts/test_streamdiffusion.py`) that `[0]` alone breaks img2img
-continuity (every frame regenerates from near-scratch, unrelated compositions) while
-`[32,45]` (StreamDiffusion's img2img tutorial default) produces mosaic garbage on
-from-scratch bootstrap. `[0,16]` fixed both. This value is **not guaranteed to hold**
-if anchor prompts, model, or `search_dims` change significantly - re-run
-`test_streamdiffusion.py`'s sweep before trusting it after any such change.
+The old `t_index_list` tuning saga (`[0]` broke img2img continuity - every frame
+regenerated from near-scratch as an unrelated composition; `[32,45]`, StreamDiffusion's
+img2img tutorial default, produced mosaic garbage on from-scratch bootstrap; `[0,16]`
+was the empirically-found fix) is now moot, because the whole img2img-continuity
+mechanism it was tuning is gone.
+
+**What changed:** `scripts/continuous_dog_latent_morph.py` demonstrated a simpler,
+officially-supported technique - pass an explicit `latents=` tensor (generated once,
+seeded, fixed for the whole session) and `prompt_embeds=` directly to a plain
+`diffusers.StableDiffusionPipeline`, rendering fresh from scratch every frame. No
+img2img feedback loop, so no "how much of the previous frame should survive" question
+to tune at all. `run_streamdiffusion_server.py` was rewritten around this - it no
+longer depends on the StreamDiffusion package, the `utils/wrapper.py` sys.path hack,
+the undocumented `stream.prompt_embeds` attribute override, or the separate
+`streamdiffusion-env` (plain diffusers has the same dependency shape as
+`run_diffusion_server.py`'s `torch-env`).
+
+**Names that changed** (in case old references linger anywhere): `build_wrapper` →
+`load_pipeline` (now returns `(pipe, fixed_latent, device, dtype)`, not a
+`StreamDiffusionWrapper`), `StreamDiffusionRenderServer` → `LatentWalkRenderServer`,
+`_fit_projector` gained a `device` parameter. `scripts/test_streamdiffusion.py` was
+updated to match; anything else referencing the old names (docs, notes, muscle memory)
+should be treated as stale.
+
+**Still worth re-validating after this change:** run `test_streamdiffusion.py` again
+with the new `--steps`/`--guidance-scale` flags before trusting it live - the technique
+is proven by the reference script, but hasn't yet been executed against our actual
+anchor-prompt bank on real hardware as of this writing.
 
 ---
 

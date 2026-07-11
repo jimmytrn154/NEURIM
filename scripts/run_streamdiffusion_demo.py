@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 """Full architecture, single process, on the GPU box: real EEG -> FAA reward ->
-Optimizer -> StreamDiffusion generator -> saved frames. No HTTP split, no
-tunnel for rendering - only the EEG connection crosses machines.
+Optimizer -> latent-walk generator -> saved frames. No HTTP split, no tunnel
+for rendering - only the EEG connection crosses machines.
 
 This is the "everything in one place" alternative to the split architecture
 (run_demo.py --backend remote_diffusion talking to run_streamdiffusion_server.py
-over HTTP). Reuses build_wrapper()/_fit_projector()/StreamDiffusionRenderServer
+over HTTP). Reuses load_pipeline()/_fit_projector()/LatentWalkRenderServer
 from run_streamdiffusion_server.py directly - same pattern test_streamdiffusion.py
-already uses - rather than duplicating the StreamDiffusion setup.
+uses - rather than duplicating the plain-diffusers setup. See that file's
+docstring for why this no longer uses StreamDiffusion (fixed seeded latent +
+fresh render every frame, no img2img continuity to tune).
 
-Run in streamdiffusion-env, on the GPU server:
+Run on the GPU server (plain torch-env is enough now - no StreamDiffusion-
+specific env/pins needed):
 
-    python scripts/run_streamdiffusion_demo.py --streamdiffusion-repo ~/chun/StreamDiffusion --mock
-    python scripts/run_streamdiffusion_demo.py --streamdiffusion-repo ~/chun/StreamDiffusion
+    python scripts/run_streamdiffusion_demo.py --mock
+    python scripts/run_streamdiffusion_demo.py
 
 REQUIREMENTS for the real-EEG (non --mock) case, since EEG now runs in this
 same process/environment instead of on your local machine:
-  - streamdiffusion-env needs the base EEG/FAA deps too:
-    pip install -r requirements.txt   (websocket-client, scipy, etc. - check
-    for a conflict with the numpy<2 pin already applied in this env)
+  - This environment needs the base EEG/FAA deps too:
+    pip install -r requirements.txt   (websocket-client, scipy, etc.)
   - EMOTIV_CLIENT_ID / EMOTIV_CLIENT_SECRET must be set in THIS environment
     (the server's), not your local machine's.
   - The tunnel direction flips back from the split architecture: run a
@@ -46,21 +48,21 @@ from src.signal_service.eeg_sources import EmotivCortexSource, MockEEGSource
 from src.signal_service.service import build_faa_service
 
 # Imported from the sibling script (same directory), same pattern
-# test_streamdiffusion.py already uses - avoids duplicating the
-# StreamDiffusionWrapper setup / z-injection / projector-fit logic.
-from run_streamdiffusion_server import StreamDiffusionRenderServer, _fit_projector, build_wrapper
+# test_streamdiffusion.py uses - avoids duplicating the plain-diffusers
+# setup / z-injection / projector-fit logic.
+from run_streamdiffusion_server import LatentWalkRenderServer, _fit_projector, load_pipeline
 
 OUT_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
 
 
-class StreamDiffusionGeneratorAdapter:
-    """Adapts StreamDiffusionRenderServer (built for an HTTP response: z in,
+class LatentWalkGeneratorAdapter:
+    """Adapts LatentWalkRenderServer (built for an HTTP response: z in,
     PNG bytes out) to the generator interface LocalOrchestrator expects:
     .render(z, step_index, state, reward_estimate) -> FrameMessage. No HTTP,
     no serialization round-trip beyond the PNG encode render_png() already does.
     """
 
-    def __init__(self, render_server: StreamDiffusionRenderServer):
+    def __init__(self, render_server: LatentWalkRenderServer):
         self._render_server = render_server
 
     def render(
@@ -74,7 +76,7 @@ class StreamDiffusionGeneratorAdapter:
         if as_pyramid:
             raise NotImplementedError(
                 "pyramid/mirrored-quadrant mode isn't implemented for the in-process "
-                "StreamDiffusion adapter - LocalOrchestrator doesn't request it by "
+                "latent-walk adapter - LocalOrchestrator doesn't request it by "
                 "default, so seeing this means something explicitly asked for it."
             )
         png_bytes = self._render_server.render_png({"z": list(map(float, z))})
@@ -112,7 +114,7 @@ class _SessionSnapshot:
         _save_frame(frame_msg, "session_end.png")
 
 
-async def run(config: Config, eeg_source, generator: StreamDiffusionGeneratorAdapter) -> None:
+async def run(config: Config, eeg_source, generator: LatentWalkGeneratorAdapter) -> None:
     signal_service = build_faa_service(config, eeg_source)
     snapshot = _SessionSnapshot()
     orchestrator = LocalOrchestrator(config, signal_service, generator, on_frame=snapshot.on_frame)
@@ -140,11 +142,11 @@ async def run(config: Config, eeg_source, generator: StreamDiffusionGeneratorAda
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--mock", action="store_true", help="use synthetic EEG instead of real hardware")
-    parser.add_argument("--streamdiffusion-repo", required=True,
-                         help="path to a cloned cumulo-autumn/StreamDiffusion checkout")
     parser.add_argument("--model-id", default="stabilityai/sd-turbo")
-    parser.add_argument("--t-index-list", default="0,16", help="comma-separated denoising step indices")
-    parser.add_argument("--acceleration", default="xformers", choices=["none", "xformers", "tensorrt"])
+    parser.add_argument("--steps", type=int, default=1,
+                         help="denoising steps - 1-4 for sd-turbo, 20-50 for a plain SD checkpoint")
+    parser.add_argument("--guidance-scale", type=float, default=0.0,
+                         help="0.0 (default, no CFG) for turbo/LCM. ~7-8 for a plain SD checkpoint.")
     parser.add_argument("--seed", type=int, default=None, help="defaults to config.generator.remote_diffusion_seed")
     parser.add_argument("--algorithm", choices=["hill_climb", "es_1p1", "gp_bo", "latent_turbo"], default=None)
     args = parser.parse_args()
@@ -153,15 +155,16 @@ def main() -> None:
     if args.algorithm:
         config.optimizer.algorithm = args.algorithm
     seed = args.seed if args.seed is not None else config.generator.remote_diffusion_seed
-    t_index_list = [int(x) for x in args.t_index_list.split(",")]
     frame_size = config.generator.frame_size
 
-    print("[streamdiffusion-demo] loading StreamDiffusion (this takes a while - model download/load)...")
-    wrapper = build_wrapper(config, args.streamdiffusion_repo, args.model_id, t_index_list,
-                            args.acceleration, seed, frame_size)
-    projector, embed_shape = _fit_projector(wrapper, config.generator.anchor_prompts, config.optimizer.search_dims)
-    render_server = StreamDiffusionRenderServer(wrapper, projector, embed_shape, frame_size)
-    generator = StreamDiffusionGeneratorAdapter(render_server)
+    print("[streamdiffusion-demo] loading pipeline (this takes a while - model download/load)...")
+    pipe, fixed_latent, device, dtype = load_pipeline(args.model_id, seed, frame_size)
+    projector, embed_shape = _fit_projector(pipe, config.generator.anchor_prompts, config.optimizer.search_dims, device)
+    render_server = LatentWalkRenderServer(
+        pipe, projector, embed_shape, frame_size, config.optimizer.search_dims,
+        fixed_latent, device, dtype, args.steps, args.guidance_scale,
+    )
+    generator = LatentWalkGeneratorAdapter(render_server)
 
     if args.mock:
         eeg_source = MockEEGSource(config.eeg.channels, config.eeg.sample_rate_hz)
