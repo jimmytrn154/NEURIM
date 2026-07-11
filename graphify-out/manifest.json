@@ -15,14 +15,14 @@
     "semantic_hash": "12e4c5a54f6e67e2ef9e0baf21e20e67"
   },
   "frontend-app/app/layout.tsx": {
-    "mtime": 1783784884.8740747,
-    "ast_hash": "8ba49923c01eb5943d70be955eece7ae",
+    "mtime": 1783795477.1440918,
+    "ast_hash": "6d6ea5fa05d4b9ceac2c9e06446fe7ea",
     "semantic_hash": ""
   },
   "frontend-app/app/page.tsx": {
-    "mtime": 1783687117.2324393,
-    "ast_hash": "ad5d069c9c6058d05ce196875f219794",
-    "semantic_hash": "ad5d069c9c6058d05ce196875f219794"
+    "mtime": 1783795477.1443846,
+    "ast_hash": "c2d1f526f2815de3488adfb9909ed598",
+    "semantic_hash": ""
   },
   "frontend-app/components.json": {
     "mtime": 1783687049.2485654,
@@ -30,13 +30,8 @@
     "semantic_hash": "a3c69c1777c5bbd4de1ede23a87c330d"
   },
   "frontend-app/components/brain-activity-3d.tsx": {
-    "mtime": 1783784884.8747053,
-    "ast_hash": "08308bf2e1c37dcb015d6ae73da05672",
-    "semantic_hash": ""
-  },
-  "frontend-app/components/neurim-dashboard.tsx": {
-    "mtime": 1783784884.8751035,
-    "ast_hash": "ce2bd65f8c24aa568ce1cade40424337",
+    "mtime": 1783795477.1447017,
+    "ast_hash": "f1acb1b6dbc03a6ff107b652cc4bb187",
     "semantic_hash": ""
   },
   "frontend-app/components/ui/alert.tsx": {
@@ -100,7 +95,7 @@
     "semantic_hash": "d9837f38cc05303254571985e3164050"
   },
   "frontend-app/next-env.d.ts": {
-    "mtime": 1783746604.9702563,
+    "mtime": 1783796924.362356,
     "ast_hash": "d0f8375ae1199dc7acd3977fc33b78b8",
     "semantic_hash": ""
   },
@@ -110,9 +105,9 @@
     "semantic_hash": "8a9becd0dd0447503aa37374a503d4d9"
   },
   "frontend-app/package.json": {
-    "mtime": 1783699138.7008095,
-    "ast_hash": "1beaf2cfcecda4956d21a79a8d8d1d20",
-    "semantic_hash": "1beaf2cfcecda4956d21a79a8d8d1d20"
+    "mtime": 1783795477.1478815,
+    "ast_hash": "b9f7b3900ee6a96630021f3b1d9a56c4",
+    "semantic_hash": ""
   },
   "frontend-app/postcss.config.mjs": {
     "mtime": 1783687049.5164163,
@@ -355,8 +350,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1783790559.2199132,
-    "ast_hash": "cd6d5cdf55227974d8361ca0d2f992e2",
+    "mtime": 1783796734.3678942,
+    "ast_hash": "c8751e96473fbed86ab7b160ec3fdd40",
     "semantic_hash": ""
   },
   "config/config.yaml": {
@@ -380,18 +375,18 @@
     "semantic_hash": ""
   },
   "frontend-app/app/api/session-intent/route.ts": {
-    "mtime": 1783784884.8735495,
-    "ast_hash": "68a1417e99b1d25a3f2f05d62fbbf895",
+    "mtime": 1783796632.6595387,
+    "ast_hash": "a587904d987b59eeef0a20e003cb6217",
     "semantic_hash": ""
   },
   "scripts/api_server.py": {
-    "mtime": 1783790087.3002307,
-    "ast_hash": "4393bc531f3974d01336ea48877202c7",
+    "mtime": 1783796608.7363257,
+    "ast_hash": "79a736fafddbec594634287c9af56e39",
     "semantic_hash": ""
   },
   "tests/test_api_server.py": {
-    "mtime": 1783790087.301386,
-    "ast_hash": "ffb910c85bca7ada399a639f8eeebe4b",
+    "mtime": 1783796720.105512,
+    "ast_hash": "97d6ae7df09076c8bad9000dba14fa0a",
     "semantic_hash": ""
   },
   "graphify-out/memory/query_20260711_122953_retrieve_context.md": {
@@ -410,8 +405,8 @@
     "semantic_hash": ""
   },
   "src/generator/anchor_session.py": {
-    "mtime": 1783784884.8859432,
-    "ast_hash": "b6b018656c225d005581178063041410",
+    "mtime": 1783796541.581678,
+    "ast_hash": "80c5ba68c1cf08fdfbe9bba0ff039f0d",
     "semantic_hash": ""
   },
   "src/generator/prompt_curation.py": {
@@ -440,13 +435,13 @@
     "semantic_hash": ""
   },
   "src/server/api/__init__.py": {
-    "mtime": 1783790087.3160763,
-    "ast_hash": "de5dda43c44621f5a3563dfb535d4d44",
+    "mtime": 1783796608.735936,
+    "ast_hash": "51c3b5490fb2f48f5db4096289a5c3f3",
     "semantic_hash": ""
   },
   "src/server/api/app.py": {
-    "mtime": 1783790087.3162704,
-    "ast_hash": "534ef8ed4941b05aa46acf995a0e7a32",
+    "mtime": 1783796608.735503,
+    "ast_hash": "e4b28b17b39ce56e8219942694c1bef6",
     "semantic_hash": ""
   },
   "src/server/api/cli.py": {
@@ -455,13 +450,13 @@
     "semantic_hash": ""
   },
   "src/server/api/manager.py": {
-    "mtime": 1783790087.3165598,
-    "ast_hash": "b7a717a79aa07989498a31bbed197e1b",
+    "mtime": 1783796955.2901266,
+    "ast_hash": "833a1f885df4a3ba44218f1df36d7d64",
     "semantic_hash": ""
   },
   "src/server/api/models.py": {
-    "mtime": 1783790087.3166642,
-    "ast_hash": "0c0f4fe33bbc13006febf7f273ce10ad",
+    "mtime": 1783796541.5810673,
+    "ast_hash": "5f039d965095130b9d9753f00f51fa76",
     "semantic_hash": ""
   },
   "src/server/api/settings.py": {
@@ -505,8 +500,8 @@
     "semantic_hash": ""
   },
   "src/session/frame_store.py": {
-    "mtime": 1783790087.319149,
-    "ast_hash": "39713121320a5f0c00b85955a6edb996",
+    "mtime": 1783795477.1482708,
+    "ast_hash": "62c551d56edd7eac9d3528e2444e27fe",
     "semantic_hash": ""
   },
   "src/session/mock_runner.py": {
@@ -525,8 +520,8 @@
     "semantic_hash": ""
   },
   "tests/test_session_runtime.py": {
-    "mtime": 1783790087.320351,
-    "ast_hash": "bc241f087c51c0dcd4ee40e951bbe5f6",
+    "mtime": 1783795477.1484256,
+    "ast_hash": "0ded4c7fc121d3254fa36e2b79dd5b76",
     "semantic_hash": ""
   },
   "data/reward_training/_synthetic_reward_model.json": {
@@ -647,6 +642,116 @@
   "docs/preference-reward.md": {
     "mtime": 1783790948.3836915,
     "ast_hash": "ec8646ebbb066bd60072e51126b5f62f",
+    "semantic_hash": ""
+  },
+  "frontend-app/app/api/eeg-retry/route.ts": {
+    "mtime": 1783796632.6606843,
+    "ast_hash": "9dc0592819b1bbceaa3033a5be4228a1",
+    "semantic_hash": ""
+  },
+  "frontend-app/app/api/eeg-status/route.ts": {
+    "mtime": 1783796632.6601999,
+    "ast_hash": "54bb63c51f33927847a28023bb10e169",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/approach-meter.tsx": {
+    "mtime": 1783795477.144838,
+    "ast_hash": "4d91ef4212f1b7fa3d2a8e775df16cb4",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/hero-candidate.tsx": {
+    "mtime": 1783795477.1449428,
+    "ast_hash": "073f73acfd453fba41e6490d6b07e03d",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/landing.tsx": {
+    "mtime": 1783795477.145167,
+    "ast_hash": "9db6b3f20e1affd06df52484f4b0df27",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/neurim-app.tsx": {
+    "mtime": 1783795477.145262,
+    "ast_hash": "74100c540db138948aeb054685099ae3",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/phase-chips.tsx": {
+    "mtime": 1783795477.145359,
+    "ast_hash": "91588927960888f32be48a8b221dd80f",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/processing-state.tsx": {
+    "mtime": 1783795477.1454494,
+    "ast_hash": "79defe96bb92a022e36934b0dfca7d97",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/prompt-bubble.tsx": {
+    "mtime": 1783795477.145545,
+    "ast_hash": "4a549b7a33cc88643b69314535f1dd58",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/reward-readout.tsx": {
+    "mtime": 1783795477.1456416,
+    "ast_hash": "7cd567aff1f59c5219f8b05fed2144e5",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/session-view.tsx": {
+    "mtime": 1783795477.1457345,
+    "ast_hash": "2f45283d29dbfe5d8e66e4c16dd4eaae",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/signal-rail.tsx": {
+    "mtime": 1783795477.1458325,
+    "ast_hash": "b1f24f44300536a40c62c39032295293",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/steer-input.tsx": {
+    "mtime": 1783795477.145934,
+    "ast_hash": "3de3cd63a6327e90053e950b12c630b1",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/theme-toggle.tsx": {
+    "mtime": 1783795477.146036,
+    "ast_hash": "7d163a44d13577230e87bca53a3c77b5",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/neurim/top-bar.tsx": {
+    "mtime": 1783795477.1461334,
+    "ast_hash": "77b35ee67a62fe6a54ee3e13654451a7",
+    "semantic_hash": ""
+  },
+  "frontend-app/components/theme-provider.tsx": {
+    "mtime": 1783795477.1462278,
+    "ast_hash": "8a7903b048a593347de714be0f62582c",
+    "semantic_hash": ""
+  },
+  "frontend-app/hooks/use-frame-stream.ts": {
+    "mtime": 1783795477.1463645,
+    "ast_hash": "00282eaa2a13e63c9fecd1c029b21865",
+    "semantic_hash": ""
+  },
+  "frontend-app/hooks/use-session.ts": {
+    "mtime": 1783795477.1464863,
+    "ast_hash": "d4c0ec07be2834efa55cf95b8b592cca",
+    "semantic_hash": ""
+  },
+  "frontend-app/lib/mock-frame.ts": {
+    "mtime": 1783795477.146595,
+    "ast_hash": "05b549d42d2d81fa7a8f7ed708e127e8",
+    "semantic_hash": ""
+  },
+  "frontend-app/lib/neurim-types.ts": {
+    "mtime": 1783796632.661169,
+    "ast_hash": "380254aa8ac13979fe85d970a8e71dbf",
+    "semantic_hash": ""
+  },
+  "src/server/api/eeg.py": {
+    "mtime": 1783796541.5806782,
+    "ast_hash": "7535afd033e0191cfb4fd3dbbb8cb145",
+    "semantic_hash": ""
+  },
+  "tests/test_eeg_api_manager.py": {
+    "mtime": 1783796720.1058383,
+    "ast_hash": "d5f860e78a163dc36cd75e6d5a6c4859",
     "semantic_hash": ""
   }
 }

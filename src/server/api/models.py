@@ -5,8 +5,8 @@ from pydantic import BaseModel, Field, field_validator
 
 class StartSessionRequest(BaseModel):
     prompt: str | None = None
-    mock: bool = True
-    baseline_seconds: float = Field(default=5.0, ge=0)
+    mock: bool = False
+    baseline_seconds: float = Field(default=30.0, ge=0)
     server_url: str = "http://localhost:8766"
 
     @field_validator("server_url")

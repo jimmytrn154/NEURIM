@@ -19,7 +19,7 @@ The runtime is split across two machines:
 
 | Component | Location | Package |
 |---|---|---|
-| Frontend API and process lifecycle | Local machine | `src/server/api/` |
+| Frontend API, EMOTIV lifecycle, and session lifecycle | Local machine | `src/server/api/` |
 | Prompt curation | Local machine | `src/session/curation.py` |
 | EEG/mock optimizer session | Local machine | `src/session/` |
 | Manifest-driven diffusion renderer | Private GPU machine | `src/server/diffusion/` |
@@ -61,13 +61,21 @@ The private server exposes:
 - `GET /manifest`: active manifest metadata and render endpoint.
 - `POST /render`: accepts `{"z": [...], "frame_size": 512}` and returns PNG bytes.
 
-3. Validate the optimizer without EEG hardware:
+3. Start the local API bridge. It immediately attempts to connect to EMOTIV
+   Cortex, retries every 60 seconds on failure, and calibrates for 30 seconds
+   once connected:
+
+```bash
+python scripts/api_server.py --host 127.0.0.1 --port 8000
+```
+
+4. Validate the optimizer without EEG hardware:
 
 ```bash
 python scripts/run_mock_optimizer.py --server-url http://GPU_HOST:8766 --seed 3
 ```
 
-4. Run the EEG optimizer:
+5. Run the EEG optimizer directly, without the frontend API:
 
 ```bash
 python scripts/run_real_eeg_optimizer.py --server-url http://GPU_HOST:8766
@@ -103,13 +111,22 @@ NEURIM_API_URL=http://127.0.0.1:8000 npm run dev
 The API exposes:
 
 - `GET /health`
+- `GET /eeg/status`
+- `POST /eeg/retry`
 - `POST /session/start`
 - `POST /session/stop`
 - `GET /session/status`
 - `GET /session/logs`
 
-The API starts only the local optimizer process. The private diffusion server
-must already be running.
+The API owns the EMOTIV connection. On startup it connects to Cortex, retries
+every 60 seconds if no headset is available, and runs a 30-second FAA baseline
+calibration immediately after connection. `POST /eeg/retry` forces an immediate
+retry.
+
+When `POST /session/start` receives a prompt, the API curates a local
+manifest, compares it with the private diffusion server's `GET /manifest`
+response, and starts the optimizer only if they match. The private diffusion
+server must already be running with that manifest.
 
 ## Core Services
 

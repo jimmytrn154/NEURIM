@@ -42,6 +42,7 @@ export type BackendSession = {
   started_at: string | null;
   prompt: string | null;
   exit_code: number | null;
+  manifest_path?: string | null;
 };
 
 export type SessionIntentResponse = {

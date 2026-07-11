@@ -16,6 +16,7 @@ type BackendSession = {
   started_at: string | null;
   prompt: string | null;
   exit_code: number | null;
+  manifest_path?: string | null;
 };
 
 const MAX_STEPS = 100;
@@ -70,7 +71,7 @@ export async function POST(request: Request) {
   const baselineFallback = Number(process.env.NEURIM_BASELINE_SECONDS ?? 0);
   const startPayload = {
     prompt,
-    mock: requestBoolean(body.mock, true),
+    mock: requestBoolean(body.mock, false),
     baseline_seconds: requestNumber(body.baseline_seconds, Number.isFinite(baselineFallback) ? baselineFallback : 0),
     server_url: requestString(body.server_url) || cleanUrl(process.env.NEURIM_DIFFUSION_SERVER_URL, DEFAULT_RENDER_SERVER_URL),
   };

@@ -77,5 +77,6 @@ def manifest_metadata(manifest: PromptCurationManifest) -> dict[str, Any]:
         "user_prompt": manifest.user_prompt,
         "anchor_count": manifest.anchor_count,
         "anchor_labels": list(manifest.anchor_labels),
+        "realized_prompts": list(manifest.realized_prompts),
         "model": dict(manifest.model),
     }
