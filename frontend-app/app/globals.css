@@ -1,7 +1,12 @@
 @import "tailwindcss";
 
+/* Class-based dark mode: `dark:` utilities respond to `.dark` on <html>
+   (written by next-themes) instead of the OS media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-background: var(--background);
+  --color-landing-bg: var(--landing-bg);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
@@ -19,31 +24,90 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-bubble: var(--bubble);
+
+  /* Brand tokens — same value in both themes (do NOT flip) */
+  --color-approach: #3f62f6;
+  --color-approach-bright: #6f8bff;
+  --color-approach-faint: #bcccff;
+  --color-withdraw: #8b7cf0;
+  --color-eeg-pink: #f062a6;
+  --color-eeg-cyan: #2dd4e0;
+  --color-eeg-cyan-bright: #43e4ee;
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
+
+  /* Fonts wired to next/font CSS variables */
+  --font-sans: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), ui-serif, Georgia, serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Animations (same set for 5a / 6a / 6b) */
+  --animate-blink: blink 1.6s ease-in-out infinite;
+  --animate-eegpulse: eegpulse 2.4s ease-in-out infinite;
+  --animate-breathe: breathe 2.6s ease-in-out infinite;
+  --animate-txtshimmer: txtshimmer 3.2s linear infinite;
+  --animate-dot: dot 1.4s ease-in-out infinite;
+  --animate-sweep: sweep 2.8s ease-in-out infinite;
+  --animate-scan: scan 3.6s linear infinite;
 }
 
+/* ---- Light theme (6a / 6b) — first-load default ------------------------- */
 :root {
-  --radius: 0.5rem;
-  --background: #fbfcff;
-  --foreground: #111827;
+  --radius: 0.9rem;
+  --background: #f6f8fc;
+  --landing-bg: #ffffff;
+  --foreground: #101828;
   --card: #ffffff;
-  --card-foreground: #111827;
+  --card-foreground: #101828;
   --popover: #ffffff;
-  --popover-foreground: #111827;
-  --primary: #f45f5f;
+  --popover-foreground: #101828;
+  --primary: #3f62f6;
   --primary-foreground: #ffffff;
-  --secondary: #eef3f8;
+  --secondary: #eef2f9;
   --secondary-foreground: #1d2939;
-  --muted: #f3f6fa;
+  --muted: #eef2f9;
   --muted-foreground: #667085;
-  --accent: #e6f6ef;
-  --accent-foreground: #125d3c;
+  --accent: #eef2f9;
+  --accent-foreground: #101828;
   --destructive: #dc3d43;
-  --border: #d9e1ea;
+  --border: rgba(16, 24, 40, 0.1);
   --input: #ffffff;
-  --ring: #f45f5f;
+  --ring: #3f62f6;
+  --bubble: #eef2f9;
+
+  /* Top blue glow — softer in light */
+  --glow-1: rgba(63, 98, 246, 0.14);
+  --glow-2: rgba(111, 139, 255, 0.06);
+}
+
+/* ---- Dark theme (current 5a) — .dark wins by source order --------------- */
+.dark {
+  --background: #141519;
+  --landing-bg: #141519;
+  --foreground: #eceef2;
+  --card: #1b1d23;
+  --card-foreground: #eceef2;
+  --popover: #1b1d23;
+  --popover-foreground: #eceef2;
+  --primary: #3f62f6;
+  --primary-foreground: #ffffff;
+  --secondary: #22242b;
+  --secondary-foreground: #dfe1e6;
+  --muted: #1c1e24;
+  --muted-foreground: #9a9ba0;
+  --accent: #22242b;
+  --accent-foreground: #eceef2;
+  --destructive: #dc3d43;
+  --border: rgba(255, 255, 255, 0.08);
+  --input: #1b1d23;
+  --ring: #3f62f6;
+  --bubble: #22242b;
+
+  --glow-1: rgba(63, 98, 246, 0.2);
+  --glow-2: rgba(111, 139, 255, 0.1);
 }
 
 * {
@@ -54,22 +118,105 @@
 html,
 body {
   min-height: 100%;
-  background:
-    linear-gradient(rgba(17, 24, 39, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(17, 24, 39, 0.035) 1px, transparent 1px),
-    linear-gradient(180deg, #ffffff 0%, #f7fbff 48%, #fbfcff 100%),
-    var(--background);
-  background-size: 32px 32px, 32px 32px, auto;
+  background-color: var(--background);
   color: var(--foreground);
 }
 
+/* Flat base + top radial blue glow; the glow strength flips with the theme. */
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+  font-family: var(--font-sans);
   letter-spacing: 0;
+  background-image:
+    radial-gradient(120% 60% at 50% -10%, var(--glow-1), transparent 70%),
+    radial-gradient(80% 40% at 80% -6%, var(--glow-2), transparent 70%);
+  background-attachment: fixed;
 }
 
 code,
 .font-mono {
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
+}
+
+/* ---- Keyframes (shared across 5a / 6a / 6b) ----------------------------- */
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(63, 98, 246, 0.5);
+  }
+  50% {
+    opacity: 0.35;
+    box-shadow: 0 0 0 4px rgba(63, 98, 246, 0);
+  }
+}
+
+@keyframes eegpulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scaleY(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+@keyframes txtshimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@keyframes dot {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@keyframes sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  85% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
 }

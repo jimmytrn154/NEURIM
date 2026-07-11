@@ -4,7 +4,7 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Sphere } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import type { EEGFeatures } from "@/components/neurim-dashboard";
+import type { EEGFeatures } from "@/lib/neurim-types";
 import { cn } from "@/lib/utils";
 
 const fallbackPositions: Record<string, [number, number, number]> = {
@@ -57,10 +57,10 @@ function BrainMesh({ reward }: { reward: number }) {
   return (
     <group rotation={[0.15, 0, 0]}>
       <Sphere ref={left} args={[1, 48, 32]} position={[-0.36, 0, 0]} scale={[0.78, 1.05, 0.62]}>
-        <meshStandardMaterial color="#2d7f73" transparent opacity={0.2} roughness={0.85} />
+        <meshStandardMaterial color="#2dd4e0" transparent opacity={0.2} roughness={0.85} />
       </Sphere>
       <Sphere ref={right} args={[1, 48, 32]} position={[0.36, 0, 0]} scale={[0.78, 1.05, 0.62]}>
-        <meshStandardMaterial color="#a36a22" transparent opacity={0.2} roughness={0.85} />
+        <meshStandardMaterial color="#f062a6" transparent opacity={0.2} roughness={0.85} />
       </Sphere>
     </group>
   );
@@ -79,7 +79,7 @@ function ElectrodeNodes({ features, reward }: { features?: EEGFeatures | null; r
       {channels.map((channel, index) => {
         const [x, y, z] = channel.position;
         const warm = channel.name === "F4" || x > 0;
-        const color = warm ? new THREE.Color("#f2a340") : new THREE.Color("#55b7ff");
+        const color = warm ? new THREE.Color("#f062a6") : new THREE.Color("#43e4ee");
         const scale = 0.055 + channel.intensity * 0.075;
         return (
           <group key={channel.name} position={[x, y, z + 0.22]}>
@@ -114,8 +114,8 @@ export function BrainActivity3D({
     <div className={cn("h-[330px] overflow-hidden rounded-md border bg-[#091013]", className)}>
       <Canvas camera={{ position: [0, 0.1, 3.7], fov: 42 }} dpr={[1, 1.75]}>
         <ambientLight intensity={0.55} />
-        <pointLight position={[2, 2, 3]} intensity={1.6} color="#f2a340" />
-        <pointLight position={[-2.4, 0.8, 2]} intensity={1.1} color="#55b7ff" />
+        <pointLight position={[2, 2, 3]} intensity={1.6} color="#f062a6" />
+        <pointLight position={[-2.4, 0.8, 2]} intensity={1.1} color="#2dd4e0" />
         <BrainMesh reward={reward} />
         <ElectrodeNodes features={features} reward={reward} />
         <OrbitControls

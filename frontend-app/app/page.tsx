@@ -1,5 +1,5 @@
-import { NeurimDashboard } from "@/components/neurim-dashboard";
+import { NeurimApp } from "@/components/neurim/neurim-app";
 
 export default function Page() {
-  return <NeurimDashboard />;
+  return <NeurimApp />;
 }
