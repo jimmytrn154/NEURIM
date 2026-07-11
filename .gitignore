@@ -2,6 +2,8 @@
 data/raw/
 data/calibration/
 data/processed/
+data/candidates_ai
+data/targets_real
 
 # pytest
 .pytest_cache/

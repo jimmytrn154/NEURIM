@@ -1,0 +1,11 @@
+[
+  {
+    "name": "poodle",
+    "prompt": "a fluffy white standard poodle sitting, studio photo, neutral background",
+    "distractors": ["a black domestic cat", "a red sports car"]
+  },
+  {
+    "name": "beagle",
+    "prompt": "a beagle dog sitting, studio photo, neutral background"
+  }
+]
