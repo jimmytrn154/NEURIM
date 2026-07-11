@@ -44,7 +44,6 @@ from src.optimizer.service import OptimizerService
 from src.signal_service.fake_reward import ScriptedRewardSource
 
 PROCESSED_DIR = Path(__file__).resolve().parents[1] / "data" / "processed"
-ARCHIVE_DIR = PROCESSED_DIR / "mock_stream"
 
 DEFAULT_BREEDS = [
     "Golden Retriever",
@@ -108,22 +107,6 @@ def _save_frame(png_bytes: bytes, name: str = "live_frame.png") -> None:
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
     with open(PROCESSED_DIR / name, "wb") as f:
         f.write(png_bytes)
-
-
-class _SessionSnapshot:
-    """Mirror the real EEG optimizer's live/start/end frame capture behavior."""
-
-    def __init__(self):
-        self._start_saved = False
-
-    def on_frame(self, png_bytes: bytes) -> None:
-        _save_frame(png_bytes)
-        if not self._start_saved:
-            _save_frame(png_bytes, "session_start.png")
-            self._start_saved = True
-
-    def save_end(self, png_bytes: bytes) -> None:
-        _save_frame(png_bytes, "session_end.png")
 
 
 def _post_render(base_url: str, z: np.ndarray, frame_size: int, timeout: float) -> bytes:
@@ -215,7 +198,7 @@ def main() -> None:
     interpolator.set_target(np.asarray(optimizer.pending_candidate(), dtype=float))
 
     if not args.dry_run:
-        ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
+        PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
         if args.set_anchors:
             _post_anchors(args.server_url, list(config.generator.anchor_prompts), args.timeout)
 
@@ -226,7 +209,6 @@ def main() -> None:
     print("-" * 46)
 
     frame_no = 0
-    snapshot = _SessionSnapshot()
     start_dist = float(np.linalg.norm(optimizer.current_z() - target))
     max_ticks = config.state_machine.max_steps * config.optimizer.reward_window_steps + 50
 
@@ -236,8 +218,7 @@ def main() -> None:
             frame_no += 1
             return
         png = _post_render(args.server_url, z, frame_size, args.timeout)
-        snapshot.on_frame(png)
-        (ARCHIVE_DIR / f"frame_{frame_no:04d}.png").write_bytes(png)
+        _save_frame(png)
         frame_no += 1
 
     try:
@@ -274,10 +255,6 @@ def main() -> None:
         final_dist = float(np.linalg.norm(optimizer.current_z() - target))
         closer = 1.0 - final_dist / start_dist if start_dist > 0 else 0.0
 
-    if not args.dry_run:
-        final_png = _post_render(args.server_url, optimizer.current_z(), frame_size, args.timeout)
-        snapshot.save_end(final_png)
-
     print()
     if args.target_breed is not None:
         print(f"[mock-opt] final state={final_state}  target_weight={closer:.0%}  "
@@ -286,9 +263,7 @@ def main() -> None:
         print(f"[mock-opt] final state={final_state}  started {start_dist:.2f} -> ended {final_dist:.2f} "
               f"({closer:.0%} closer)  frames emitted={frame_no}")
     if not args.dry_run:
-        print(f"[mock-opt] saved {PROCESSED_DIR / 'live_frame.png'}, "
-              f"{PROCESSED_DIR / 'session_start.png'}, and {PROCESSED_DIR / 'session_end.png'}")
-        print(f"[mock-opt] archived frames in {ARCHIVE_DIR}/  (frame_0000.png ...)")
+        print(f"[mock-opt] live frame at {PROCESSED_DIR / 'live_frame.png'}")
     if final_state == "settle":
         print("[mock-opt] CONVERGED - the z-stream locked onto the target image.")
     else:

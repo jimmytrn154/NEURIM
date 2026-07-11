@@ -27,16 +27,34 @@ Your job is to convert one simple user prompt into:
 
 Requirements:
 - Preserve the user's core subject, intent, and visual domain.
-- The scaffold must describe the shared subject identity, composition, medium,
-  lighting, and style constraints that all anchors inherit.
+- Optimize for smooth interpolation, not for a diverse image collection.
+- Select exactly one semantic visual axis implied by the user's prompt. The
+  seven anchor labels must be seven distinct values along only that axis.
+- Fix the core subject category and subject count across every anchor. Subject
+  subtype may vary only when it is the single selected axis (for example breed).
+- Fix composition, pose, framing, viewpoint, lens, background, environment,
+  lighting, medium, and style across every anchor. None of these may vary.
+- If the user did not specify a composition, choose a conservative stable
+  composition appropriate to the subject, such as one centered subject in a
+  fixed studio or natural setting.
+- The scaffold must state all fixed visual properties shared by every anchor.
 - The prompt_template must contain the literal placeholder {{anchor}} exactly
-  once and be reusable for future anchor substitutions.
-- Anchor labels must be short, distinct, and meaningful visual axes or
-  compatible variations. They must not contradict the user's subject.
-- Realized prompts must be full prompts ready to send to a diffusion model.
-- Each realized prompt must correspond positionally to the matching anchor
-  label and remain compatible with the shared scaffold.
-- Avoid contradictory or incompatible anchors.
+  once. It must be concise and suitable for SD-Turbo.
+- Anchor labels must be short, distinct values that fit grammatically when
+  substituted into the template. They must not contain camera or scene changes.
+- Each realized prompt must equal prompt_template with {{anchor}} replaced by
+  its corresponding anchor label exactly. Do not add any per-anchor details.
+- Avoid quality filler such as "8k", "masterpiece", or repeated adjectives.
+- Avoid contradictory anchors and do not vary multiple attributes at once.
+
+Good example: seven dog breeds shown as the same centered head-and-shoulders
+studio portrait, where only the breed name changes.
+Good example: seven woolly mammoth fur appearances shown as the same single
+full-body mammoth in the same tundra composition, where only fur appearance
+changes.
+Bad example: mammoth anchors mixing a single mammoth, a herd, charging action,
+a river scene, a cliff scene, and a close-up portrait. Those are incompatible
+compositions and cannot form a stable morph space.
 - Return JSON only. No markdown, no prose outside JSON.
 
 Return exactly this shape:
@@ -179,6 +197,40 @@ def validate_prompt_curation_payload(
     )
 
 
+def validate_morph_compatibility(manifest: PromptCurationManifest) -> PromptCurationManifest:
+    """Enforce the strict template-only contract for newly curated sessions."""
+    placeholder = "{anchor}"
+    placeholder_count = manifest.prompt_template.count(placeholder)
+    if placeholder_count != 1:
+        raise RuntimeError(
+            "Morph-compatible prompt_template must contain the literal {anchor} "
+            f"placeholder exactly once; found {placeholder_count}. Regenerate the prompt session."
+        )
+
+    try:
+        expected_prompts = [
+            manifest.prompt_template.format(anchor=label) for label in manifest.anchor_labels
+        ]
+    except (IndexError, KeyError, ValueError) as exc:
+        raise RuntimeError(
+            "Morph-compatible prompt_template may not contain format fields other than {anchor}. "
+            "Regenerate the prompt session."
+        ) from exc
+
+    for index, (actual, expected) in enumerate(
+        zip(manifest.realized_prompts, expected_prompts, strict=True),
+        start=1,
+    ):
+        if actual != expected:
+            raise RuntimeError(
+                f"realized_prompts[{index - 1}] must exactly equal prompt_template with "
+                f"anchor_labels[{index - 1}] substituted. Per-anchor scene, camera, action, "
+                "or composition details are not morph-compatible. Regenerate the prompt session."
+            )
+
+    return manifest
+
+
 def curate_prompt_manifest(
     user_prompt: str,
     model: str = DEFAULT_TEXT_MODEL,
@@ -201,7 +253,13 @@ def curate_prompt_manifest(
     )
     raw_text = _extract_response_text(response)
     payload = parse_prompt_curation_json(raw_text)
-    return validate_prompt_curation_payload(payload, user_prompt=prompt, model=model, anchor_count=anchor_count)
+    manifest = validate_prompt_curation_payload(
+        payload,
+        user_prompt=prompt,
+        model=model,
+        anchor_count=anchor_count,
+    )
+    return validate_morph_compatibility(manifest)
 
 
 def format_manifest_summary(manifest: PromptCurationManifest) -> str:
