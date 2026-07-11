@@ -2,6 +2,7 @@ import io
 import json
 import threading
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 import numpy as np
 from PIL import Image
@@ -85,6 +86,63 @@ def test_make_handler_accepts_render_payload_shape():
         httpd.server_close()
 
     assert fake_server.payloads == [{"z": [0.1] * 7, "frame_size": 128}]
+
+
+def test_make_handler_serves_manifest_metadata():
+    class FakeRenderServer:
+        manifest = {
+            "user_prompt": "world cup players",
+            "anchor_count": 7,
+            "anchor_labels": [f"axis_{i}" for i in range(7)],
+            "model": {"provider": "openai", "name": "gpt-test"},
+        }
+
+        def render_png(self, payload):
+            return _png_bytes()
+
+    httpd = general_server.ThreadingHTTPServer(("127.0.0.1", 0), general_server.make_handler(FakeRenderServer()))
+    thread = threading.Thread(target=httpd.handle_request, daemon=True)
+    thread.start()
+    try:
+        with urlopen(f"http://127.0.0.1:{httpd.server_address[1]}/manifest", timeout=5) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+            assert response.status == 200
+            assert response.headers["Content-Type"] == "application/json"
+    finally:
+        thread.join(timeout=5)
+        httpd.server_close()
+
+    assert payload == {
+        "ok": True,
+        "user_prompt": "world cup players",
+        "anchor_count": 7,
+        "anchor_labels": [f"axis_{i}" for i in range(7)],
+        "model": {"provider": "openai", "name": "gpt-test"},
+        "server": {
+            "kind": "general_stable_diffusion",
+            "render_endpoint": "/render",
+        },
+    }
+
+
+def test_make_handler_rejects_unknown_get_path():
+    class FakeRenderServer:
+        manifest = {"anchor_count": 7, "anchor_labels": [f"axis_{i}" for i in range(7)]}
+
+        def render_png(self, payload):
+            return _png_bytes()
+
+    httpd = general_server.ThreadingHTTPServer(("127.0.0.1", 0), general_server.make_handler(FakeRenderServer()))
+    thread = threading.Thread(target=httpd.handle_request, daemon=True)
+    thread.start()
+    try:
+        with pytest.raises(HTTPError) as exc_info:
+            urlopen(f"http://127.0.0.1:{httpd.server_address[1]}/unknown", timeout=5)
+    finally:
+        thread.join(timeout=5)
+        httpd.server_close()
+
+    assert exc_info.value.code == 404
 
 
 def test_cli_smoke_loads_manifest_and_initializes_server(tmp_path):

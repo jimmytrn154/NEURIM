@@ -37,7 +37,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from src.common.config import Config
-from src.generator.anchor_session import load_prompt_session_manifest
+from src.generator.anchor_session import load_prompt_session_manifest, manifest_metadata
 
 
 def encode_anchor_prompts(pipe, prompts: Sequence[str], device: str):
@@ -126,6 +126,7 @@ class AnchorMorphRenderServer:
         softmax_temperature: float,
         log_weights_every: int,
         target_anchor: str | None,
+        manifest: dict | None = None,
     ):
         self.pipe = pipe
         self.anchor_labels = anchor_labels
@@ -141,6 +142,10 @@ class AnchorMorphRenderServer:
         self.guidance_scale = guidance_scale
         self.softmax_temperature = softmax_temperature
         self.log_weights_every = max(0, log_weights_every)
+        self.manifest = manifest or {
+            "anchor_count": len(anchor_labels),
+            "anchor_labels": list(anchor_labels),
+        }
         self._render_count = 0
         self.lock = threading.Lock()
 
@@ -192,6 +197,21 @@ class AnchorMorphRenderServer:
 
 def make_handler(render_server: AnchorMorphRenderServer):
     class Handler(BaseHTTPRequestHandler):
+        def do_GET(self) -> None:
+            if self.path != "/manifest":
+                self.send_error(404, "expected GET /manifest")
+                return
+            self._send_json(
+                {
+                    "ok": True,
+                    **render_server.manifest,
+                    "server": {
+                        "kind": "general_stable_diffusion",
+                        "render_endpoint": "/render",
+                    },
+                }
+            )
+
         def do_POST(self) -> None:
             if self.path != "/render":
                 self.send_error(404, "expected POST /render (this server has no /anchors endpoint)")
@@ -327,6 +347,7 @@ def main(argv: list[str] | None = None) -> None:
         args.temperature,
         args.log_weights_every,
         args.target_anchor,
+        manifest=manifest_metadata(manifest),
     )
 
     server = ThreadingHTTPServer((args.host, args.port), make_handler(render_server))
