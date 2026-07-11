@@ -58,15 +58,14 @@ optimizer:
   # DEFAULT_BREEDS. (The old PCA path in run_streamdiffusion_server.py used 8 -
   # the favorable end of the spec's 8-16 range - which is unrelated here.)
   search_dims: 7
-  step_size_explore: 0.25
+  step_size_explore: 1.0
   step_size_refine_min: 0.03
   step_momentum: 0.6
   noise_threshold: 0.05     # reward diffs smaller than this are EEG jitter
-  reward_window_steps: 8    # ~1s of FAA readings averaged per accept/reject
-  bounds: 1               # was 3.0; z is in anchor-bank std units (PCA whitens
-                            # per axis), so +/-1.5 still reaches every anchor
-                            # while cutting the box corner from ~8.5 to ~4.2 std,
-                            # out of the incoherent-embedding zone. Sweep 1.2-2.0.
+  reward_window_steps: 8    # ~2s of FAA readings averaged per accept/reject
+  bounds: 1.5               # breed-weight logits need enough range to let one
+                            # anchor dominate after softmax; pair with
+                            # run_stablediffusion.py --temperature 5-8.
   algorithm: "latent_turbo"   # "hill_climb" | "es_1p1" | "gp_bo" | "latent_turbo"
                             # latent_turbo = Noise-Aware Latent TuRBO: local GP +
                             # heteroscedastic noise + Thompson sampling + adaptive

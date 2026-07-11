@@ -141,6 +141,11 @@ def blend_noise_latents(breed_latents, weights: np.ndarray):
     return blended.to(dtype=breed_latents.dtype)
 
 
+def top_breeds(breeds: Sequence[str], weights: np.ndarray, n: int = 3) -> str:
+    order = np.argsort(weights)[::-1][:n]
+    return " | ".join(f"{breeds[i]} {weights[i]:.2f}" for i in order)
+
+
 # --------------------------------------------------------------------------- #
 # Server.
 # --------------------------------------------------------------------------- #
@@ -157,6 +162,7 @@ class BreedMorphRenderServer:
         num_inference_steps: int,
         guidance_scale: float,
         softmax_temperature: float,
+        log_weights_every: int,
     ):
         self.pipe = pipe
         self.breeds = breeds
@@ -168,6 +174,8 @@ class BreedMorphRenderServer:
         self.num_inference_steps = num_inference_steps
         self.guidance_scale = guidance_scale
         self.softmax_temperature = softmax_temperature
+        self.log_weights_every = max(0, log_weights_every)
+        self._render_count = 0
         self.lock = threading.Lock()
 
     def render_png(self, payload: dict) -> bytes:
@@ -186,6 +194,9 @@ class BreedMorphRenderServer:
 
         with self.lock:
             weights = softmax_weights(z, temperature=self.softmax_temperature)
+            self._render_count += 1
+            if self.log_weights_every and self._render_count % self.log_weights_every == 0:
+                print(f"[breed-morph-server] render={self._render_count} top={top_breeds(self.breeds, weights)}")
             prompt_embeds = blend_prompt_embeds(self.breed_embeds, weights)
             latents = blend_noise_latents(self.breed_latents, weights)
             with torch.inference_mode():
@@ -299,6 +310,8 @@ def main() -> None:
                         help="softmax temperature for z -> breed weights. Higher values make the same "
                              "optimizer movement snap more strongly toward one breed/species; lower values "
                              "produce smoother but more uniform blends.")
+    parser.add_argument("--log-weights-every", type=int, default=12,
+                        help="print the top breed weights every N renders; 0 disables logging.")
     parser.add_argument("--seed", type=int, default=None,
                         help="per-breed latent seed (default: config.generator.remote_diffusion_seed)")
     args = parser.parse_args()
@@ -336,7 +349,7 @@ def main() -> None:
 
     render_server = BreedMorphRenderServer(
         pipe, list(args.breeds), breed_embeds, breed_latents, frame_size,
-        device, dtype, args.steps, args.guidance_scale, args.temperature,
+        device, dtype, args.steps, args.guidance_scale, args.temperature, args.log_weights_every,
     )
 
     server = ThreadingHTTPServer((args.host, args.port), make_handler(render_server))
