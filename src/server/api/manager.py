@@ -7,7 +7,7 @@ import threading
 import time
 from collections import deque
 from collections.abc import Callable
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -33,7 +33,7 @@ FrameStoreFactory = Callable[[], FrameStore]
 
 
 def _utc_now() -> str:
-    return datetime.now(UTC).isoformat()
+    return datetime.now(timezone.utc).isoformat()
 
 
 def _slug(value: str) -> str:
@@ -68,6 +68,7 @@ class SessionManager:
         eeg_manager: EEGConnectionManager | None = None,
         curation_service: PromptCurationService | None = None,
         diffusion_client_factory: DiffusionClientFactory | None = None,
+        diffusion_process_manager: Any | None = None,
         finalizer_factory: FinalizerFactory | None = None,
         frame_store_factory: FrameStoreFactory | None = None,
         config: Config | None = None,
@@ -81,6 +82,7 @@ class SessionManager:
         self.diffusion_client_factory = diffusion_client_factory or (
             lambda server_url, timeout: DiffusionClient(server_url, timeout)
         )
+        self.diffusion_process_manager = diffusion_process_manager
         self.finalizer_factory = finalizer_factory
         self.frame_store_factory = frame_store_factory or FrameStore
         self._lock = threading.Lock()
@@ -111,7 +113,19 @@ class SessionManager:
         reward_source = self._build_reward_source(request)
         manifest = self._curate_manifest(prompt)
         manifest_path = self._write_manifest(manifest)
-        client = self.diffusion_client_factory(request.server_url, 30.0)
+        server_url = request.server_url
+        if self.diffusion_process_manager is not None:
+            with self._lock:
+                self._logs.append("[api] restarting managed diffusion server")
+            try:
+                self.diffusion_process_manager.restart(manifest_path)
+            except Exception as exc:  # noqa: BLE001
+                raise HTTPException(
+                    status_code=502,
+                    detail=f"managed diffusion startup failed: {exc}",
+                ) from exc
+            server_url = self.diffusion_process_manager.base_url
+        client = self.diffusion_client_factory(server_url, 30.0)
         remote_manifest = self._load_remote_manifest(client)
         self._validate_remote_manifest(manifest, remote_manifest)
         frame_store = self.frame_store_factory()
@@ -145,7 +159,7 @@ class SessionManager:
             self._result_refined = False
             self._finalize_error = None
             self._logs.append(f"[api] manifest: {manifest_path}")
-            self._logs.append(f"[api] render server: {request.server_url}")
+            self._logs.append(f"[api] render server: {server_url}")
             thread.start()
             return self._status_locked()
 
@@ -243,7 +257,7 @@ class SessionManager:
         return manifest
 
     def _write_manifest(self, manifest: PromptCurationManifest) -> Path:
-        stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+        stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
         output_path = self.repo_root / "data" / "processed" / "prompt_sessions" / f"{stamp}-{_slug(manifest.user_prompt)}.json"
         self.curation_service.write(manifest, output_path)
         return output_path

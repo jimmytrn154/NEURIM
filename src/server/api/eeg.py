@@ -5,7 +5,7 @@ from __future__ import annotations
 import threading
 import time
 from collections.abc import Callable
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from src.common.config import Config, emotiv_credentials
@@ -19,7 +19,7 @@ Calibrator = Callable[[Any, Any, float], Any]
 
 
 def _utc_now() -> datetime:
-    return datetime.now(UTC)
+    return datetime.now(timezone.utc)
 
 
 def _iso(value: datetime | None) -> str | None:

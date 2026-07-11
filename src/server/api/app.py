@@ -8,10 +8,11 @@ from typing import Any
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 
+from .diffusion_process import DiffusionProcessManager
 from .eeg import EEGConnectionManager
 from .manager import SessionManager
 from .models import StartSessionRequest
-from .settings import ApiSettings
+from .settings import REPO_ROOT, ApiSettings
 
 
 def create_app(
@@ -21,9 +22,21 @@ def create_app(
 ) -> FastAPI:
     api_settings = settings or ApiSettings.from_env()
     eeg = eeg_manager or EEGConnectionManager()
+    diffusion_process_manager = None
+    if api_settings.manage_diffusion:
+        diffusion_process_manager = DiffusionProcessManager(
+            repo_root=REPO_ROOT,
+            host=api_settings.diffusion_host,
+            port=api_settings.diffusion_port,
+            python_executable=api_settings.diffusion_python,
+            cuda_visible_devices=api_settings.diffusion_cuda_visible_devices,
+            model=api_settings.diffusion_model,
+            startup_timeout_s=api_settings.diffusion_startup_timeout_s,
+        )
     manager = session_manager or SessionManager(
         max_log_lines=api_settings.max_log_lines,
         eeg_manager=eeg,
+        diffusion_process_manager=diffusion_process_manager,
     )
 
     @asynccontextmanager
@@ -33,6 +46,8 @@ def create_app(
             yield
         finally:
             manager.stop()
+            if diffusion_process_manager is not None:
+                diffusion_process_manager.stop()
             eeg.close()
 
     application = FastAPI(title="NEURIM API", version="0.3.0", lifespan=lifespan)

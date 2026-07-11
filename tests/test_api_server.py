@@ -48,6 +48,23 @@ class FakeDiffusionClient:
         return b"\x89PNG\r\n\x1a\n"
 
 
+class FakeDiffusionProcessManager:
+    def __init__(self, base_url="http://127.0.0.1:8766", raise_exc=None):
+        self.base_url = base_url
+        self.raise_exc = raise_exc
+        self.restarts = []
+        self.stopped = False
+
+    def restart(self, manifest_path):
+        self.restarts.append(manifest_path)
+        if self.raise_exc is not None:
+            raise self.raise_exc
+        return {}
+
+    def stop(self):
+        self.stopped = True
+
+
 class FakeEEGManager:
     def __init__(self, ready=False):
         self.ready = ready
@@ -83,7 +100,7 @@ class FakeEEGManager:
         raise AssertionError("real session reward source should not be needed in this test")
 
 
-def _client(tmp_path, *, eeg_ready=False, remote_manifest=None):
+def _client(tmp_path, *, eeg_ready=False, remote_manifest=None, diffusion_process_manager=None):
     curation = FakeCurationService()
     eeg = FakeEEGManager(ready=eeg_ready)
     manager = SessionManager(
@@ -91,6 +108,7 @@ def _client(tmp_path, *, eeg_ready=False, remote_manifest=None):
         eeg_manager=eeg,
         curation_service=curation,
         diffusion_client_factory=lambda _url, _timeout: FakeDiffusionClient(remote_manifest),
+        diffusion_process_manager=diffusion_process_manager,
         frame_store_factory=lambda: FrameStore(tmp_path),
     )
     return TestClient(create_app(session_manager=manager, eeg_manager=eeg)), manager, eeg, curation
@@ -326,3 +344,33 @@ def test_manifest_mismatch_returns_conflict(tmp_path):
 
     assert response.status_code == 409
     assert response.json()["detail"]["error"] == "diffusion server manifest does not match curated prompt"
+
+
+def test_managed_diffusion_restarts_with_curated_manifest_before_session(tmp_path):
+    process = FakeDiffusionProcessManager(base_url="http://managed:8766")
+    client, manager, _, curation = _client(
+        tmp_path,
+        remote_manifest=_manifest("cat").to_dict(),
+        diffusion_process_manager=process,
+    )
+
+    response = client.post(
+        "/session/start",
+        json={"prompt": "cat", "mock": True, "server_url": "http://ignored:9999"},
+    )
+
+    assert response.status_code == 200
+    assert process.restarts
+    assert process.restarts[0].name.endswith("-cat.json")
+    assert curation.writes[0][1] == process.restarts[0]
+    manager.stop()
+
+
+def test_managed_diffusion_startup_failure_returns_bad_gateway(tmp_path):
+    process = FakeDiffusionProcessManager(raise_exc=RuntimeError("boom"))
+    client, _, _, _ = _client(tmp_path, diffusion_process_manager=process)
+
+    response = client.post("/session/start", json={"prompt": "cat", "mock": True})
+
+    assert response.status_code == 502
+    assert "managed diffusion startup failed" in response.json()["detail"]

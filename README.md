@@ -128,6 +128,43 @@ manifest, compares it with the private diffusion server's `GET /manifest`
 response, and starts the optimizer only if they match. The private diffusion
 server must already be running with that manifest.
 
+### API-managed local diffusion
+
+For a same-machine GPU setup, `api_server.py` can own the diffusion process.
+In this mode, each frontend prompt curates a new manifest, restarts
+`scripts/run_general_stable_diffusion.py` with that manifest, waits for
+`GET /manifest`, validates the active manifest, and then starts the optimizer.
+
+Enable it before starting the API bridge:
+
+```bash
+NEURIM_MANAGE_DIFFUSION=true \
+NEURIM_DIFFUSION_HOST=127.0.0.1 \
+NEURIM_DIFFUSION_PORT=8766 \
+NEURIM_DIFFUSION_CUDA_VISIBLE_DEVICES=4 \
+python scripts/api_server.py --host 127.0.0.1 --port 8000
+```
+
+On PowerShell:
+
+```powershell
+$env:NEURIM_MANAGE_DIFFUSION="true"
+$env:NEURIM_DIFFUSION_HOST="127.0.0.1"
+$env:NEURIM_DIFFUSION_PORT="8766"
+$env:NEURIM_DIFFUSION_CUDA_VISIBLE_DEVICES="4"
+python scripts/api_server.py --host 127.0.0.1 --port 8000
+```
+
+Optional environment variables:
+
+- `NEURIM_DIFFUSION_PYTHON`: Python executable used to launch the diffusion server.
+- `NEURIM_DIFFUSION_MODEL`: model id passed to `--model`, default `stabilityai/sd-turbo`.
+- `NEURIM_DIFFUSION_STARTUP_TIMEOUT_S`: seconds to wait for the restarted server, default `300`.
+
+Do not run `run_mock_optimizer.py` or `run_real_eeg_optimizer.py` separately in
+this mode. The frontend starts sessions through `api_server.py`, and the API
+owns the optimizer loop.
+
 ## Core Services
 
 - `src/signal_service/`: EEG sources, baseline calibration, and frontal alpha

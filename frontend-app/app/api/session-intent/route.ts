@@ -43,6 +43,15 @@ function requestNumber(value: unknown, fallback: number) {
 function backendError(payload: Record<string, unknown>, fallback: string) {
   if (typeof payload.error === "string") return payload.error;
   if (typeof payload.detail === "string") return payload.detail;
+  if (payload.detail && typeof payload.detail === "object" && !Array.isArray(payload.detail)) {
+    const detail = payload.detail as Record<string, unknown>;
+    if (typeof detail.error === "string") return detail.error;
+    if (detail.eeg && typeof detail.eeg === "object") {
+      const eeg = detail.eeg as Record<string, unknown>;
+      if (typeof eeg.last_error === "string" && eeg.last_error) return eeg.last_error;
+      if (typeof eeg.state === "string") return `EEG is not ready: ${eeg.state}`;
+    }
+  }
   if (Array.isArray(payload.detail)) {
     return payload.detail
       .map((item) => {

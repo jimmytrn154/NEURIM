@@ -31,6 +31,16 @@ export interface NeurimSession {
   reset: () => void;
 }
 
+class SessionStartError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.name = "SessionStartError";
+    this.status = status;
+  }
+}
+
 export function useSession(): NeurimSession {
   const [active, setActive] = useState(false);
   const [submittedPrompt, setSubmittedPrompt] = useState("");
@@ -134,13 +144,23 @@ export function useSession(): NeurimSession {
         body: JSON.stringify({ prompt }),
       });
       const json = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(json.error || "Failed to start session");
+      if (!response.ok) {
+        throw new SessionStartError(json.error || "Failed to start session", response.status);
+      }
       const intent = json as SessionIntentResponse;
       setSubmittedPrompt(intent.prompt || prompt);
       setSessionId(intent.session_id);
       setBackendPhase(intent.backend_session.phase || "running");
       setStatusText("Session running");
     } catch (error) {
+      if (error instanceof SessionStartError && error.status !== 502) {
+        setActive(false);
+        setOffline(false);
+        setSessionId(null);
+        setBackendPhase("idle");
+        setStatusText(error.message);
+        return;
+      }
       const fallback = makeMockSession(prompt, Date.now() / 1000);
       setSubmittedPrompt(prompt);
       setSessionId(`local-${Date.now().toString(36).slice(-6)}`);
