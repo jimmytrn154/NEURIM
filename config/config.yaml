@@ -30,10 +30,10 @@ faa:
   channel_left: "F3"
   channel_right: "F4"
   channel_pairs:
-    - ["F7", "F8"]
-    - ["AF3", "AF4"]
+    # - ["F7", "F8"]
+    # - ["AF3", "AF4"]
     - ["F3", "F4"]
-    - ["FC5", "FC6"]
+    # - ["FC5", "FC6"]
   pair_weights:
     "F3/F4": 1.0
     "F7/F8": 0.75
