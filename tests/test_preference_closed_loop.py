@@ -20,6 +20,7 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -86,11 +87,16 @@ def _run_loop(model_path, signal_gain, seed, steps=35):
 @pytest.fixture(scope="module")
 def trained_model(tmp_path_factory):
     out = tmp_path_factory.mktemp("pref")
+    stimuli = out / "stimuli"
+    stimuli.mkdir()
+    for index in range(N_BREEDS):
+        color = (30 + index * 25, 50 + index * 20, 210 - index * 20)
+        Image.new("RGB", (24, 24), color).save(stimuli / f"stimulus_{index}.png")
     csv = out / "trials.csv"
     model = out / "model.joblib"
     subprocess.run(
         [sys.executable, "scripts/record_reward_trials.py", "--mock", "--sessions", "3",
-         "--trials", "90", "--signal-gain", "0.6", "--stimuli-dir", "scripts/data/stimuli",
+         "--trials", "90", "--signal-gain", "0.6", "--stimuli-dir", str(stimuli),
          "--out", str(csv)],
         cwd=ROOT, check=True, capture_output=True,
     )

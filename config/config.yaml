@@ -68,13 +68,8 @@ faa:
 # converges noticeably more reliably than 12+ within a demo-length step
 # budget - see tests/test_optimizer.py and the tuning notes in README.md.
 optimizer:
-  # For run_stablediffusion.py OR run_general_stable_diffusion.py this MUST
-  # equal the server's anchor count: every z dimension directly IS one
-  # breed/anchor weight (no PCA compression), so dimensionality is exact.
-  # 7 == the current compatibility contract for both the dog-breed runner and
-  # the generalized prompt-session runner. (The old PCA path in
-  # run_streamdiffusion_server.py used 8 - the favorable end of the spec's
-  # 8-16 range - which is unrelated here.)
+  # Must equal the active manifest's anchor count. Every z dimension directly
+  # represents one anchor logit, so dimensionality is exact.
   search_dims: 7
   step_size_explore: 1.0
   step_size_refine_min: 0.03
@@ -83,7 +78,6 @@ optimizer:
   reward_window_steps: 8    # ~2s of FAA readings averaged per accept/reject
   bounds: 1.5               # anchor-weight logits need enough range to let one
                             # anchor dominate after softmax; pair with
-                            # run_stablediffusion.py or
                             # run_general_stable_diffusion.py --temperature 5-8.
   algorithm: "latent_turbo"   # "hill_climb" | "es_1p1" | "gp_bo" | "latent_turbo"
                             # latent_turbo = Noise-Aware Latent TuRBO: local GP +
@@ -118,12 +112,7 @@ generator:
   remote_diffusion_url: "http://localhost:8766"
   remote_diffusion_timeout_s: 30.0
   remote_diffusion_seed: 0                  # pinned seed -> smooth morph keyframes
-  # ~5 true renders/s for run_diffusion_server.py (SDXL-Turbo, crossfaded up to
-  # target_fps by the client). If instead running run_streamdiffusion_server.py
-  # (SD-Turbo via StreamDiffusion, genuinely ~30-100fps), lower this toward
-  # 0.02-0.03 so the background fetch loop runs near target_fps directly - the
-  # client crossfade code is unchanged either way, just becomes a near-instant
-  # blend once keyframes arrive fast enough.
+  # Delay target retained for generator backends that fetch remote keyframes.
   remote_diffusion_keyframe_interval_s: 0.2
   openai_image_model: "gpt-image-2"
   openai_text_model: "gpt-5-mini"

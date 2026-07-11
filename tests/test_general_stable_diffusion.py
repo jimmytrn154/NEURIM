@@ -8,7 +8,9 @@ import numpy as np
 from PIL import Image
 import pytest
 
-import scripts.run_general_stable_diffusion as general_server
+from src.server.diffusion import cli as diffusion_cli
+from src.server.diffusion import http as diffusion_http
+from src.server.diffusion import renderer as general_server
 
 
 def _png_bytes(color=(0, 255, 0)):
@@ -66,7 +68,7 @@ def test_make_handler_accepts_render_payload_shape():
             return _png_bytes()
 
     fake_server = FakeRenderServer()
-    httpd = general_server.ThreadingHTTPServer(("127.0.0.1", 0), general_server.make_handler(fake_server))
+    httpd = diffusion_http.ThreadingHTTPServer(("127.0.0.1", 0), diffusion_http.make_handler(fake_server))
     thread = threading.Thread(target=httpd.handle_request, daemon=True)
     thread.start()
     try:
@@ -100,7 +102,7 @@ def test_make_handler_serves_manifest_metadata():
         def render_png(self, payload):
             return _png_bytes()
 
-    httpd = general_server.ThreadingHTTPServer(("127.0.0.1", 0), general_server.make_handler(FakeRenderServer()))
+    httpd = diffusion_http.ThreadingHTTPServer(("127.0.0.1", 0), diffusion_http.make_handler(FakeRenderServer()))
     thread = threading.Thread(target=httpd.handle_request, daemon=True)
     thread.start()
     try:
@@ -132,7 +134,7 @@ def test_make_handler_rejects_unknown_get_path():
         def render_png(self, payload):
             return _png_bytes()
 
-    httpd = general_server.ThreadingHTTPServer(("127.0.0.1", 0), general_server.make_handler(FakeRenderServer()))
+    httpd = diffusion_http.ThreadingHTTPServer(("127.0.0.1", 0), diffusion_http.make_handler(FakeRenderServer()))
     thread = threading.Thread(target=httpd.handle_request, daemon=True)
     thread.start()
     try:
@@ -145,7 +147,7 @@ def test_make_handler_rejects_unknown_get_path():
     assert exc_info.value.code == 404
 
 
-def test_cli_smoke_loads_manifest_and_initializes_server(tmp_path):
+def test_cli_smoke_loads_manifest_and_initializes_server(tmp_path, monkeypatch):
     manifest_path = tmp_path / "session.json"
     manifest_path.write_text(
         json.dumps(
@@ -190,34 +192,22 @@ def test_cli_smoke_loads_manifest_and_initializes_server(tmp_path):
         }
         return "anchor-latents"
 
-    class FakeHTTPServer:
-        def __init__(self, addr, handler):
-            captured["server_addr"] = addr
-            captured["handler"] = handler
+    class FakeDiffusionServer:
+        def __init__(self, renderer, host, port):
+            captured["server_addr"] = (host, port)
+            captured["renderer"] = renderer
 
         def serve_forever(self):
             captured["served"] = True
 
-    original_load_pipeline = general_server.load_pipeline
-    original_encode = general_server.encode_anchor_prompts
-    original_make_latents = general_server.make_anchor_latents
-    original_make_generator = general_server.make_cpu_generator
-    original_http_server = general_server.ThreadingHTTPServer
-    general_server.load_pipeline = fake_load_pipeline
-    general_server.encode_anchor_prompts = fake_encode_anchor_prompts
-    general_server.make_anchor_latents = fake_make_anchor_latents
-    general_server.make_cpu_generator = lambda seed: {"seed": seed}
-    general_server.ThreadingHTTPServer = FakeHTTPServer
-    try:
-        general_server.main(
-            ["--session-manifest", str(manifest_path), "--host", "127.0.0.1", "--port", "9999", "--size", "512"]
-        )
-    finally:
-        general_server.load_pipeline = original_load_pipeline
-        general_server.encode_anchor_prompts = original_encode
-        general_server.make_anchor_latents = original_make_latents
-        general_server.make_cpu_generator = original_make_generator
-        general_server.ThreadingHTTPServer = original_http_server
+    monkeypatch.setattr(diffusion_cli, "load_pipeline", fake_load_pipeline)
+    monkeypatch.setattr(diffusion_cli, "encode_anchor_prompts", fake_encode_anchor_prompts)
+    monkeypatch.setattr(diffusion_cli, "make_anchor_latents", fake_make_anchor_latents)
+    monkeypatch.setattr(diffusion_cli, "make_cpu_generator", lambda seed: {"seed": seed})
+    monkeypatch.setattr(diffusion_cli, "DiffusionServer", FakeDiffusionServer)
+    diffusion_cli.main(
+        ["--session-manifest", str(manifest_path), "--host", "127.0.0.1", "--port", "9999", "--size", "512"]
+    )
 
     assert captured["model_id"] == "stabilityai/sd-turbo"
     assert captured["prompts"] == [f"prompt {i}" for i in range(7)]

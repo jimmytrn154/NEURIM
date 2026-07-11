@@ -21,13 +21,13 @@ candidates via --candidate-dir. For mock/offline pipeline tests a single
 Examples:
     # Offline: synthesize 3 mock sessions with a decodable signal (single pool)
     python scripts/record_reward_trials.py --mock --sessions 3 \
-        --stimuli-dir scripts/data/stimuli \
-        --out scripts/data/reward_training/pref_trials.csv
+        --stimuli-dir data/stimuli \
+        --out data/reward_training/pref_trials.csv
 
     # Real headset: real-photo targets, AI-generated A/B candidates
     python scripts/record_reward_trials.py --present --subject S01 --session-id S01_day1 \
         --target-dir data/targets_real --candidate-dir data/candidates_ai --embed clip \
-        --out scripts/data/reward_training/S01_day1.csv
+        --out data/reward_training/S01_day1.csv
 """
 
 from __future__ import annotations
@@ -458,7 +458,7 @@ def main() -> None:
     parser.add_argument("--candidate-dir", type=Path, default=None,
                         help="AI-generated images shown as A/B; pair with --target-dir")
     parser.add_argument("--out", type=Path,
-                        default=Path("scripts/data/reward_training/pref_trials.csv"))
+                        default=Path("data/reward_training/pref_trials.csv"))
     parser.add_argument("--subject", default="S00")
     parser.add_argument("--session-id", default=None, help="single-session id (real hardware)")
     parser.add_argument("--sessions", type=int, default=1, help="synthesize N mock sessions")
