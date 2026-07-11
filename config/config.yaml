@@ -110,17 +110,17 @@ generator:
   # enough to crossfade smoothly. ~10 prompts fully span the 8-dim search space
   # (PCA yields up to n_prompts-1 meaningful directions after centering).
   anchor_prompts:
-    - "a close portrait photo of a fluffy golden-brown puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a pale cream puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a chocolate-brown puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a soft grey puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a black and white puppy sitting on soft white bedding, floppy ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a fluffy golden puppy sitting on soft white bedding, small pointed ears, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a fluffy golden puppy sitting on soft white bedding, floppy ears, wearing a coral-orange collar, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a fluffy golden puppy sitting on soft white bedding, floppy ears, wearing a soft blue collar, black button nose, glossy dark eyes, gentle expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a fluffy golden puppy on soft white bedding with a slight curious head tilt, floppy ears, black button nose, glossy dark eyes, alert happy expression, soft diffused daylight, shallow depth of field"
-    - "a close portrait photo of a fluffy golden puppy lying relaxed on soft white bedding, floppy ears, black button nose, glossy dark eyes, sleepy calm expression, soft diffused daylight, shallow depth of field"
-
+anchor_prompts:
+  - "A white cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a calm expression and a forward-facing gaze."
+  - "A cream cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a relaxed expression and a slightly left-facing gaze."
+  - "A pale orange cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a gentle expression and a slightly right-facing gaze."
+  - "A orange tabby cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a curious expression and a forward-facing gaze."
+  - "A sgray tabby cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with an attentive expression and a slightly left-facing gaze."
+  - "A solid gray cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with an alert expression and a forward-facing gaze."
+  - "A bluish-gray cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with an observant expression and a slightly right-facing gaze."
+  - "A dark brown cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a composed expression and a forward-facing gaze." 
+  - "A black cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a quiet expression and a slightly left-facing gaze."
+  - "A black-and-white cat sits centered against a plain neutral background, shown at medium distance under soft studio lighting in a realistic style, with a calm expression and a slightly right-facing gaze."
 
 loop:
   target_latency_ms: 250          # perceive -> acquire -> decode -> generate, end to end
