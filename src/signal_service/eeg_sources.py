@@ -106,10 +106,6 @@ class EmotivCortexSource:
         # MARKER_HARDWARE, MARKERS], so channels must be mapped by label, not
         # by naive position.
         self._eeg_cols: list[str] | None = None
-        self._dev_cols: list[str] | None = None
-        self._headset: dict[str, Any] | None = None
-        self._eeg_subscribed = False
-        self._last_device_quality: dict[str, Any] | None = None
 
     def _next_id(self) -> int:
         self._req_id += 1
@@ -188,39 +184,7 @@ class EmotivCortexSource:
             f"(last status: {last_status})"
         )
 
-    @staticmethod
-    def classify_headset(headset: dict[str, Any]) -> str:
-        if bool(headset.get("isVirtual")):
-            return "virtual"
-        headset_id = str(headset.get("id", "")).upper()
-        if headset.get("headbandPosition") in {"back", "top"} or headset_id.startswith("EPOCX-"):
-            return "physical_epoc_x"
-        return "unsupported"
-
-    @staticmethod
-    def headset_model(headset: dict[str, Any]) -> str:
-        headset_id = str(headset.get("id", "")).upper()
-        if headset.get("headbandPosition") in {"back", "top"} or headset_id.startswith("EPOCX-"):
-            return "EPOC X"
-        mode = str((headset.get("settings") or {}).get("mode", "")).strip()
-        if mode == "EPOCPLUS" or headset_id.startswith("EPOCPLUS-"):
-            return "EPOC+"
-        return mode or headset_id.split("-", 1)[0] or "Unknown"
-
-    @classmethod
-    def select_preferred_headset(cls, headsets: list[dict[str, Any]]) -> dict[str, Any]:
-        if not headsets:
-            raise RuntimeError("No EMOTIV headset found by Cortex")
-        rank = {"physical_epoc_x": 0, "virtual": 1, "unsupported": 2}
-        return min(
-            headsets,
-            key=lambda item: (
-                rank[cls.classify_headset(item)],
-                0 if item.get("status") == "connected" else 1,
-            ),
-        )
-
-    def _select_headset(self) -> dict[str, Any]:
+    def _select_headset(self) -> str:
         self._call("controlDevice", {"command": "refresh"})
 
         deadline = time.monotonic() + self.connect_timeout_s
@@ -235,7 +199,8 @@ class EmotivCortexSource:
             target = f" matching {self.headset_id!r}" if self.headset_id else ""
             raise RuntimeError(f"No EMOTIV headset{target} found by Cortex")
 
-        headset = self.select_preferred_headset(headsets)
+        connected = [h for h in headsets if h.get("status") == "connected"]
+        headset = connected[0] if connected else headsets[0]
         headset_id = headset["id"]
 
         if headset.get("status") != "connected":
@@ -249,21 +214,13 @@ class EmotivCortexSource:
             )
 
         self.headset_id = headset_id
-        self._headset = dict(headset)
-        return dict(headset)
+        return headset_id
 
     @staticmethod
     def _extract_eeg_cols(subscription_result: dict) -> list[str] | None:
         """Return Cortex EEG column labels from a subscribe response."""
         for item in subscription_result.get("success", []):
             if item.get("streamName") == "eeg" and item.get("cols"):
-                return list(item["cols"])
-        return None
-
-    @staticmethod
-    def _extract_stream_cols(subscription_result: dict, stream_name: str) -> list[str] | None:
-        for item in subscription_result.get("success", []):
-            if item.get("streamName") == stream_name and item.get("cols"):
                 return list(item["cols"])
         return None
 
@@ -322,8 +279,7 @@ class EmotivCortexSource:
             "authorize", {"clientId": self.client_id, "clientSecret": self.client_secret, "debit": 10}
         )
         self._cortex_token = auth["cortexToken"]
-        headset = self._select_headset()
-        headset_id = str(headset["id"])
+        headset_id = self._select_headset()
         session = self._call(
             "createSession",
             {"cortexToken": self._cortex_token, "headset": headset_id, "status": "active"},
@@ -334,73 +290,18 @@ class EmotivCortexSource:
             {
                 "cortexToken": self._cortex_token,
                 "session": self._session_id,
-                "streams": ["dev"],
-            },
-        )
-        self._dev_cols = self._extract_stream_cols(subscription, "dev")
-
-    def headset_info(self) -> dict[str, Any]:
-        if self._headset is None:
-            raise RuntimeError("Cortex headset metadata is unavailable; call connect() first")
-        return dict(self._headset)
-
-    def _ensure_eeg_subscription(self) -> None:
-        if self._eeg_subscribed:
-            return
-        if not self._cortex_token or not self._session_id:
-            raise RuntimeError("Cortex session is unavailable; call connect() first")
-        subscription = self._call(
-            "subscribe",
-            {
-                "cortexToken": self._cortex_token,
-                "session": self._session_id,
                 "streams": ["eeg"],
             },
         )
         self._eeg_cols = self._extract_eeg_cols(subscription)
-        self._eeg_subscribed = True
-
-    def _parse_device_quality(self, values: list[Any]) -> dict[str, Any]:
-        cols = self._dev_cols or []
-        mapped = dict(zip(cols, values))
-        reserved = {"Battery", "BatteryPercent", "Signal", "OVERALL"}
-        sensors = {
-            key: float(value)
-            for key, value in mapped.items()
-            if key not in reserved and isinstance(value, (int, float))
-        }
-        result = {
-            "battery_percent": mapped.get("BatteryPercent"),
-            "battery": mapped.get("Battery"),
-            "signal": mapped.get("Signal"),
-            "overall": mapped.get("OVERALL"),
-            "sensors": sensors,
-        }
-        self._last_device_quality = result
-        return result
-
-    def read_device_quality(self) -> dict[str, Any]:
-        import json
-
-        assert self._ws is not None, "call connect() first"
-        while True:
-            with self._io_lock:
-                msg = json.loads(self._ws.recv())
-            if "dev" in msg:
-                return self._parse_device_quality(msg["dev"])
 
     def stream(self, channels: list[str] | None = None) -> Iterator[tuple[float, dict[str, Any]]]:
         import json
 
         assert self._ws is not None, "call connect() first"
-        if self._session_id is not None:
-            self._ensure_eeg_subscription()
         while True:
             with self._io_lock:
                 msg = json.loads(self._ws.recv())
-            if "dev" in msg:
-                self._parse_device_quality(msg["dev"])
-                continue
             if "eeg" not in msg:
                 continue
             values = msg["eeg"]
@@ -444,10 +345,6 @@ class EmotivCortexSource:
         self._cortex_token = None
         self._session_id = None
         self._eeg_cols = None
-        self._dev_cols = None
-        self._headset = None
-        self._eeg_subscribed = False
-        self._last_device_quality = None
 
 
 class BrainFlowLSLSource:

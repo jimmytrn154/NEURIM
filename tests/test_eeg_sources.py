@@ -93,34 +93,6 @@ def test_emotiv_extracts_eeg_cols_from_subscribe_result():
         "MARKERS",
     ]
 
-
-def test_emotiv_classifies_and_prefers_physical_epoc_x():
-    virtual = {"id": "EPOCX-VIRTUAL", "isVirtual": True, "status": "connected"}
-    physical = {
-        "id": "EPOCX-PHYSICAL",
-        "isVirtual": False,
-        "headbandPosition": "top",
-        "status": "connected",
-    }
-    epoc_plus = {"id": "EPOCPLUS-1234", "isVirtual": False, "status": "connected"}
-
-    assert EmotivCortexSource.classify_headset(virtual) == "virtual"
-    assert EmotivCortexSource.classify_headset(physical) == "physical_epoc_x"
-    assert EmotivCortexSource.classify_headset(epoc_plus) == "unsupported"
-    assert EmotivCortexSource.select_preferred_headset([virtual, epoc_plus, physical]) is physical
-
-
-def test_emotiv_parses_device_quality_columns():
-    source = EmotivCortexSource()
-    source._dev_cols = ["Battery", "Signal", "AF3", "F3", "OVERALL", "BatteryPercent"]
-
-    quality = source._parse_device_quality([3, 0.9, 4, 2, 82, 75])
-
-    assert quality["battery_percent"] == 75
-    assert quality["signal"] == 0.9
-    assert quality["overall"] == 82
-    assert quality["sensors"] == {"AF3": 4.0, "F3": 2.0}
-
 def test_emotiv_formats_unpublished_app_error_with_owner_hint():
     message = EmotivCortexSource._format_api_error(
         "authorize",

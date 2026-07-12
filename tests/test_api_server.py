@@ -84,14 +84,6 @@ class FakeEEGManager:
         self.retry_count += 1
         return self.status()
 
-    def start_calibration(self):
-        self.calibration_requested = True
-        return self.status()
-
-    def set_demo_mode(self, enabled):
-        self.demo_enabled = enabled
-        return self.status()
-
     def status(self):
         return {
             "state": "ready" if self.ready else "error",
@@ -137,18 +129,6 @@ def test_eeg_status_and_retry(tmp_path):
 
     assert response.status_code == 200
     assert eeg.retry_count == 1
-
-
-def test_eeg_calibration_and_demo_controls(tmp_path):
-    client, _, eeg, _ = _client(tmp_path)
-
-    calibrate = client.post("/eeg/calibrate")
-    demo = client.post("/eeg/demo", json={"enabled": True})
-
-    assert calibrate.status_code == 200
-    assert eeg.calibration_requested is True
-    assert demo.status_code == 200
-    assert eeg.demo_enabled is True
 
 
 def test_start_mock_session_curates_manifest_and_starts_thread(tmp_path):

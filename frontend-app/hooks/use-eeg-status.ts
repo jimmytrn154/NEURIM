@@ -16,8 +16,6 @@ export interface EegStatusHook {
   // true while a manual retry request is in flight.
   retrying: boolean;
   retry: () => Promise<void>;
-  calibrate: () => Promise<void>;
-  setDemoMode: (enabled: boolean) => Promise<void>;
 }
 
 function isEegStatus(value: unknown): value is EegStatus {
@@ -78,7 +76,7 @@ export function useEegStatus(): EegStatusHook {
     // Optimistically flip to connecting so the animation shows without waiting
     // for the connector thread to advance past the reset "disconnected" state.
     setStatus((prev) =>
-      prev ? { ...prev, state: "scanning", last_error: null, next_retry_at: null } : prev
+      prev ? { ...prev, state: "connecting", last_error: null, next_retry_at: null } : prev
     );
     try {
       const res = await fetch("/api/eeg-retry", { method: "POST", cache: "no-store" });
@@ -107,39 +105,6 @@ export function useEegStatus(): EegStatusHook {
     }
   }, []);
 
-  const postStatus = useCallback(async (url: string, body?: object) => {
-    setRetrying(true);
-    try {
-      const res = await fetch(url, {
-        method: "POST",
-        headers: body ? { "content-type": "application/json" } : undefined,
-        body: body ? JSON.stringify(body) : undefined,
-        cache: "no-store",
-      });
-      const json = await res.json().catch(() => null);
-      if (!res.ok || !isEegStatus(json)) {
-        const detail = (json as { detail?: unknown; error?: unknown } | null)?.detail
-          ?? (json as { error?: unknown } | null)?.error;
-        throw new Error(typeof detail === "string" ? detail : `EEG request failed with HTTP ${res.status}`);
-      }
-      if (mounted.current) {
-        setStatus(json);
-        setReachable(true);
-        setError(null);
-      }
-    } catch (actionError) {
-      if (mounted.current) setError(actionError instanceof Error ? actionError.message : String(actionError));
-    } finally {
-      if (mounted.current) setRetrying(false);
-    }
-  }, []);
-
-  const calibrate = useCallback(() => postStatus("/api/eeg-calibrate"), [postStatus]);
-  const setDemoMode = useCallback(
-    (enabled: boolean) => postStatus("/api/eeg-demo", { enabled }),
-    [postStatus],
-  );
-
   useEffect(() => {
     mounted.current = true;
     // Deferred so the first poll runs as a timer callback rather than a
@@ -153,5 +118,5 @@ export function useEegStatus(): EegStatusHook {
     };
   }, [poll]);
 
-  return { status, reachable, error, loading, retrying, retry, calibrate, setDemoMode };
+  return { status, reachable, error, loading, retrying, retry };
 }

@@ -12,7 +12,7 @@ from .diffusion_process import DiffusionProcessManager
 from .diffusion_supervisor_client import RemoteDiffusionSupervisorClient
 from .eeg import EEGConnectionManager
 from .manager import SessionManager
-from .models import DemoModeRequest, StartSessionRequest
+from .models import StartSessionRequest
 from .settings import REPO_ROOT, ApiSettings
 
 
@@ -82,24 +82,6 @@ def create_app(
     @application.post("/eeg/retry")
     def eeg_retry() -> dict[str, Any]:
         return eeg.retry_now()
-
-    @application.post("/eeg/calibrate")
-    def eeg_calibrate() -> dict[str, Any]:
-        try:
-            return eeg.start_calibration()
-        except RuntimeError as exc:
-            from fastapi import HTTPException
-
-            raise HTTPException(status_code=409, detail=str(exc)) from exc
-
-    @application.post("/eeg/demo")
-    def eeg_demo(request: DemoModeRequest) -> dict[str, Any]:
-        try:
-            return eeg.set_demo_mode(request.enabled)
-        except RuntimeError as exc:
-            from fastapi import HTTPException
-
-            raise HTTPException(status_code=409, detail=str(exc)) from exc
 
     @application.post("/session/start")
     def start_session(request: StartSessionRequest) -> dict[str, Any]:

@@ -42,11 +42,6 @@ class EEGConfig:
     device: str = "EPOC_X"
     channels: list[str] = field(default_factory=list)
     sample_rate_hz: int = 128
-    min_wireless_signal: float = 0.8
-    min_overall_contact_quality: float = 70.0
-    min_sensor_contact_quality: float = 2.0
-    quality_stable_seconds: float = 5.0
-    low_battery_percent: float = 10.0
 
 
 @dataclass

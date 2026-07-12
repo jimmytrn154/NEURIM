@@ -22,13 +22,6 @@ eeg:
     - F8
     - AF4
   sample_rate_hz: 128
-  # Physical EPOC X fitting gate. The eight FAA channels are blocking; other
-  # sensors are displayed as warnings but do not prevent calibration.
-  min_wireless_signal: 0.8
-  min_overall_contact_quality: 70
-  min_sensor_contact_quality: 2
-  quality_stable_seconds: 5
-  low_battery_percent: 10
 
 # Streaming signal conditioning (src/signal_service/preprocessing.py), applied
 # before band power / FAA. Without this the raw frontal channels are dominated

@@ -104,35 +104,11 @@ export function decodeFrameSrc(msg: FrameMessage): string {
 export type EegState =
   | "unknown"
   | "disconnected"
-  | "scanning"
-  | "device_validation"
-  | "fitting"
-  | "ready_to_calibrate"
+  | "connecting"
+  | "connected"
   | "calibrating"
   | "ready"
   | "error";
-
-export type EegDevice = {
-  id: string;
-  name: string;
-  model: string;
-  is_virtual: boolean;
-  connected_by: string | null;
-  battery_percent: number | null;
-  signal: number | null;
-  sensors: string[];
-  classification: "physical_epoc_x" | "virtual" | "unsupported";
-};
-
-export type EegQuality = {
-  overall: number | null;
-  signal: number | null;
-  stable_seconds: number;
-  required_stable_seconds: number;
-  sensors: Record<string, number>;
-  blocking_reasons: string[];
-  warnings: string[];
-};
 
 export type EegStatus = {
   state: EegState;
@@ -143,8 +119,4 @@ export type EegStatus = {
   last_connected_at: string | null;
   last_calibrated_at: string | null;
   next_retry_at: string | null;
-  mode: "real" | "demo";
-  device: EegDevice | null;
-  quality: EegQuality;
-  can_calibrate: boolean;
 };
