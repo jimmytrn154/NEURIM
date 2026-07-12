@@ -2,9 +2,10 @@
 
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Sphere } from "@react-three/drei";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import type { EEGFeatures } from "@/lib/neurim-types";
+import { makeSyntheticEegFeatures } from "@/lib/mock-frame";
 import { cn } from "@/lib/utils";
 
 const fallbackPositions: Record<string, [number, number, number]> = {
@@ -24,8 +25,6 @@ const fallbackPositions: Record<string, [number, number, number]> = {
   AF4: [0.42, 0.88, 0.22],
 };
 
-const channelNames = Object.keys(fallbackPositions);
-
 function normalizeChannels(features?: EEGFeatures | null, reward = 0) {
   if (features?.channels?.length) {
     const powers = features.channels.map((c) => Math.log1p(Math.max(0, c.alpha_power ?? 0)));
@@ -36,11 +35,10 @@ function normalizeChannels(features?: EEGFeatures | null, reward = 0) {
       intensity: Math.min(1, Math.max(0.06, powers[index] / max)),
     }));
   }
-
-  return channelNames.map((name, index) => ({
+  return Object.keys(fallbackPositions).map((name) => ({
     name,
     position: fallbackPositions[name],
-    intensity: 0.22 + 0.36 * Math.abs(Math.sin(index * 0.7 + reward * 2.8)),
+    intensity: 0.22 + Math.abs(reward) * 0.28,
   }));
 }
 
@@ -110,6 +108,25 @@ export function BrainActivity3D({
   reward: number;
   className?: string;
 }) {
+  const [syntheticFeatures, setSyntheticFeatures] = useState<EEGFeatures | null>(null);
+
+  useEffect(() => {
+    if (features?.channels?.length) {
+      setSyntheticFeatures(null);
+      return;
+    }
+    const update = () => {
+      setSyntheticFeatures(
+        makeSyntheticEegFeatures(reward, performance.now() / 1000, "brain-activity-3d"),
+      );
+    };
+    update();
+    const interval = window.setInterval(update, 160);
+    return () => window.clearInterval(interval);
+  }, [features, reward]);
+
+  const displayFeatures = features?.channels?.length ? features : syntheticFeatures;
+
   return (
     <div className={cn("h-[330px] overflow-hidden rounded-md border bg-[#091013]", className)}>
       <Canvas camera={{ position: [0, 0.1, 3.7], fov: 42 }} dpr={[1, 1.75]}>
@@ -117,7 +134,7 @@ export function BrainActivity3D({
         <pointLight position={[2, 2, 3]} intensity={1.6} color="#f062a6" />
         <pointLight position={[-2.4, 0.8, 2]} intensity={1.1} color="#2dd4e0" />
         <BrainMesh reward={reward} />
-        <ElectrodeNodes features={features} reward={reward} />
+        <ElectrodeNodes features={displayFeatures} reward={reward} />
         <OrbitControls
           enablePan={false}
           enableZoom

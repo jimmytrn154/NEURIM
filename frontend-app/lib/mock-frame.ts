@@ -2,7 +2,7 @@
 // verbatim from the original neurim-dashboard monolith so the redesign stays
 // reviewable with no backend running.
 
-import type { FrameMessage } from "@/lib/neurim-types";
+import type { EEGFeatures, FrameMessage } from "@/lib/neurim-types";
 
 export const examplePrompts = [
   "A calm golden retriever puppy on white bedding",
@@ -10,7 +10,7 @@ export const examplePrompts = [
   "A soft cinematic portrait with warm studio light",
 ];
 
-const epocPositions: Record<string, [number, number, number]> = {
+export const epocPositions: Record<string, [number, number, number]> = {
   AF3: [-0.42, 0.88, 0.22],
   F7: [-0.86, 0.58, 0.04],
   F3: [-0.46, 0.55, 0.36],
@@ -39,6 +39,55 @@ function promptHash(input: string) {
 function seededUnit(seed: number, index: number) {
   const value = Math.sin(seed * 0.00001 + index * 12.9898) * 43758.5453;
   return value - Math.floor(value);
+}
+
+export function makeSyntheticEegFeatures(
+  reward: number,
+  t: number,
+  seedSource = "live-signal",
+): EEGFeatures {
+  const seed = promptHash(seedSource);
+  const clippedReward = Math.max(-1, Math.min(1, reward));
+  const phase = t * 1.9;
+
+  const channels = Object.entries(epocPositions).map(([name, position], index) => {
+    const lateral = position[0] >= 0 ? 1 : -1;
+    const rhythmic = 0.5 + 0.5 * Math.sin(phase + index * 0.63 + seededUnit(seed, index) * Math.PI * 2);
+    const shimmer = 0.5 + 0.5 * Math.sin(phase * 2.3 + index * 0.41);
+    const alphaPower = Math.max(
+      0.08,
+      0.18
+        + rhythmic * 1.05
+        + shimmer * 0.34
+        + Math.max(0, clippedReward * lateral) * 0.52
+        + Math.abs(clippedReward) * 0.14,
+    );
+    const signedValue =
+      lateral * clippedReward * 5.2
+      + Math.sin(phase * 1.35 + index * 0.82) * 2.6
+      + (seededUnit(seed, index + 64) - 0.5) * 1.6;
+    const quality = Math.max(
+      0.58,
+      Math.min(0.98, 0.76 + Math.sin(phase * 0.4 + index * 0.35) * 0.08),
+    );
+    return {
+      name,
+      value: Number(signedValue.toFixed(3)),
+      alpha_power: Number(alphaPower.toFixed(3)),
+      quality: Number(quality.toFixed(3)),
+      position,
+    };
+  });
+
+  return {
+    channels,
+    faa: {
+      raw: Number((clippedReward * 0.3 + Math.sin(phase * 0.7) * 0.05).toFixed(3)),
+      reward: Number(clippedReward.toFixed(3)),
+      left_channel: "F3",
+      right_channel: "F4",
+    },
+  };
 }
 
 function makeMockImageSrc(seed: number) {
@@ -83,15 +132,7 @@ export function makeMockSession(prompt: string, t: number): MockSession {
   const z = Array.from({ length: 8 }, (_, index) =>
     Number((seededUnit(seed, index + 16) * 2 - 1).toFixed(3))
   );
-  const channels = Object.entries(epocPositions).map(([name, position], index) => ({
-    name,
-    value: Number(((seededUnit(seed, index + 32) - 0.5) * 18).toFixed(3)),
-    alpha_power: Number(
-      (0.2 + seededUnit(seed, index + 48) * 1.4 + Math.max(0, reward) * 0.35).toFixed(3)
-    ),
-    quality: Number((0.72 + seededUnit(seed, index + 64) * 0.22).toFixed(3)),
-    position,
-  }));
+  const synthetic = makeSyntheticEegFeatures(reward, t, prompt);
 
   return {
     candidateSrc: makeMockImageSrc(seed),
@@ -104,12 +145,10 @@ export function makeMockSession(prompt: string, t: number): MockSession {
       state: "explore",
       reward_estimate: reward,
       eeg_features: {
-        channels,
+        ...synthetic,
         faa: {
+          ...synthetic.faa,
           raw: rawFaa,
-          reward,
-          left_channel: "F3",
-          right_channel: "F4",
         },
       },
     },

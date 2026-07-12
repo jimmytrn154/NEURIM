@@ -176,7 +176,7 @@ class AnchorMorphRenderer:
         with self._lock:
             weights = softmax_weights(z_array, temperature=self.softmax_temperature)
             self._render_count += 1
-            self._log_weights(weights)
+            self._log_weights(weights, payload)
             prompt_embeds = blend_prompt_embeds(self.anchor_embeds, weights)
             latents = blend_noise_latents(self.anchor_latents, weights)
             with torch.inference_mode():
@@ -197,14 +197,18 @@ class AnchorMorphRenderer:
         image.save(buffer, format="PNG")
         return buffer.getvalue()
 
-    def _log_weights(self, weights: np.ndarray) -> None:
+    def _log_weights(self, weights: np.ndarray, payload: dict) -> None:
         if not self.log_weights_every or self._render_count % self.log_weights_every != 0:
             return
+        step_index = int(payload.get("step_index", 0))
+        state = str(payload.get("state", "explore"))
+        reward_estimate = float(payload.get("reward_estimate", 0.0))
         target = ""
         if self.target_index is not None and self.target_anchor is not None:
             target = f" target={self.target_anchor} {weights[self.target_index]:.2f}"
         print(
             f"[anchor-morph-server] render={self._render_count} "
+            f"step={step_index} state={state} reward={reward_estimate:+.2f} "
             f"top={top_anchors(self.anchor_labels, weights)}{target}"
         )
 
