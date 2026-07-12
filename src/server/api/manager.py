@@ -140,7 +140,7 @@ class SessionManager:
         frame_store.clear_live()
         loop = OptimizerRenderLoop(
             self.config,
-            frames_per_step=6,
+            frames_per_step=8, #default was 6
             client=client,
             frame_store=frame_store,
             capture_snapshots=not request.mock,

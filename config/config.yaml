@@ -90,8 +90,8 @@ state_machine:
   settle_reward_threshold: 0.25       # was 0.55 - realistic plateau for a clipped FAA z-score
   settle_reward_std_threshold: 0.2   # plateau tightness: SETTLE needs recent reward std below this
   settle_motion_threshold: 0.1
-  settle_patience_steps: 3
-  min_steps_before_settle: 20
+  settle_patience_steps: 5 #old: 3
+  min_steps_before_settle: 50 #old: 20
   recover_negative_streak: 4
   recover_reward_margin: -0.25        # RECOVER counts only clearly-bad rewards, not ordinary z-score dips
   recover_widen_factor: 1.5
