@@ -1,0 +1,5 @@
+# Trained weights and the large MindBigData dump are not tracked.
+artifacts/
+data/
+__pycache__/
+*.pt

@@ -48,6 +48,7 @@ class DiffusionProcessManager:
         self.startup_timeout_s = startup_timeout_s
         self._process: subprocess.Popen | None = None
         self._manifest_path: Path | None = None
+        self._last_seed: int | None = None
 
     @property
     def base_url(self) -> str:
@@ -55,6 +56,11 @@ class DiffusionProcessManager:
 
     def restart(self, manifest_path: Path, _manifest: Any | None = None) -> dict[str, Any]:
         self.stop()
+        # A fixed seed pins the anchor noise so every generation renders the same
+        # base images. When no seed is configured, draw a fresh one per restart so
+        # each session's morph looks visually distinct.
+        render_seed = self.seed if self.seed is not None else int.from_bytes(os.urandom(4), "big") % (2**31)
+        self._last_seed = render_seed
         command = [
             self.python_executable,
             str(self.repo_root / "scripts" / "run_general_stable_diffusion.py"),
@@ -75,8 +81,7 @@ class DiffusionProcessManager:
         ]
         if self.size is not None:
             command.extend(["--size", str(self.size)])
-        if self.seed is not None:
-            command.extend(["--seed", str(self.seed)])
+        command.extend(["--seed", str(render_seed)])
         env = os.environ.copy()
         if self.cuda_visible_devices:
             env["CUDA_VISIBLE_DEVICES"] = self.cuda_visible_devices
@@ -128,4 +133,5 @@ class DiffusionProcessManager:
             "pid": process.pid if process is not None else None,
             "base_url": self.base_url,
             "manifest_path": str(self._manifest_path) if self._manifest_path else None,
+            "seed": self._last_seed,
         }

@@ -5,7 +5,7 @@ data/processed/
 data/candidates_ai
 data/targets_real
 data/stimuli/
-
+demo/classifier/data/
 # pytest
 .pytest_cache/
 

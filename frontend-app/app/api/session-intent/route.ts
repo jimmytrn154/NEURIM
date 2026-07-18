@@ -79,9 +79,13 @@ export async function POST(request: Request) {
 
   const apiBase = cleanUrl(process.env.NEURIM_API_URL, DEFAULT_API_URL);
   const baselineFallback = Number(process.env.NEURIM_BASELINE_SECONDS ?? 0);
+  // No-headset demo default: drive sessions with the synthetic brain-like reward
+  // so the morph stays alive without a live EPOC X. Set NEURIM_SESSION_MOCK=false
+  // to require real EEG instead.
+  const mockDefault = (process.env.NEURIM_SESSION_MOCK ?? "true").toLowerCase() !== "false";
   const startPayload = {
     prompt,
-    mock: requestBoolean(body.mock, false),
+    mock: requestBoolean(body.mock, mockDefault),
     baseline_seconds: requestNumber(body.baseline_seconds, Number.isFinite(baselineFallback) ? baselineFallback : 0),
     server_url: requestString(body.server_url) || cleanUrl(process.env.NEURIM_DIFFUSION_SERVER_URL, DEFAULT_RENDER_SERVER_URL),
   };
