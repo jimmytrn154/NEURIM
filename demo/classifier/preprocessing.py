@@ -120,3 +120,58 @@ def hht_features(signal_1d: np.ndarray, fs: float, max_imf: int = 10) -> dict[st
     ip = np.unwrap(np.angle(analytic), axis=-1)            # instantaneous phase
     if_ = np.diff(ip, axis=-1) / (2.0 * np.pi) * fs         # instantaneous frequency
     return {"IA": ia, "IP": ip, "IF": if_}
+
+
+def _fix_imf_time(arr: np.ndarray, n_imf: int, n_time: int) -> np.ndarray:
+    """Force an (n_actual_imf, t) HHT array to exactly (n_imf, n_time): EMD emits
+    a variable IMF count per signal (pad/truncate) and IF is one sample short of
+    the window (edge-pad time)."""
+    a = np.asarray(arr, dtype=np.float32)
+    if a.ndim == 1:
+        a = a[None, :]
+    k, t = a.shape
+    if k >= n_imf:
+        a = a[:n_imf]
+    else:
+        a = np.pad(a, [(0, n_imf - k), (0, 0)])
+    if t >= n_time:
+        a = a[:, :n_time]
+    else:
+        a = np.pad(a, [(0, 0), (0, n_time - t)], mode="edge")
+    return a
+
+
+HHT_ATTRS = ("IA", "IF")  # default HHT attributes fed to the CNN
+
+
+def epoch_hht_features(
+    epoch: np.ndarray,
+    fs: float = config.SAMPLE_RATE_HZ,
+    n_imf: int = 6,
+    attrs: tuple[str, ...] = HHT_ATTRS,
+    band: str | None = None,
+) -> np.ndarray:
+    """Paper-faithful EMD+HHT feature map for one (channels, samples) epoch.
+
+    For each EEG channel: fit-window -> denoise (-> optional sub-band) -> EMD ->
+    HHT, then keep the first `n_imf` IMFs' `attrs` (IA/IP/IF) as time series.
+    Returns a z-scored (channels * len(attrs) * n_imf, WINDOW_SAMPLES) float32
+    array -- the CNN input for the offline HHT path. Slow (EMD); offline only.
+    """
+    x = fit_window(epoch, config.WINDOW_SAMPLES)
+    x = denoise(x, fs)
+    if band is not None:
+        x = bandpass(x, band, fs)
+    n_time = x.shape[-1]
+    rows: list[np.ndarray] = []
+    for ch in range(x.shape[0]):
+        h = hht_features(x[ch], fs, max_imf=n_imf)
+        for attr in attrs:
+            rows.append(_fix_imf_time(h[attr], n_imf, n_time))  # (n_imf, n_time)
+    out = np.concatenate(rows, axis=0)  # (channels*len(attrs)*n_imf, n_time)
+    return zscore(out)
+
+
+def hht_channels(n_imf: int = 6, attrs: tuple[str, ...] = HHT_ATTRS) -> int:
+    """Number of CNN input channels the HHT feature map produces."""
+    return config.NUM_CHANNELS * len(attrs) * n_imf

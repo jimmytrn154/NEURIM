@@ -7,6 +7,5 @@ scikit-learn>=1.3
 # Live EPOC X streaming via the EMOTIV Cortex API
 websocket-client>=1.5
 
-# Optional: paper-faithful EMD + Hilbert-Huang feature path (offline only, slow).
-# Uncomment to enable hht_features() in preprocessing.py.
-# EMD-signal>=1.4
+# Paper-faithful EMD + Hilbert-Huang feature path (offline training, --feature hht)
+EMD-signal>=1.4

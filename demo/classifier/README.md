@@ -27,12 +27,11 @@ headset or the 2 GB dataset.
 1. **PyTorch, not Keras.** The rest of NEURIM is PyTorch; the architecture,
    layer sizes, and hyperparameters are identical to the paper's Table 4/5.
    (Softmax is folded into `CrossEntropyLoss`.)
-2. **The live path uses the denoised signal, not EMD/HHT.** Empirical Mode
-   Decomposition is iterative and takes seconds per channel — impractical for
-   real-time. The default feature is the low-pass+notch denoised, z-scored
-   14-channel window, which the same architecture consumes. The full EMD/HHT
-   feature extractor is implemented (`preprocessing.hht_features`) for offline /
-   band-wise experiments and is gated behind the optional `EMD-signal` package.
+2. **The live path uses the denoised signal, not EMD/HHT.** The default feature
+   is the low-pass+notch denoised, z-scored 14-channel window, which the same
+   architecture consumes in real time. The full paper EMD/HHT pipeline is
+   available for **offline training** via `--feature hht` (see below) but can't
+   drive the live loop.
 
 ## Install
 
@@ -56,12 +55,34 @@ python -m demo.classifier.realtime --source synthetic --stride 0.5
 ## Train on real MindBigData
 
 Download the `EP1.01` EPOC text dump from <http://mindbigdata.com/opendb/> and
-place it at `demo/classifier/data/EP1.01.txt`, then:
+place it at `demo/classifier/data/EP1.01.txt`, then pick a **feature mode**:
 
 ```bash
+# Denoised broadband signal (fast; this model can also run real-time)
 python -m demo.classifier.train --data demo/classifier/data/EP1.01.txt
-python -m demo.classifier.train --data ... --band delta   # band-wise model
+
+# Paper-faithful EMD + Hilbert-Huang features, FULL-BAND (offline only)
+python -m demo.classifier.train --data demo/classifier/data/EP1.01.txt \
+    --feature hht --jobs 8 --epochs 20
+
+# Restrict either feature to one sub-band (paper Sect. 4)
+python -m demo.classifier.train --data ... --feature hht --band delta --jobs 8
 ```
+
+### Feature modes
+
+| `--feature` | Input to CNN | Speed | Real-time? |
+|---|---|---|---|
+| `denoised` (default) | low-pass+notch, z-scored → (14, 256) | fast | ✅ |
+| `hht` | EMD → HHT (IA/IF of first `--n-imf` IMFs per channel) → (14·2·n_imf, 256) | ~30 ms/epoch (EMD), cached + parallel via `--jobs` | ❌ offline only |
+
+EMD+HHT features are **cached** to `artifacts/feature_cache/` keyed by the
+feature params + data subset, so re-training (tuning epochs/lr) is instant after
+the first extraction. A model trained with `--feature hht` is rejected by
+`realtime.py` (its channel count doesn't match the live denoised stream).
+
+Both modes track the **best-generalising epoch** (test-acc), and `--weight-decay`
+adds L2 to fight the overfitting seen on this dataset.
 
 ## Real-time on the EPOC X
 

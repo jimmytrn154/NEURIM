@@ -104,7 +104,13 @@ def _synthetic_stream(seed: int = 0) -> Iterator[tuple[float, dict[str, float]]]
 
 def run(source: str, model_path: Path, stride_s: float, pace: bool, seed: int = 0) -> None:
     clf = DigitClassifier(model_path)
-    print(f"loaded model {model_path} (band={clf.band or 'denoised'})")
+    if clf.feature == "hht":
+        raise SystemExit(
+            f"Model {model_path} was trained with EMD+HHT features, which are "
+            "offline-only (EMD is too slow for the live loop). Train a "
+            "'--feature denoised' model for real-time use."
+        )
+    print(f"loaded model {model_path} (feature={clf.feature}, band={clf.band or 'full'})")
 
     win = SlidingWindow(config.EPOC_CHANNELS, config.WINDOW_SAMPLES)
     stream = _cortex_stream() if source == "cortex" else _synthetic_stream(seed)

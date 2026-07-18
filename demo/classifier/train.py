@@ -31,9 +31,11 @@ from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
+from torch.utils.data import TensorDataset
+
 from . import config
 from .braindigidata import load_epochs, synthetic_epochs
-from .dataset import DigitEpochs
+from .features import build_features, feature_channels
 from .model import BrainDigiCNN, save
 
 
@@ -56,29 +58,41 @@ def _evaluate(model: BrainDigiCNN, loader: DataLoader, device: str) -> tuple[flo
 def train(
     X: np.ndarray,
     y: np.ndarray,
+    feature: str = "denoised",
     band: str | None = None,
+    n_imf: int = 6,
+    jobs: int = 1,
     epochs: int = config.EPOCHS,
     batch_size: int = config.BATCH_SIZE,
     lr: float = config.LEARNING_RATE,
+    weight_decay: float = 0.0,
     out_path=config.DEFAULT_MODEL_PATH,
+    cache_tag: str = "",
     seed: int = 0,
 ) -> BrainDigiCNN:
     torch.manual_seed(seed)
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
+    # Build the CNN feature matrix once (EMD+HHT is cached), then split.
+    feats = build_features(X, mode=feature, band=band, n_imf=n_imf,
+                           jobs=jobs, cache_tag=cache_tag)
+    in_channels = feats.shape[1]
+    print(f"feature '{feature}' -> input shape {feats.shape[1:]} ({in_channels} channels)")
+
     # 70/30 split (paper), stratified by digit.
     Xtr, Xte, ytr, yte = train_test_split(
-        X, y, test_size=0.30, random_state=seed, stratify=y
+        feats, y, test_size=0.30, random_state=seed, stratify=y
     )
-    train_ds = DigitEpochs(Xtr, ytr, band=band)
-    test_ds = DigitEpochs(Xte, yte, band=band)
+    train_ds = TensorDataset(torch.from_numpy(Xtr), torch.from_numpy(ytr))
+    test_ds = TensorDataset(torch.from_numpy(Xte), torch.from_numpy(yte))
     train_dl = DataLoader(train_ds, batch_size=batch_size, shuffle=True)
     test_dl = DataLoader(test_ds, batch_size=batch_size)
 
-    model = BrainDigiCNN().to(device)
-    opt = torch.optim.Adam(model.parameters(), lr=lr)
+    model = BrainDigiCNN(in_channels=in_channels).to(device)
+    opt = torch.optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     loss_fn = torch.nn.CrossEntropyLoss()
 
+    best_acc, best_state = 0.0, None
     for ep in range(1, epochs + 1):
         model.train()
         running = 0.0
@@ -90,17 +104,27 @@ def train(
             opt.step()
             running += float(loss) * len(yb)
         acc, _, _ = _evaluate(model, test_dl, device)
-        print(f"epoch {ep:2d}/{epochs}  train_loss={running / len(train_ds):.4f}  test_acc={acc:.3f}")
+        flag = ""
+        if acc > best_acc:
+            best_acc = acc
+            best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
+            flag = "  *"
+        print(f"epoch {ep:2d}/{epochs}  train_loss={running / len(train_ds):.4f}  test_acc={acc:.3f}{flag}")
 
+    # Keep the best-generalising epoch, not the last (overfit) one.
+    if best_state is not None:
+        model.load_state_dict(best_state)
     acc, yt, yp = _evaluate(model, test_dl, device)
-    print(f"\nfinal test accuracy: {acc:.3f}  (band={band or 'denoised'})\n")
+    print(f"\nbest test accuracy: {acc:.3f}  (feature={feature}, band={band or 'full'})\n")
     print(classification_report(yt, yp, digits=3, zero_division=0))
 
     save(model, out_path, meta={
-        "in_channels": config.NUM_CHANNELS,
+        "in_channels": in_channels,
         "seq_len": config.WINDOW_SAMPLES,
         "num_classes": config.NUM_CLASSES,
+        "feature": feature,
         "band": band,
+        "n_imf": n_imf,
         "test_accuracy": acc,
         "channels": config.EPOC_CHANNELS,
     })
@@ -112,25 +136,33 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Train BrainDigiCNN on MindBigData EPOC digits")
     ap.add_argument("--data", default=str(config.DEFAULT_DATA_PATH), help="MindBigData EP1.01 file")
     ap.add_argument("--synthetic", action="store_true", help="train on the built-in synthetic fixture")
+    ap.add_argument("--feature", choices=["denoised", "hht"], default="denoised",
+                    help="CNN input: denoised signal (fast, real-time) or paper's EMD+HHT (offline)")
     ap.add_argument("--band", choices=list(config.SUB_BANDS), default=None,
-                    help="train a band-wise model instead of the denoised signal")
+                    help="restrict to one sub-band (omit for full-band)")
+    ap.add_argument("--n-imf", type=int, default=6, help="IMFs kept per channel (hht feature)")
+    ap.add_argument("--jobs", type=int, default=1, help="worker processes for EMD extraction")
     ap.add_argument("--max-events", type=int, default=None, help="cap epochs parsed (for quick runs)")
     ap.add_argument("--epochs", type=int, default=config.EPOCHS)
     ap.add_argument("--batch-size", type=int, default=config.BATCH_SIZE)
     ap.add_argument("--lr", type=float, default=config.LEARNING_RATE)
+    ap.add_argument("--weight-decay", type=float, default=0.0, help="Adam L2 (helps overfitting)")
     ap.add_argument("--out", default=str(config.DEFAULT_MODEL_PATH))
     args = ap.parse_args()
 
     if args.synthetic:
         print("loading synthetic fixture ...")
         X, y = synthetic_epochs()
+        cache_tag = "synthetic"
     else:
         print(f"loading MindBigData from {args.data} ...")
         X, y = load_epochs(args.data, max_events=args.max_events)
+        cache_tag = f"{args.data}:{args.max_events}"
     print(f"{len(X)} epochs, shape {X.shape[1:]}, class counts {np.bincount(y).tolist()}")
 
-    train(X, y, band=args.band, epochs=args.epochs,
-          batch_size=args.batch_size, lr=args.lr, out_path=args.out)
+    train(X, y, feature=args.feature, band=args.band, n_imf=args.n_imf, jobs=args.jobs,
+          epochs=args.epochs, batch_size=args.batch_size, lr=args.lr,
+          weight_decay=args.weight_decay, out_path=args.out, cache_tag=cache_tag)
 
 
 if __name__ == "__main__":
